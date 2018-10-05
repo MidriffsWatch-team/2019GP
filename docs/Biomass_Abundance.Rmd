@@ -1,0 +1,69 @@
+---
+title: "Biomass and Abunance data"
+author: "Seleni Cruz"
+date: "September 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(raster)
+  library(sp)
+  library(rgdal)
+})
+```
+
+```{r}
+sealife <- load_taxa(server="sealifebase")
+species("Panulirus inflatus",
+"Panulirus interruptus", server="sealifebase")
+```
+
+#Load biomass rasters 
+
+```{r}
+
+ainter<-raster(here("raw_data", "biomass", "Anisotremus interruptusGrid_biomas_Teorica.asc"))
+
+#Assigning a coordinate reference system
+
+crs(ainter) <- CRS("+proj=longlat +datum=WGS84")
+plot(ainter)
+ainter
+
+pr1 <- projectRaster(ainter, crs=newproj)
+crs(pr1)
+plot(ainter)
+
+bpoly<-raster(here("raw_data", "biomass", "Balistes polylepisGrid_biomas_Teorica.asc"))
+plot(bpoly)
+
+cbrach<-raster(here("raw_data", "biomass", "Calamus brachysomusGrid_biomas_Teorica.asc"))
+plot(cbrach)
+
+eanal<-raster(here("raw_data", "biomass", "Epinephelus analogusGrid_biomas_Teorica.asc"))
+plot(eanal)
+
+
+```
+
+
+#Plotting abundance 
+
+```{r}
+ainter_A<-raster(here("raw_data", "Abundance", "Anisotremus interruptusGrid_precio_Teorico.asc"))
+plot(ainter_A)
+ainter_A
+
+```
+

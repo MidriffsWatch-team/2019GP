@@ -23,8 +23,14 @@ suppressPackageStartupMessages({
 #Load .RDS file 
 Filter national data set to just Sonora and Baja California Sur
 ```{r}
+
+catch<- readRDS (here("raw_data", "conapesca.RDS"))
 catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
   filter(Estado== "Baja california sur"| Estado=="Sonora")
+
+length(unique(catch$NombreCientifico))
+length(unique(catch$Ano))
+sum(catch$Valor)
 
 #Total yearly landings and value in pesos and USD
 landings<- catch%>%
@@ -59,7 +65,7 @@ top_value<- ranked_avg %>%
   arrange(desc(avgvalue))%>%
   mutate(value_rank= 1:n())
 
-head(top_value)
+head(top_value, 10)
 
 #note: most valuable species accounts only for 4% of toal landings but accounts for 28% of value. top 4 species are shrimps
 ```
@@ -78,7 +84,8 @@ top_landings
 #Load species from Stuart 15/05/18
 
 ```{r}
-species <- read_csv("G:/GitHub/2019GP/raw_data/species.csv")
+
+species <- read_csv (here("raw_data", "species.csv"))
 
 ```
 

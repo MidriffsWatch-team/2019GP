@@ -1,0 +1,123 @@
+---
+title: "17 Focal Species Catch Data"
+author: "Seleni Cruz"
+date: "September 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Loading packages
+```{r, message=FALSE}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+})
+```
+
+#Load Catch data 
+Filter national data set to just Sonora and Baja California Sur
+```{r, message=FALSE}
+catch<- readRDS (here("raw_data", "conapesca.RDS"))
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado== "Baja california sur"| Estado=="Sonora")
+
+```
+
+#Load 17 focal species
+
+```{r, message=FALSE}
+focalspecies<-read.csv(here("raw_data", "finalfocalspecies.csv"))
+
+```
+
+#Merge catch data and focal species 
+
+```{r, message=FALSE}
+merged<-merge(catch, focalspecies, by= "NombreCientifico")%>%
+  as.data.frame()
+```
+
+#Calculate catch per species per year 
+
+```{r, message=FALSE}
+catch_yr<- merged%>%
+  group_by(NombreCientifico, Ano)%>%
+  summarise(Annual_Catch=sum(PesoVivo))%>%
+  as.data.frame()
+```
+
+#Plot catch per species over time 
+
+```{r}
+graph <-ggplot(catch_yr, aes(x=Ano, y=Annual_Catch, color=NombreCientifico))+
+  #tiff('demand.tiff', units="in", width=10, height=5, res=300)+
+  geom_line(size=1)+
+  geom_point()+
+  labs(x="Year", y="Annual catch (kg)", title="Annual Catch per species ", subtitle= "2000-2015")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+#graph
+
+```
+
+#Plot each species separately 
+
+```{r, fig.width=8, fig.height=12}
+graph+
+   facet_wrap(~ NombreCientifico, scales = "free_y", ncol=2)
+
+```
+
+```{r}
+HFlav<-catch%>%
+  filter(NombreCientifico=="Haemulon flaviguttatum") #Only data points for July/September 2006
+
+HScud<-catch%>%
+  filter(NombreCientifico=="Haemulon scudderi") #Only 1 data point for Auust 2002
+```
+
+#Getting parameters from rfishbase
+
+```{r}
+sealife <- load_taxa(server="sealifebase")
+
+#Vector for fishbase package 
+fish<-c("Anisotremus interruptus",
+"Balistes polylepis",
+"Calamus brachysomus",
+"Epinephelus analogus",
+"Epinephelus labriformis",
+"Haemulon flaviguttatum",
+"Haemulon scudderi",
+"Lutjanus argentiventris",
+"Lutjanus guttatus",
+"Mycteroperca jordani",
+"Mycteroperca prionura",
+"Panulirus inflatus",
+"Panulirus interruptus",
+"Paralabrax auroguttatus",
+"Paralabrax maculatofasciatus",
+"Pinctada mazatlanica",
+"Scarus perrico")
+
+validate_names(fish)
+data<- species(fish)
+
+validate_names("Panulirus inflatus",
+"Panulirus interruptus")
+
+
+species("Panulirus inflatus",
+"Panulirus interruptus", server="sealifebase")
+```
+

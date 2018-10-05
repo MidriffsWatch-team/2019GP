@@ -20,7 +20,7 @@ conapesca.rds file contains monthly landings reported to CONAPESCA by fishers/co
   14. Precio- Price per kg, not sure of what year 
   15. Valor- Total value  landed (PesoDesembaracdo * price per kg)
 
-targetspecies.csv contains a list of target species sent to us by Stuart 15/05/2018.
+species.csv contains a list of target species sent to us by Stuart 15/05/2018.
   Variables:
   1. NombreCientifico- scientific name
   2. NombreCommum- common names of species
