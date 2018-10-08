@@ -30,6 +30,8 @@ species("Panulirus inflatus",
 ```
 
 #Load biomass rasters 
+Resolution of spatial datasets is 0.0833 decimal degrees (111.32 km at equator) ~ 9km 
+Time of the assessments:
 
 ```{r}
 

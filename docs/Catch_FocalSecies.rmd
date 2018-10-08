@@ -121,3 +121,19 @@ species("Panulirus inflatus",
 "Panulirus interruptus", server="sealifebase")
 ```
 
+
+Other things to consider:
+1. recovery potential of species... There are some published figures on years for different species 
+
+#Repreentation of species catch in the region 
+
+```{r}
+landings<- catch%>%
+  group_by(Ano)%>%
+  summarize (weight=sum(PesoVivo))
+
+average<- mean(landings$weight)
+
+```
+
+

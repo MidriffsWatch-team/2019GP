@@ -35,7 +35,7 @@ sum(catch$Valor)
 #Total yearly landings and value in pesos and USD
 landings<- catch%>%
   group_by(Ano)%>%
-  summarize(weight=sum(PesoDesembarcado),
+  summarize(weight=sum(PesoVivo),
             value=sum(Valor))%>%
   mutate(usdM= (value/16)/1000000)
 
@@ -44,7 +44,7 @@ avglandings<-mean(landings$weight) #average total landings 2010-2015
 #Total landings by species by year
 ranked_yr<- catch%>%
   group_by(NombreCientifico, Ano)%>%
-  summarise(value=sum(Valor), kg=sum(PesoDesembarcado),
+  summarise(value=sum(Valor), kg=sum(PesoVivo),
             usdM=((value)/16)/1000000,
             kgM=kg/1000000)%>%
   as.data.frame()
@@ -81,11 +81,16 @@ top_landings
 ```
 
 
-#Load species from Stuart 15/05/18
+#Load species from Stuart with 17 focial species
 
 ```{r}
 
-species <- read_csv (here("raw_data", "species.csv"))
+species<-read.csv(here("raw_data", "finalfocalspecies.csv"))
+
+landings<- top_landings%>%
+  select(NombreCientifico, avgkg, kg_percent, kg_rank)
+
+merged<-merge(species, landings, by= "NombreCientifico")
 
 ```
 
@@ -93,17 +98,16 @@ species <- read_csv (here("raw_data", "species.csv"))
 
 ```{r}
 value<- catch%>%
-  select(NombreCientifico, NombrePrincipal, Mes, Ano, PesoDesembarcado, Precio)
+  select(NombreCientifico, Mes, Ano, PesoVivo)
 
 spp<- species%>%
-  select(NombreCientifico, PrecioMinimo, PrecioMaximo, promedio)
+  select(NombreCientifico, CommonName, Min2018, Max2018, Average2018)
 
 
-# 42 of the species Stuart sent us are found in the CONAPESCA database 
 merged<-merge(value, spp, by= "NombreCientifico")%>%
-   mutate(minvalue=(PesoDesembarcado*PrecioMinimo))%>%
-  mutate(avgvalue=(PesoDesembarcado* promedio))%>%
-   mutate(maxvalue=(PesoDesembarcado*PrecioMaximo))%>%
+   mutate(minvalue=(PesoVivo*Min2018))%>%
+  mutate(avgvalue=(PesoVivo* Max2018))%>%
+   mutate(maxvalue=(PesoVivo*Average2018))%>%
   as.data.frame()
 
 mostvaluable<- merged%>%
