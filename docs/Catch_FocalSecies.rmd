@@ -28,6 +28,8 @@ catch<- readRDS (here("raw_data", "conapesca.RDS"))
 catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
   filter(Estado== "Baja california sur"| Estado=="Sonora")
 
+#test
+
 ```
 
 #Load 17 focal species
