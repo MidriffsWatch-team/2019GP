@@ -24,11 +24,31 @@ suppressPackageStartupMessages({
 #Load Catch data 
 Filter national data set to just Sonora and Baja California Sur
 ```{r, message=FALSE}
-catch<- readRDS (here("raw_data", "conapesca.RDS"))
 catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
   filter(Estado== "Baja california sur"| Estado=="Sonora")
 
+
+#unique(catch$NombreCientifico) #481 unique species 
+
+#Calculate total catch in the region  
+total_catch<-catch%>%
+  group_by(Ano)%>%
+  summarize(Total_MT=sum(PesoVivo)/1000)
+
 ```
+
+```{r}
+ggplot(total_catch, aes(x=Ano, y=Total_MT))+
+  #tiff('yearlycatch.tiff', units="in", width=10, height=5, res=300)+
+  geom_line(size=1, color='blue')+
+  geom_point()+
+  labs(x="Year", y="Yearly total landings (MT)", title="Yearly total reported catch in Baja California Sur and Sonora", subtitle= "481 species from 2000-2015")+
+  theme_classic()+
+  #scale_x_continuous(expand=c(0,0))+
+  #scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+```
+
 
 #Load 17 focal species
 
@@ -49,24 +69,48 @@ merged<-merge(catch, focalspecies, by= "NombreCientifico")%>%
 ```{r, message=FALSE}
 catch_yr<- merged%>%
   group_by(NombreCientifico, Ano)%>%
-  summarise(Annual_Catch=sum(PesoVivo))%>%
-  as.data.frame()
+  summarise(Annual_Catch_kg=sum(PesoVivo))%>%
+  mutate(MT=Annual_Catch_kg/1000)
+
+write.csv(catch_yr, file="catch_yr.csv")
+
+focal_catch<-catch_yr%>%
+  group_by(Ano)%>%
+  summarize(MT=sum(MT))%>%
+  merge(total_catch, by="Ano")%>%
+  mutate(percent_catch=(MT/Total_MT)*100)%>%
+   mutate_all(funs(round(., digits = 1)))
+
 ```
+
+```{r}
+ggplot(data=focal_catch, aes(x=Ano))+
+  geom_line(aes(y=Total_MT, color= "blue"))+
+  geom_line(aes(y=MT, color="red"))+
+  geom_point(aes(y=Total_MT, color= "blue"))+
+  geom_point(aes(y=MT, color="red"))+
+  geom_text(aes(y=MT, label=percent_catch), size=3, vjust = -0.5, nudge_y = 1)+
+  labs(x="Year", y="Yearly total landings (MT)", title="Representation of Focal Species Catch in the Baja California Sur and Sonora", subtitle= "17 species from 2000-2015")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+```
+
+
 
 #Plot catch per species over time 
 
 ```{r}
-graph <-ggplot(catch_yr, aes(x=Ano, y=Annual_Catch, color=NombreCientifico))+
+graph <-ggplot(catch_yr, aes(x=Ano, y=MT, color=NombreCientifico))+
   #tiff('demand.tiff', units="in", width=10, height=5, res=300)+
   geom_line(size=1)+
   geom_point()+
-  labs(x="Year", y="Annual catch (kg)", title="Annual Catch per species ", subtitle= "2000-2015")+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch per species ", subtitle= "2000-2015")+
   theme_classic()+
   scale_x_continuous(expand=c(0,0))+
   scale_y_continuous(expand=c(0,0))+
   theme(legend.title=element_blank())
 
-#graph
+graph
 
 ```
 
@@ -77,63 +121,3 @@ graph+
    facet_wrap(~ NombreCientifico, scales = "free_y", ncol=2)
 
 ```
-
-```{r}
-HFlav<-catch%>%
-  filter(NombreCientifico=="Haemulon flaviguttatum") #Only data points for July/September 2006
-
-HScud<-catch%>%
-  filter(NombreCientifico=="Haemulon scudderi") #Only 1 data point for Auust 2002
-```
-
-#Getting parameters from rfishbase
-
-```{r}
-sealife <- load_taxa(server="sealifebase")
-
-#Vector for fishbase package 
-fish<-c("Anisotremus interruptus",
-"Balistes polylepis",
-"Calamus brachysomus",
-"Epinephelus analogus",
-"Epinephelus labriformis",
-"Haemulon flaviguttatum",
-"Haemulon scudderi",
-"Lutjanus argentiventris",
-"Lutjanus guttatus",
-"Mycteroperca jordani",
-"Mycteroperca prionura",
-"Panulirus inflatus",
-"Panulirus interruptus",
-"Paralabrax auroguttatus",
-"Paralabrax maculatofasciatus",
-"Pinctada mazatlanica",
-"Scarus perrico")
-
-validate_names(fish)
-data<- species(fish)
-
-validate_names("Panulirus inflatus",
-"Panulirus interruptus")
-
-
-species("Panulirus inflatus",
-"Panulirus interruptus", server="sealifebase")
-```
-
-
-Other things to consider:
-1. recovery potential of species... There are some published figures on years for different species 
-
-#Repreentation of species catch in the region 
-
-```{r}
-landings<- catch%>%
-  group_by(Ano)%>%
-  summarize (weight=sum(PesoVivo))
-
-average<- mean(landings$weight)
-
-```
-
-
