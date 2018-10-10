@@ -31,7 +31,7 @@ species.csv contains a list of target species sent to us by Stuart 15/05/2018.
   7. EspecieObjetive- Si/No is the species is targeted
   8. Calidad-
   9. Sitio- Site listed as RGI, Baja or RGI/Baja
-  10. PrecioMinimo- minimum market price 2014
-  11. PrecioMaximo- maximum market price 2014
-  12. Promedio- Average market price 2014 
+  10. PrecioMinimo- minimum market price 2014 in MXN pesos per kilogram
+  11. PrecioMaximo- maximum market price 2014in MXN pesos per kilogram
+  12. Promedio- Average market price 2014 in MXN pesos per kilogram
   13. Tendencia- market value trend (increasing, decreasing or stable) 

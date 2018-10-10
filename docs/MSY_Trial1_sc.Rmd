@@ -34,7 +34,7 @@ library(FishLife)
 #Load catch data of species per year 
 ```{r}
 catch_yr<-read.csv(here("docs", "catch_yr.csv"))%>% 
-  filter(NombreCientifico=="Anisotremus interruptus")
+  filter(NombreCientifico=="Balistes polylepis")
 ```
 
 
@@ -61,6 +61,8 @@ fish<-c("Anisotremus interruptus",
 "Pinctada mazatlanica",
 "Scarus perrico")
 
+fish
+
 validate_names(fish) #ID possible misspelling, changed names etc 
 
 lifehistory<-popgrowth(fish) #the most useful but most of the data is missing 
@@ -82,7 +84,7 @@ stock<-stocks(fish)
 #Getting information from Fishlife r package 
 ```{r}
 Plot_taxa( Search_species(Genus="Lutjanus",Species="argentiventris")$match_taxonomy )
-Search_species(fish)
+
 
 vignette("tutorial","FishLife")
 
@@ -102,18 +104,20 @@ catch<-c(catch_yr$Annual_Catch) #vector of catch date
 
 trial<-catchmsy(year=year,
                 catch=catch,
-                catchCV=NULL,
-                catargs = (dist="none"),
-    l0=list(low=0.02,up=0.8,step=0),#biomass in year 1 in relation to K, step=0 means it will select randomly from the range given assuming normal dist
-    lt=list(low=0.01,up=0.25,refyr=2002),sigv=0, #depletion level in year 1; like fishing effort?
-    k=list(dist="unif",low=500,up=50000,mean=0,sd=0), #carrying capacity
-    r=list(dist="unif",low=0.015,up=0.1,mean=0,sd=0), #intrinsic growth rate
+                catchCV=NULL,#not sure what this is 
+                catargs = (dist="none"), 
+    l0=list(low=0.3,up=0.3,step=0),#biomass in year 1 in relation to K, step=0 means it will select randomly from the range given assuming normal dist
+    lt=list(low=0.01,up=0.25,refyr=2002),sigv=0, #depletion level in year 1; like fishing mortiality?
+    k=list(dist="unif",low=20392.8528,up=20392.8528), #carrying capacity; can include mean= and sd=
+    r=list(dist="unif",low=0.2178754,up=0.2178754), #intrinsic growth rate
     M=list(dist="unif",low=0.18,up=0.18,mean=0.00,sd=0.00), #Natural mortality 
     nsims=30000, #Monte carlo simulations 
     catchout = (1), #saving the monte carlo simulations that can later be graphed
     grout = 1, #output just to console, 
     graphs = c(1, 2,3,4,5,6,7,8,9,10,11))
 trial
+
+
 
 ```
 
