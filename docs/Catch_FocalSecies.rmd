@@ -29,6 +29,7 @@ Filter national data set to just Sonora and Baja California Sur
 catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
   filter(Estado== "Baja california sur"| Estado=="Sonora")
 
+<<<<<<< HEAD
 focalspecies<-read.csv(here("raw_data", "finalfocalspecies.csv"))
 #unique(catch$NombreCientifico) #352 unique species 
 
@@ -38,6 +39,9 @@ unique(catch$NombreCientifico)
 total_catch<-catch%>%
   group_by(Ano)%>%
   summarize(Total_MT=sum(PesoVivo)/1000, all_species= length(unique(NombreCientifico)))
+=======
+#test
+>>>>>>> 6f747e215632c0d378f870e38e8a38fbca06d04c
 
 ```
 
