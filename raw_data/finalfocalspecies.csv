@@ -1,18 +1,20 @@
-NombreCientifico,CommonName,Commercial,Targetted,Quality,Site,Min2014,Max2014,Average2014,Tendency,Min2018,Max2018,Average2018,Additional_biological_information,quotas,status_of_fishery,Abundance,Biomass
-Anisotremus interruptus,Burito grunt,Small scale,No,Secondary,RGI,5,5,5,Igual,10,10,10,No,No,Not known,yes,yes
-Balistes polylepis,Finescale triggerfish,Small scale,Yes,Primary,RGI/Baja,12,12,12,Estable,20,25,22.5,Yes,No,Not known,yes,yes
-Calamus brachysomus,Pacific porgy,Small scale,No,Secondary,RGI/Baja,5,5,5,Estable,10,15,12.5,No,No,Not known,yes,yes
-Epinephelus analogus,Spotted grouper,Small scale,No,Primary,RGI/Baja,45,45,45,Estable,50,70,60,No,No,MSY,yes,yes
-Epinephelus labriformis,Starry grouper,Small scale,No,Secondary,RGI/Baja,25,25,25,Estable,50,50,50,No,No,Not known,yes,yes
-Haemulon flaviguttatum,Yellowspotted grunt,Small scale,No,Secondary,RGI/Baja,5,5,5,Estable,10,10,10,No,No,Not known,yes,yes
-Haemulon scudderi,Grey grunt,Small scale,No,Secondary,RGI/Baja,5,5,5,Estable,10,10,10,No,No,Not known,,
-Lutjanus argentiventris,Yellow snapper,Small scale,Yes,Primary,RGI/Baja,35,45,40,Estable,45,50,47.5,No,No,Not known,yes,yes
-Lutjanus guttatus,Rose snapper,Small scale,Yes,Primary,RGI/Baja,35,45,40,Estable,45,50,47.5,No,No,Not known,yes,yes
-Mycteroperca jordani,Gulf grouper,Small scale,Yes,Primary,RGI/Baja,50,60,55,Estable,50,60,55,No,No,Not known,yes,yes
-Mycteroperca prionura,Sawtail grouper,Small scale,No,Primary,RGI/Baja,45,45,45,Estable,50,50,50,No,No,Not known,yes,
-Panulirus inflatus,Blue spiny lobster,Small scale,Yes,Primary,RGI/Baja,120,130,125,Igual,200,200,200,No,No,MSY,yes,
-Panulirus interruptus,Caligornia spiny lobster,Small scale,Yes,Primary,RGI/Baja,120,130,125,Igual,200,200,200,Yes,No,MSY,yes,
-Paralabrax auroguttatus,Goldspotted sand bass,Small scale,Yes,Primary,RGI/Baja,15,15,15,Estable,22,25,23.5,No,No,Not known,yes,yes 
-Paralabrax maculatofasciatus,Spotted sand bass,Small scale,Yes,Secondary,RGI/Baja,8,12,10,Aumenta,10,15,12.5,No,No,Not known,yes,yes
-Pinctada mazatlanica,Pearl oyster,Small scale,No,Secondary,RGI,80,80,80,Igual,,,,No,No,Not known,,
-Scarus perrico,Bumphead parrotfish,Small scale,No,Secondary,RGI/Baja,30,30,30,Estable,,,,No,No,Not known,yes,yes 
+NombreCientifico,CommonName,Commercial,Targetted,Quality,Site,Min2014,Max2014,Average2014,Tendency,Min2018,Max2018,Average2018,Additional_biological_information,quotas,status_of_fishery,Abundance,Biomass,SPAGs
+Anisotremus interruptus,Burito grunt,Small scale,No,Secondary,RGI,5,5,5,Igual,10,10,10,No,No,Not known,yes,yes,
+Balistes polylepis,Finescale triggerfish,Small scale,Yes,Primary,RGI/Baja,12,12,12,Estable,20,25,22.5,Yes,No,Not known,yes,yes,
+Calamus brachysomus,Pacific porgy,Small scale,No,Secondary,RGI/Baja,5,5,5,Estable,10,15,12.5,No,No,Not known,yes,yes,
+Epinephelus analogus,Spotted grouper,Small scale,No,Primary,RGI/Baja,45,45,45,Estable,50,70,60,No,No,MSY,yes,yes,
+Epinephelus labriformis,Starry grouper,Small scale,No,Secondary,RGI/Baja,25,25,25,Estable,50,50,50,No,No,Not known,yes,yes,
+Haemulon flaviguttatum,Yellowspotted grunt,Small scale,No,Secondary,RGI/Baja,5,5,5,Estable,10,10,10,No,No,Not known,yes,yes,
+Haemulon scudderi,Grey grunt,Small scale,No,Secondary,RGI/Baja,5,5,5,Estable,10,10,10,No,No,Not known,,,
+Lutjanus argentiventris,Yellow snapper,Small scale,Yes,Primary,RGI/Baja,35,45,40,Estable,45,50,47.5,No,No,Not known,yes,yes,
+Lutjanus guttatus,Rose snapper,Small scale,Yes,Primary,RGI/Baja,35,45,40,Estable,45,50,47.5,No,No,Not known,yes,yes,
+Mycteroperca jordani,Gulf grouper,Small scale,Yes,Primary,RGI/Baja,50,60,55,Estable,50,60,55,No,No,Not known,yes,yes,Yes
+Mycteroperca prionura,Sawtail grouper,Small scale,No,Primary,RGI/Baja,45,45,45,Estable,50,50,50,No,No,Not known,yes,,
+Panulirus inflatus,Blue spiny lobster,Small scale,Yes,Primary,RGI/Baja,120,130,125,Igual,200,200,200,No,No,MSY,yes,,Yes
+Panulirus interruptus,Caligornia spiny lobster,Small scale,Yes,Primary,RGI/Baja,120,130,125,Igual,200,200,200,Yes,No,MSY,yes,,
+Paralabrax auroguttatus,Goldspotted sand bass,Small scale,Yes,Primary,RGI/Baja,15,15,15,Estable,22,25,23.5,No,No,Not known,yes,yes ,Yes
+Paralabrax maculatofasciatus,Spotted sand bass,Small scale,Yes,Secondary,RGI/Baja,8,12,10,Aumenta,10,15,12.5,No,No,Not known,yes,yes,Yes
+Pinctada mazatlanica,Pearl oyster,Small scale,No,Secondary,RGI,80,80,80,Igual,,,,No,No,Not known,,,
+Scarus perrico,Bumphead parrotfish,Small scale,No,Secondary,RGI/Baja,30,30,30,Estable,,,,No,No,Not known,yes,yes ,
+Hoplopagrus guentheri,Mexican barred snapper,Small scale,Yes,Primary,RGI/Baja,45,45,45,Igual,45,50,47.5,,,,Yes,Yes,Yes
+Octopus sp,Octopus bimaculatus ,Small scale,Yes,Primary,RGI/Baja,40,50,45,Aumenta,100,120,110,,,,Yes,No,Yes
