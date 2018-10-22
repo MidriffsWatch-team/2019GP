@@ -59,6 +59,10 @@ plot(yellowsnapper$Ano, yellowsnapper$MT, type="l")
 #final year catch divided by highest catch for lt
 103.17780/211.75220
 #=0.4872573
+
+# for K, lower bound will be the year with highest catch and low bound will be greatest catch*100
+211.75220*100
+#=21175.22
 ```
 
 
@@ -66,11 +70,11 @@ plot(yellowsnapper$Ano, yellowsnapper$MT, type="l")
 catchmsy(year=year,
                catch=catch,
                catchCV=NULL,#Addresses uncertainty but we don't need it
-   l0=list(low=0.3,up=0.6,step=0),#biomass in year 1 in relation to K, Initial catch divided by highest catch
-   lt=list(low= 0.01,up=0.4,refyr=2015),
-   k=list(dist="unif",low=4000,up=15000), #carrying capacity; low=highest reported catch, high=highest catch*100
-   r=list(dist="unif",low=0.3,up=0.6), #intrinsic growth rate based on resiliene; Low  0.05–0.5
-   M=list(dist="unif",low=0.1,up=0.9), #Natural mortality
+   l0=list(low=0.5,up=0.9,step=0),#biomass in year 1 in relation to K, Initial catch divided by highest catch
+   lt=list(low= 0.01,up=0.3,refyr=2015),
+   k=list(dist="unif",low=211.752220,up=2117.522), #carrying capacity; low bound=highest reported catch, high=highest catch*100
+   r=list(dist="unif",low=0.05,up=0.5), #intrinsic growth rate based on resiliene; Low  0.05–0.5
+   M=list(dist="unif",low=0.1,up=0.4), #Natural mortality
    nsims=30000, #Monte carlo simulations
    catchout = (1), #saving the monte carlo simulations that can later be graphed
    grout = 1, #output just to console,
