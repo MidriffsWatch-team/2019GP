@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #Loading packages
-```{r, message=FALSE}
+```{r, include=FALSE}
 suppressPackageStartupMessages({
   library(tidyverse)
   library(here)
@@ -18,124 +18,284 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(sf)
   library(rfishbase)
+  library(plotly)
+  library(reshape)
 })
 ```
 
-#Load Catch data 
+#Load Catch data and list of 19 focal species
 Filter national data set to just Sonora and Baja California Sur
-```{r, message=FALSE}
-catch<- readRDS (here("raw_data", "conapesca.RDS"))
+```{r, include=FALSE}
+
 catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
   filter(Estado== "Baja california sur"| Estado=="Sonora")
 
-#test
-
-```
-
-#Load 17 focal species
-
-```{r, message=FALSE}
 focalspecies<-read.csv(here("raw_data", "finalfocalspecies.csv"))
+#unique(catch$NombreCientifico) #352 unique species 
+
+names<-unique(catch$NombreCientifico)%>% as.data.frame()
+
+#Calculate total catch in the region by year and number of species reported in each year 
+total_catch<-catch%>%
+  group_by(Ano)%>%
+  summarize(Total_MT=sum(PesoVivo)/1000, all_species= length(unique(NombreCientifico)))
 
 ```
 
-#Merge catch data and focal species 
 
-```{r, message=FALSE}
-merged<-merge(catch, focalspecies, by= "NombreCientifico")%>%
-  as.data.frame()
+#Identifying groups of species that are fished industrially in the region 
+Industrial fisheies in the region include mackerel, sardines, shrimps, corvina, anchoveta, and squid. How much of reported landings come from this subset of species?
+What do total landings like in the region from 2000-2015? This includes all landings from the CONAPESCA data from year to year. It only included data reported in this dataset. Blue line represents total landings, green line represents landings from small scale fisheries (excluding subset of industrial landings). The differnce then is landings from industrial fleets (~90%).
+
+Note: All species includes industrial and small scale.
+      Small scale excludes the following species mackerel, sardines, shrimps, corvina, anchoveta, and squid.
+      Industrial includes mackerel, sardines, shrimps, corvina, anchoveta, and squid.
+
+```{r, include=FALSE}
+industrial<-catch%>%
+  filter(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta")%>%
+  group_by(Ano)%>%
+  summarize(industrial_MT= (sum(PesoVivo)/1000), industrial_species= length(unique(NombreCientifico)))
+
+smallscale<-catch%>%
+  filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  group_by(Ano)%>%
+  summarize(smallscale_MT= (sum(PesoVivo)/1000), smallscale_species= length(unique(NombreCientifico)))
+
+
+allcatch<-merge(total_catch, smallscale, by="Ano")%>%
+  mutate(percent=(smallscale_MT/Total_MT)*100)%>%
+  mutate_all(funs(round(., digits = 1)))
+
 ```
 
-#Calculate catch per species per year 
+```{r,echo=FALSE}
+graph1<-ggplot(allcatch, aes(x=Ano))+
+  geom_line(aes(y=Total_MT), size=1, color='blue')+
+  geom_point(aes(y=Total_MT), size=1, color='blue')+
+  geom_line(aes(y=smallscale_MT), size=1, color='green')+
+  geom_point(aes(y=smallscale_MT), size=1, color='green')+
+   geom_text(aes(y=smallscale_MT, label=percent), size=3, vjust = 1, nudge_y = 2)+
+  labs(x="Year", y="Yearly total landings (MT)", title="Yearly total reported catch in Baja California Sur and Sonora", subtitle= "Small scale landings")+
+    theme_classic()
 
-```{r, message=FALSE}
+ggplotly(graph1)
+```
+
+Important to note that number of species reported each year also varies. Green represents number of small sclae fisheries species landed (excluding industrial subset). Number of industrial species ranged from 19-27 species, generally stable over time. While small scale fisheries species ranged from 130-179.
+
+```{r, echo=FALSE}
+graph2<-ggplot(allcatch, aes(x=Ano))+
+  geom_line(aes(y=all_species), size=1, color='blue')+
+  geom_point(aes(y=all_species), size=1, color='blue')+
+  geom_line(aes(y=smallscale_species), size=1, color='green')+
+  geom_point(aes(y=smallscale_species), size=1, color='green')+
+  labs(x="Year", y="Number of species landed", title="Number of species landed in Baja California Sur and Sonora")+
+    theme_classic()
+
+ggplotly(graph2)
+
+```
+
+
+
+#Merge CONAPESCA catch data with 17 focal species 
+
+```{r, include=FALSE}
+merged<-merge(catch, focalspecies, by= "NombreCientifico")
+```
+
+#For 17 focal species calculate catch per species per year
+
+```{r, include=FALSE}
+#Sum all catch reported for speces in each year and convert it to MT
 catch_yr<- merged%>%
   group_by(NombreCientifico, Ano)%>%
-  summarise(Annual_Catch=sum(PesoVivo))%>%
-  as.data.frame()
+  summarise(Annual_Catch_kg=sum(PesoVivo))%>%
+  mutate(MT=Annual_Catch_kg/1000)
+
+write.csv(catch_yr, file="catch_yr.csv")
+
+#Calculate total landings of 17 focal species combined 
+focal_catch_all<-catch_yr%>%
+  group_by(Ano)%>%
+  summarize(focal_MT=sum(MT))%>%
+  merge(total_catch, by="Ano")%>%
+  mutate(percent_catch=(focal_MT/Total_MT)*100)%>%
+   mutate_all(funs(round(., digits = 1)))
+
 ```
 
-#Plot catch per species over time 
+Figure graphically shows landings of 17 focal specied relative to total landings in each year in Baja California Sur and Sonora. Blue line represents total yearly landings, red line represents combined landings of 17 species. Numerical labels are in percent ie all values are 1% or less.
+```{r, echo=FALSE}
+graph3<-ggplot(data=focal_catch_all, aes(x=Ano))+
+  geom_line(aes(y=Total_MT), color="blue")+
+  geom_line(aes(y=focal_MT), color="green")+
+  geom_point(aes(y=Total_MT), color="blue")+
+  geom_text(aes(y=focal_MT, label=percent_catch), size=3, vjust =0.5, nudge_y = 1)+
+  labs(x="Year", y="Yearly total landings (MT)", title="Representation of Focal Species Catch in the Baja California Sur and Sonora ", subtitle= "17 species from 2000-2015")+
+  theme_classic()+
+  theme(legend.title=element_blank())
 
-```{r}
-graph <-ggplot(catch_yr, aes(x=Ano, y=Annual_Catch, color=NombreCientifico))+
-  #tiff('demand.tiff', units="in", width=10, height=5, res=300)+
+ggplotly(graph3)
+```
+
+Tells a differnet story if we omit industrial fisheries and just focus on small scale species. If we only consider small scale fisheries, the 17 focal species collectively represent between 3.2-5.1% of yearly landing from 2000-2015.
+
+```{r, echo=FALSE}
+focal_catch_small<-catch_yr%>%
+  group_by(Ano)%>%
+  summarize(focal_MT=sum(MT))%>%
+  merge(smallscale, by="Ano")%>%
+  mutate(percent_catch=(focal_MT/smallscale_MT)*100)%>%
+   mutate_all(funs(round(., digits = 1)))
+
+
+graph4<-ggplot(data=focal_catch_small, aes(x=Ano))+
+  geom_line(aes(y=smallscale_MT), color="blue")+
+  geom_line(aes(y=focal_MT), color="green")+
+  geom_point(aes(y=smallscale_MT), color="blue")+
+  geom_text(aes(y=focal_MT, label=percent_catch), size=3, vjust = -0.5, nudge_y = 1)+
+  labs(x="Year", y="Yearly total landings (MT)", title="Representation of Focal Species Catch in the Baja California Sur and Sonora ", subtitle= "17 species from 2000-2015")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+
+ggplotly(graph4)
+```
+
+
+
+#Plot catch per species over time 
+What do landings of 17 focal species looks like over time?
+
+```{r, echo=FALSE}
+graph5 <-ggplot(catch_yr, aes(x=Ano, y=MT, color=NombreCientifico))+
+  #tiff('yearly_catch_focal_species.tiff', units="in", width=10, height=5, res=300)+
   geom_line(size=1)+
   geom_point()+
-  labs(x="Year", y="Annual catch (kg)", title="Annual Catch per species ", subtitle= "2000-2015")+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of 19 focal species", subtitle= "2000-2015")+
   theme_classic()+
   scale_x_continuous(expand=c(0,0))+
   scale_y_continuous(expand=c(0,0))+
   theme(legend.title=element_blank())
 
-#graph
+ggplotly(graph5)
+
 
 ```
 
 #Plot each species separately 
+This helps us to see gaps in data, that is, some species don't have landing reported for all years. Are they not finshed anymore because fisheries is collapsed or the market value is not worth it etc? Or is it that it is still being fished but not reported?
 
-```{r, fig.width=8, fig.height=12}
-graph+
+```{r, fig.width=8, fig.height=12, echo=FALSE}
+graph6<-graph5+
    facet_wrap(~ NombreCientifico, scales = "free_y", ncol=2)
 
+ggplotly(graph6)
 ```
+
+#Average Distribution of catch by all species in the MRI in 2014 excluding industiral fisheries 
+If our 17 species only account for ~5%, what are the other species that make up landings on average?
+
+Other important species include: cannonball jellyfish, Catarina scallop, no data (~17%), blue swimming crab, sea bass, etc 
+
+
+```{r, include= FALSE}
+#calculate catch of all species per year 
+smallscale_yr<- catch%>%
+  filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  group_by(NombreCientifico, Ano)%>%
+  summarise(smallscale_MT=(sum(PesoVivo)/1000))
+
+#calculate average landing by species over 2000-2015
+average<-smallscale_yr%>%
+  group_by(NombreCientifico)%>%
+  summarise(AverageMT=mean(smallscale_MT))%>% #average landings of species
+  mutate(percent=((AverageMT/sum(AverageMT))*100)) #conversion to MT
+```
+
+
+```{r, echo=FALSE}
+plot_ly(average, labels = ~NombreCientifico, values = ~percent, type = 'pie', showlegend=FALSE) %>%
+  layout(title = 'Average percent catch contribution by species from 2010-2015')
+
+
+```
+
+#2014
+I wanted to look specifically at 2014 since we have data on market value of the 17 focal spceies. In 2014 the 17 focal species generated $10,664,380 USD. 
+
+
+From the graphs below we see that California Spiny Lobster generated 73.9% of value in 2014 but only acconted for 35.3% of total landings. 
+
+
+```{r, include=FALSE}
+#0.053 exchange rate of 1 MXN peso to $1 USD
+
+value2014<-catch_yr%>%
+  filter(Ano=="2014")%>%
+  merge(focalspecies, by="NombreCientifico")%>%
+  mutate(total_min_value_2014=(MT*Min2014*0.053*1000), total_max_value_2014=(MT*Max2014*0.053*1000), total_avg_value_2014=(MT*Average2014*0.053*1000), value_percent=(total_avg_value_2014/sum(total_avg_value_2014)*100))
+
+sum(value2014$total_avg_value_2014)
+```
+
+
+```{r, echo=FALSE}
+plot_ly(value2014, labels = ~NombreCientifico, values = ~total_avg_value_2014, type = 'pie', showlegend=FALSE) %>%
+  layout(title = 'Revenue generated by 19 focal species in 2014 in USD')
+
+```
+
+
+```{r, echo=FALSE}
+plot_ly(value2014, labels = ~NombreCientifico, values = ~MT, type = 'pie', showlegend=FALSE) %>%
+  layout(title = 'Landing of 17 focal species in 2014')
+
+```
+
+
+#SPAGS
+The SPAGS layer contains 68 point entries corresponsing to 10 species. Of the 68 points only 58 overlap with the final design of the marine reserve network, but we do have representation of all 10 species(6 invertebrates and 4 fish). 4 of these species overlap with our 17 focal species (Mycteroperca jordani, Panulirus inflatus, Paralabrax spp).
+The SPAG layer includes Paralabrax spp, we have two Paralabrax species, can we assume the aggregation include our two species?
+
+From the data we could include:Hoplopagrus guentheri (snapper) and Octopus sp. which is not specific to any one species of octopus and Paralabrax spp which is also not speices specific. Including these 3 we would have 14 spawning aggregation sites. 
+
+
+
 
 ```{r}
-HFlav<-catch%>%
-  filter(NombreCientifico=="Haemulon flaviguttatum") #Only data points for July/September 2006
 
-HScud<-catch%>%
-  filter(NombreCientifico=="Haemulon scudderi") #Only 1 data point for Auust 2002
-```
+SPAGS<-read.csv(here("raw_data", "SPAGS.csv"))
 
-#Getting parameters from rfishbase
+SPAG<-merge(catch, SPAGS, by= "NombreCientifico")%>%
+ group_by(NombreCientifico, Ano)%>%
+  summarise(Annual_Catch_kg=sum(PesoVivo))%>%
+  mutate(MT=Annual_Catch_kg/1000)
 
-```{r}
-sealife <- load_taxa(server="sealifebase")
+unique(SPAG$NombreCientifico)
 
-#Vector for fishbase package 
-fish<-c("Anisotremus interruptus",
-"Balistes polylepis",
-"Calamus brachysomus",
-"Epinephelus analogus",
-"Epinephelus labriformis",
-"Haemulon flaviguttatum",
-"Haemulon scudderi",
-"Lutjanus argentiventris",
-"Lutjanus guttatus",
-"Mycteroperca jordani",
-"Mycteroperca prionura",
-"Panulirus inflatus",
-"Panulirus interruptus",
-"Paralabrax auroguttatus",
-"Paralabrax maculatofasciatus",
-"Pinctada mazatlanica",
-"Scarus perrico")
-
-validate_names(fish)
-data<- species(fish)
-
-validate_names("Panulirus inflatus",
-"Panulirus interruptus")
+graph5 <-ggplot(SPAG, aes(x=Ano, y=MT, color=NombreCientifico))+
+  #tiff('yearly_catch_focal_species.tiff', units="in", width=10, height=5, res=300)+
+  geom_line(size=1)+
+  geom_point()+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="", subtitle= "2000-2015")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
 
 
-species("Panulirus inflatus",
-"Panulirus interruptus", server="sealifebase")
-```
-
-
-Other things to consider:
-1. recovery potential of species... There are some published figures on years for different species 
-
-#Repreentation of species catch in the region 
-
-```{r}
-landings<- catch%>%
-  group_by(Ano)%>%
-  summarize (weight=sum(PesoVivo))
-
-average<- mean(landings$weight)
 
 ```
+
+
+```{r, fig.width=8, fig.height=12, echo=FALSE}
+graph6<-graph5+
+   facet_wrap(~ NombreCientifico, scales = "free_y", ncol=2)
+ggplotly(graph6)
+
+```
+
 
 

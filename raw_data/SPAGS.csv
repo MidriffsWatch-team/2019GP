@@ -1,0 +1,11 @@
+NombreCientifico,CommonName,Comment,Commercial,Targetted,Quality,Site,Min2014,Max2014,Average2014,Tendency,Min2018,Max2018,Average2018,Additional_biological_information,quotas,status_of_fishery,Abundance,Biomass
+Callinectes bellicosus,Cortez swimming crab,Limited catch data ,Small scale,No,Secondary,RGI/Baja,,,,,,,,No,,,,
+Hexaplex nigritus     ,Black and white sea snail ,No catch data ,Small scale,No,Secondary,RGI/Baja,,,,,,,,No,,,,
+Hoplopagrus guentheri,Mexican barred snapper,No catch data ,Small scale,Yes,Primary,RGI/Baja,,,,,,,,No,,,,
+Istiophorus spp,brown sea cucumber,Limited catch data ,Small scale,Yes,Primary,RGI/Baja,,,,,,,,No,,,,
+Mycteroperca jordani,Gulf grouper,in our list ,Small scale,Yes,Primary,RGI/Baja,50,60,55,Estable,50,60,55,No,No,Not known,yes,yes
+Mycteroperca rosacea  ,Leopard grouper,No catch data ,Small scale,Yes,Primary,RGI/Baja,,,,,,,,Yes,,,,
+Octopus sp,Octopus bimaculatus ,Octopus bimaculatus is not listed but there is a spp in the CONPAESCA dataset ,Small scale,Yes,Primary,RGI/Baja,,,,,,,,No,,,,
+Panulirus inflatus,Blue spiny lobster,in our list ,Small scale,Yes,Primary,RGI/Baja,120,130,125,Igual,200,200,200,No,No,MSY,yes,
+Paralabrax spp        ,Seabass,in our list ,Small scale,No,Secondary,RGI/Baja,,,,,,,,No,,,,
+Spondylus limbatus    ,White daisy spine sea clam,No catch data ,Small scale,No,Primary,RGI/Baja,,,,,,,,No,,,,
