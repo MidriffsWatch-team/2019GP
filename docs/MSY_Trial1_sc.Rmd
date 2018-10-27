@@ -33,12 +33,12 @@ library(FishLife)
 #Load catch data of species
 
 ```{r}
-#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the ":anding sites.rmd" in docs 
+#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
 focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
 
 unique(focalspeciescatch$NombreCientifico) #6 species 
 
-#create a new dataframe to isolate yout species of interest 
+#create a new dataframe to isolate your species of interest 
 Octopus<-focalspeciescatch%>%
   filter(NombreCientifico=="Octopus sp")
 
