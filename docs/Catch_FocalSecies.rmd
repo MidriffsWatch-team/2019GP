@@ -1,5 +1,5 @@
 ---
-title: "17 Focal Species Catch Data"
+title: "Focal Species Catch Data"
 author: "Seleni Cruz"
 date: "September 27, 2018"
 output: html_document
@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Loading packages
+
 ```{r, include=FALSE}
 suppressPackageStartupMessages({
   library(tidyverse)
@@ -23,7 +23,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-#Load Catch data and list of 19 focal species
+###Load Catch data and list of focal species
 Filter national data set to just Sonora and Baja California Sur
 ```{r, include=FALSE}
 
@@ -43,13 +43,14 @@ total_catch<-catch%>%
 ```
 
 
-#Identifying groups of species that are fished industrially in the region 
+Identifying groups of species that are fished industrially in the region 
 Industrial fisheies in the region include mackerel, sardines, shrimps, corvina, anchoveta, and squid. How much of reported landings come from this subset of species?
 What do total landings like in the region from 2000-2015? This includes all landings from the CONAPESCA data from year to year. It only included data reported in this dataset. Blue line represents total landings, green line represents landings from small scale fisheries (excluding subset of industrial landings). The differnce then is landings from industrial fleets (~90%).
 
 Note: All species includes industrial and small scale.
       Small scale excludes the following species mackerel, sardines, shrimps, corvina, anchoveta, and squid.
       Industrial includes mackerel, sardines, shrimps, corvina, anchoveta, and squid.
+      
 
 ```{r, include=FALSE}
 industrial<-catch%>%
@@ -76,7 +77,7 @@ graph1<-ggplot(allcatch, aes(x=Ano))+
   geom_line(aes(y=smallscale_MT), size=1, color='green')+
   geom_point(aes(y=smallscale_MT), size=1, color='green')+
    geom_text(aes(y=smallscale_MT, label=percent), size=3, vjust = 1, nudge_y = 2)+
-  labs(x="Year", y="Yearly total landings (MT)", title="Yearly total reported catch in Baja California Sur and Sonora", subtitle= "Small scale landings")+
+  labs(x="Year", y="Yearly total landings (MT)", title="Yearly total catch of all small scale fisheries", subtitle= "Small scale landings")+
     theme_classic()
 
 ggplotly(graph1)
@@ -90,7 +91,7 @@ graph2<-ggplot(allcatch, aes(x=Ano))+
   geom_point(aes(y=all_species), size=1, color='blue')+
   geom_line(aes(y=smallscale_species), size=1, color='green')+
   geom_point(aes(y=smallscale_species), size=1, color='green')+
-  labs(x="Year", y="Number of species landed", title="Number of species landed in Baja California Sur and Sonora")+
+  labs(x="Year", y="Number of species landed", title="Number of species landed")+
     theme_classic()
 
 ggplotly(graph2)
@@ -99,13 +100,18 @@ ggplotly(graph2)
 
 
 
-#Merge CONAPESCA catch data with 17 focal species 
+Merge CONAPESCA catch data with 17 focal species 
 
 ```{r, include=FALSE}
 merged<-merge(catch, focalspecies, by= "NombreCientifico")
+
+unique(merged$NombreCientifico)
+landingsites<-unique(merged$SitioDesembarque)%>% as.data.frame()
+write.csv(landingsites, file="landingsites.csv")
+
 ```
 
-#For 17 focal species calculate catch per species per year
+#Focal species catch per species per year
 
 ```{r, include=FALSE}
 #Sum all catch reported for speces in each year and convert it to MT
@@ -133,7 +139,7 @@ graph3<-ggplot(data=focal_catch_all, aes(x=Ano))+
   geom_line(aes(y=focal_MT), color="green")+
   geom_point(aes(y=Total_MT), color="blue")+
   geom_text(aes(y=focal_MT, label=percent_catch), size=3, vjust =0.5, nudge_y = 1)+
-  labs(x="Year", y="Yearly total landings (MT)", title="Representation of Focal Species Catch in the Baja California Sur and Sonora ", subtitle= "17 species from 2000-2015")+
+  labs(x="Year", y="Yearly total landings (MT)", title="Yearly catch of focal species relative to all catches")+
   theme_classic()+
   theme(legend.title=element_blank())
 
@@ -156,7 +162,7 @@ graph4<-ggplot(data=focal_catch_small, aes(x=Ano))+
   geom_line(aes(y=focal_MT), color="green")+
   geom_point(aes(y=smallscale_MT), color="blue")+
   geom_text(aes(y=focal_MT, label=percent_catch), size=3, vjust = -0.5, nudge_y = 1)+
-  labs(x="Year", y="Yearly total landings (MT)", title="Representation of Focal Species Catch in the Baja California Sur and Sonora ", subtitle= "17 species from 2000-2015")+
+  labs(x="Year", y="Yearly total landings (MT)", title="Yearly catch of focal species relative to only small scale fisheries catches", subtitle= "17 species from 2000-2015")+
   theme_classic()+
   theme(legend.title=element_blank())
 
@@ -173,7 +179,7 @@ graph5 <-ggplot(catch_yr, aes(x=Ano, y=MT, color=NombreCientifico))+
   #tiff('yearly_catch_focal_species.tiff', units="in", width=10, height=5, res=300)+
   geom_line(size=1)+
   geom_point()+
-  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of 19 focal species", subtitle= "2000-2015")+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of focal species", subtitle= "2000-2015")+
   theme_classic()+
   scale_x_continuous(expand=c(0,0))+
   scale_y_continuous(expand=c(0,0))+

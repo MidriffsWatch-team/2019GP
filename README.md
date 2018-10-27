@@ -7,7 +7,7 @@ conapesca.rds file contains monthly landings reported to CONAPESCA by fishers/co
   1. NombreActivo- vessel name 
   2. SitioDesembarque- Landing site 
   3. UnidadEconomica- cooperative or fisher folk name
-  4. Estado- state (Sonora, Baja California Sur)
+  4. Estado- State (our focus is on Sonora, Baja California)
   5. Officina- office 
   6. LugardeCaptura- fishing grounds 
   7. Mes- Month 
@@ -15,23 +15,28 @@ conapesca.rds file contains monthly landings reported to CONAPESCA by fishers/co
   9. Nombre principal- Group name of species 
   10. NombreCommum- Common names of species 
   11. NombreCientifico- Scientific name 
-  12. PesoDesembaracdo- weight of landings (kilograms)
-  13. PesoVivo- 
-  14. Precio- Price per kg, not sure of what year 
+  12. PesoDesembaracdo- Weight of landed product, may be whole, or gutted or filleted
+  13. PesoVivo- Live weight of landings in kilograms 
+  14. Precio- Price per kg, not sure of referecnce year  
   15. Valor- Total value  landed (PesoDesembaracdo * price per kg)
 
-species.csv contains a list of target species sent to us by Stuart 15/05/2018.
+focalspecies.csv contains a list of target species
   Variables:
   1. NombreCientifico- scientific name
-  2. NombreCommum- common names of species
-  3. Group- fish or invertebrate 
-  4. Tracy- Yes/No inicating if this species was included in Tracey's delayed model.
-  5. CommonName- common name as listed in Tracy's paper
-  6. ImportanciaComercial- Pesca artesanal (small scale fisheries) or Ornato (Ornamentals)
-  7. EspecieObjetive- Si/No is the species is targeted
-  8. Calidad-
-  9. Sitio- Site listed as RGI, Baja or RGI/Baja
-  10. PrecioMinimo- minimum market price 2014 in MXN pesos per kilogram
-  11. PrecioMaximo- maximum market price 2014in MXN pesos per kilogram
-  12. Promedio- Average market price 2014 in MXN pesos per kilogram
-  13. Tendencia- market value trend (increasing, decreasing or stable) 
+  2. CommonName- common name 
+  3. Commercial- refers to commercial scale ie small scale or large scale for which all are small scale 
+  4. Targetted- refers to whether the species is the primary targetted fisheries, yes/no variable 
+  5. Quality- corresponds to targetted, yes= primary, no=secondary 
+  6. Site- RGI (Region de las grandes islas) and Baja (Baja California)
+  7. Min 2014- Minimum market price of species in pesos/kilogram in 2014
+  8. Max2014- Maximum market price of species in pesos/kilogram in 2014
+  9. Average 2014- Average market price of species in pesos/kilogram in 2014
+  10. Min2018- Minimum market price of species in pesos/kilogram in 2018
+  11.Max2018- Maximum market price of species in pesos/kilogram in 2018
+  12. Average2018- Average market price of species in pesos/kilogram in 2018
+  13.Additional biological information- refers to whether the species was included in Tracey's (2018) cost of delay paper 
+  14. Quotas- refers to whether there is a quota system in place to manage species 
+  15. Satus_of_fishery- Based on CONAPESCA assessmet 
+  16. Abundance- Yes indicates that abundance data is available for the species from COBI for 2010/2011
+  17. Biomass-Yes indicates that biomass data is available for the species from COBI for 2010/2011
+  18. SPAGs- Yes indicates that spawing aggregation data is available for the species from COBI that fall within the proposed MPA design
