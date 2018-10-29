@@ -83,13 +83,12 @@ catch_gulf_grouper<-c(gulf_grouper$MT) #vector of catch date
 #final year catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
 19.555/19.555
 
-
 catchmsy(year=year_gulf_grouper,
                 catch=catch_gulf_grouper,
     l0=list(low=0.5,up=0.9,step=0),#biomass in year in relation to K, Initial catch divided by highest catch
     lt=list(low= 0.3,up=0.7,refyr=2015),#biomass in last year in relation to K, years catch divided by highest catch
     k=list(dist="unif",low=19.555,up=195.55), #carrying capacity; low=highest reported catch, high=highest catch*100
-    r=list(dist="unif",low=0.015,up=0.1), #intrinsic growth rate based on resiliene 
+    r=list(dist="unif",low=0.025,up=0.1), #intrinsic growth rate based on resiliene 
     M=list(dist="unif",low=0.1,up=0.9), #Natural mortality 
     nsims=30000, #Monte carlo simulations 
     catchout = (1), #saving the monte carlo simulations that can later be graphed
