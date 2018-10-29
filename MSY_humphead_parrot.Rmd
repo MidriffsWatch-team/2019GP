@@ -1,9 +1,10 @@
 ---
-title: "MSY"
-author: "Seleni Cruz"
-date: "October 7, 2018"
+title: "MSY_humphead_parrot"
+author: "Juliette Verstaen"
+date: "10/27/2018"
 output: html_document
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -39,8 +40,8 @@ focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
 unique(focalspeciescatch$NombreCientifico) #6 species 
 
 #create a new dataframe to isolate your species of interest 
-Octopus<-focalspeciescatch%>%
-  filter(NombreCientifico=="Octopus sp")
+humphead_parrot<-focalspeciescatch%>%
+  filter(NombreCientifico=="Scarus perrico")
 
 ```
 
@@ -48,8 +49,9 @@ Octopus<-focalspeciescatch%>%
 
 ```{r}
 #Plots catch over given years, simply change the name of the dataframe ie "Octopus"
-graph <-ggplot(Octopus, aes(x=Ano, y=MT))+
+graph <-ggplot(humphead_parrot, aes(x=Ano, y=MT))+
   geom_line(size=1)+
+  ggtitle("Humphead Parrot")+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Yearly total catch catch (MT)")+
@@ -70,29 +72,32 @@ https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-2979.2012.00485.x
 Above is the link to the reference publication "A simple method for estimating MSY from catch and resilience"
 
 ```{r}
-year<-c(Octopus$Ano) #vector of years
-catch<-c(Octopus$MT) #vector of catch date 
+year_humphead_parrot<-c(humphead_parrot$Ano) #vector of years
+catch_humphead_parrot<-c(humphead_parrot$MT) #vector of catch date 
 
 ?catchmsy #Provides more information on the function itself
 
 #Initial catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
-0.1490/247.8646
+0.1584/0.1584
 
 #final year catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
-121.2963/247.8646
+0.1395/0.1584
 
 
-catchmsy(year=year,
-                catch=catch,
+catchmsy(year=year_humphead_parrot,
+                catch=catch_humphead_parrot,
     l0=list(low=0.3,up=0.6,step=0),#biomass in year in relation to K, Initial catch divided by highest catch
-    lt=list(low= 0.01,up=0.4,refyr=2015),#biomass in last year in relation to K, years catch divided by highest catch
-    k=list(dist="unif",low=4000,up=15000), #carrying capacity; low=highest reported catch, high=highest catch*100
-    r=list(dist="unif",low=0.3,up=0.6), #intrinsic growth rate based on resiliene 
+    lt=list(low= 0.3,up=0.7,refyr=2015),#biomass in last year in relation to K, years catch divided by highest catch
+    k=list(dist="unif",low=0.1584,up=15.84), #carrying capacity; low=highest reported catch, high=highest catch*100
+    r=list(dist="unif",low=0.3,up=.9), #intrinsic growth rate based on resiliene 
     M=list(dist="unif",low=0.1,up=0.9), #Natural mortality 
     nsims=30000, #Monte carlo simulations 
     catchout = (1), #saving the monte carlo simulations that can later be graphed
     grout = 1, #output just to console, 
     graphs = c(1, 2,3,4,5,6,7,8,9,10,11))
+
+
+#on fish base "Resilience (Ref. 69278):  Medium, minimum population doubling time 1.4 - 4.4 years (Preliminary K or Fecundity.)"
 
 ```
 
@@ -108,4 +113,3 @@ Graphs:
 9. Histogram of Umsy values from Fmsy and M; Umsy is exploitation rate at MSY
 10. Histogram of overfishing limit (OFL) in last year+1 values from Umsys
 11. Line plots of accepted and rejected biomass trajectores with median and 2.5th and 97.5th percentiles (in red)
-
