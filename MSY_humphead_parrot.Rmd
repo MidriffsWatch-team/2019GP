@@ -40,7 +40,7 @@ focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
 unique(focalspeciescatch$NombreCientifico) #6 species 
 
 #create a new dataframe to isolate your species of interest 
-humphead_parrot<-focalspeciescatch%>%
+bumphead_parrot<-focalspeciescatch%>%
   filter(NombreCientifico=="Scarus perrico")
 
 ```
@@ -49,9 +49,9 @@ humphead_parrot<-focalspeciescatch%>%
 
 ```{r}
 #Plots catch over given years, simply change the name of the dataframe ie "Octopus"
-graph <-ggplot(humphead_parrot, aes(x=Ano, y=MT))+
+graph_BumpheadParrot <-ggplot(bumphead_parrot, aes(x=Ano, y=MT))+
   geom_line(size=1)+
-  ggtitle("Humphead Parrot")+
+  ggtitle("Bumphead Parrot")+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Yearly total catch catch (MT)")+

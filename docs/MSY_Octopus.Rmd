@@ -39,8 +39,8 @@ focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
 unique(focalspeciescatch$NombreCientifico) #6 species 
 
 #create a new dataframe to isolate your species of interest 
-gulf_grouper<-focalspeciescatch%>%
-  filter(NombreCientifico=="Mycteroperca jordani")
+octopus_sp<-focalspeciescatch%>%
+  filter(NombreCientifico=="Octopus sp")
 
 ```
 
@@ -48,9 +48,9 @@ gulf_grouper<-focalspeciescatch%>%
 
 ```{r}
 #Plots catch over given years, simply change the name of the dataframe ie "Octopus"
-graph <-ggplot(gulf_grouper, aes(x=Ano, y=MT))+
+graph_octopus <-ggplot(gulf_grouper, aes(x=Ano, y=MT))+
   geom_line(size=1)+
-  ggtitle("Gulf Grouper Catch")+
+  ggtitle("Octopus Species Catch")+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Yearly total catch catch (MT)")+
