@@ -97,6 +97,12 @@ catchmsy(year=year_octopus,
 
 #reslience = unsure, saying medium, not on fish base or other preliminary searches
 
+
+a <- cmsy2(year=year_octopus, catch=catch_octopus, resilience = "Medium")
+
+plot_dlm(a)
+
+
 ```
 
 Graphs:

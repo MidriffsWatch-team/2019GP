@@ -1,0 +1,103 @@
+---
+title: "Humphead_Parrot_CMSY_Free"
+author: "Juliette"
+date: "October 31, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#Packages 
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(plotly)
+  library(fishmethods)
+  library(devtools)
+install_github("James-Thorson/FishLife")
+library(FishLife)
+})
+
+
+```
+
+
+#Load catch data of species
+
+```{r}
+#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
+focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+
+unique(focalspeciescatch$NombreCientifico) #6 species 
+
+#create a new dataframe to isolate your species of interest 
+bumphead_parrot<-focalspeciescatch%>%
+  filter(NombreCientifico=="Scarus perrico")
+
+#new datafram to isolate catch increase by 20%
+
+#new datafram to isolate catch increase by 40%
+
+#new datafram to isolate catch increase by 60%
+
+
+
+```
+
+
+```{r}
+
+#Plots catch over given years, simply change the name of the dataframe ie "Octopus"
+graph_BumpheadParrot <-ggplot(bumphead_parrot, aes(x=Ano, y=MT))+
+  geom_line(size=1)+
+  ggtitle("Bumphead Parrot")+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Yearly total catch catch (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+ggplotly(graph_BumpheadParrot)
+
+```
+
+
+
+FAO considers a maximally sustainable fished stock to be between 0.8 and 1.2 BMSY, an overfished stock to be <0.8 BMSY, and an underfished stock to be >1.2 BMSY. For US federally managed fisheries, NOAA reports on what fraction of stocks are overfished (https://www.fisheries.noaa.gov/feature-story/status-stocks-2017), usually defined as being <0.5 BMSY, though the exact ratio differs by region and type of stock
+
+Paper: https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsy138/5133277
+
+```{r}
+
+
+year_bumphead_parrot<-c(bumphead_parrot$Ano) #vector of years
+catch_bumphead_parrot<-c(bumphead_parrot$MT) #vector of catch date 
+
+#reslience = medium from fishbase
+
+# reported catch
+bumphead_parrot_cmsy_free <- cmsy2(year=year_bumphead_parrot, catch=catch_bumphead_parrot, resilience = "Medium")
+bumphead_parrot_cmsy_free_plots <- plot_dlm(a)
+
+bumphead_parrot_cmsy_free$ref_pts
+bumphead_parrot_cmsy_free$ref_ts
+
+
+#20% increase of reported catch
+
+#40% increase of reported catch
+
+#60% increase of reported catch
+
+```

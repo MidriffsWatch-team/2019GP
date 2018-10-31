@@ -77,8 +77,8 @@ focallandingsites<-merge(catchfocalspecies, LandingSites, by= "SitioDesembarque"
 spp_catch<-focallandingsites%>%
   group_by(NombreCientifico, Ano)%>%
   summarize(MT=sum(PesoVivo)/1000)%>%
-  filter(length(unique(Ano))>5|length(unique(Ano))==5)
-unique(spp_catch$NombreCientifico)
+  filter(length(unique(Ano))>5|length(unique(Ano))==5)%>%
+  mutate(MT_20= MT*1.2, MT_40= MT*1.4, MT_60=MT*1.6)
 
 write.csv(spp_catch, "focalspeciescatch.csv")
 
