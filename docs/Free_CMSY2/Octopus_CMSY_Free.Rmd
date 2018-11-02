@@ -96,10 +96,12 @@ octopus_sp_cmsy_free <- cmsy2(year=year_octopus_sp, catch=catch_octopus_sp, resi
 
 octopus_sp_cmsy_free_plots <- plot_dlm(octopus_sp_cmsy_free)
 
+octopus_sp_cmsy_free
+octopus_sp_cmsy_free_plots
 octopus_sp_cmsy_free$ref_pts
 octopus_sp_cmsy_free$ref_ts
 
-##results:MSY= 171.454; BMSY < 0.8 = maximally fished
+##results:MSY= 171.454; Bmsy = 0.604; B/Bmsy in last year  = 0.93
 
 
 #Landings inflated 20%
@@ -110,7 +112,7 @@ octopus_sp_20_cmsy_free_plots <- plot_dlm(octopus_sp_20_cmsy_free)
 octopus_sp_20_cmsy_free$ref_pts
 octopus_sp_20_cmsy_free$ref_ts
 
-##results:MSY= 204.294;  BMSY < 0.8 = maximally fished
+##results:MSY= 204.294;  Bmsy = 0.716; B/Bmsy in last year  = 0.929
 
 
 #Landings inflated 40%
@@ -121,7 +123,7 @@ octopus_sp_40_cmsy_free_plots <- plot_dlm(octopus_sp_40_cmsy_free)
 octopus_sp_40_cmsy_free$ref_pts
 octopus_sp_40_cmsy_free$ref_ts
 
-##results: MSY= 237.990; BMSY < 0.8 = maximally fished
+##results: MSY= 237.990; Bmsy = 0.847; B/Bmsy in last year  = 0.936
 
 
 #Landings inflated 60%
@@ -132,7 +134,7 @@ octopus_sp_60_cmsy_free_plots <- plot_dlm(octopus_sp_60_cmsy_free)
 octopus_sp_60_cmsy_free$ref_pts
 octopus_sp_60_cmsy_free$ref_ts
 
-##results: MSY= 273.372	; BMSY < 0.8 = maximally fished
+##results: MSY= 273.372	; Bmsy = 0.977; B/Bmsy in last year  = 0.969
 
 ```
 
