@@ -79,5 +79,7 @@ catchmsy(year=year,
    catchout = (1), #saving the monte carlo simulations that can later be graphed
    grout = 1, #output just to console,
    graphs = c(1, 2,3,4,5,6,7,8,9,10,11))
+
+catchmsy
 ```
 
