@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load packages}
 
-install.packages("tidyverse")
 
+ suppressPackageStartupMessages({
   library(tidyverse)
   library(here)
   library(ggplot2)
@@ -22,9 +22,10 @@ install.packages("tidyverse")
   library(plotly)
   library(fishmethods)
   library(devtools)
+devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2) # Chris Free updated package for CMSY2
+})
 
-install_github("James-Thorson/FishLife")
-library(FishLife)
 
 
 ```
