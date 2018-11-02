@@ -1,0 +1,80 @@
+---
+title: "cMSY2"
+author: "Edaysi Bucio"
+date: "31 de octubre de 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages
+
+```{r}
+
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(plotly)
+  library(fishmethods)
+  library(devtools)
+  devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2) # Chris Free updated package for CMSY2
+})
+
+```
+
+## Database
+
+```{r}
+
+focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+unique(focalspeciescatch$NombreCientifico) #7 species  
+
+View(focalspeciescatch)
+
+#create a new dataframe to isolate your species of interest 
+
+burrito <- focalspeciescatch%>% 
+  filter(NombreCientifico == "Anisotremus interruptus")
+
+#Create vectors for the cmsy2 function
+
+year <- c(burrito$Ano)
+catch <- c(burrito$MT)
+catch20<- c(burrito$MT_20)
+catch40<- c(burrito$MT_40)
+catch60<- c(burrito$MT_60)
+
+```
+
+
+##Running cMSY model
+
+```{r}
+
+burritoM <- cmsy2(year=year, catch=catch, resilience = "Low")
+burritoM
+
+plot_dlm(burritoM)
+
+#Landings inflated 20%
+
+burritoM20 <- cmsy2(year=year, catch=catch20, resilience = "Low")
+plot_dlm(burritoM20)
+
+#Landings inflated 40%
+
+burritoM40 <- cmsy2(year=year, catch=catch40, resilience = "Low")
+plot_dlm(burritoM40)
+
+#Landings inflated 60%
+
+burritoM60 <- cmsy2(year=year, catch=catch60, resilience = "Low")
+plot_dlm(burritoM60)
+
+```
+

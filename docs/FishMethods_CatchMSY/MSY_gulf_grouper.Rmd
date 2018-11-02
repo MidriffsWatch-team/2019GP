@@ -1,0 +1,115 @@
+---
+title: "MSY_gulf_grouper"
+author: "Juliette Verstaen"
+date: "10/27/2018"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Packages 
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(plotly)
+  library(fishmethods)
+  library(devtools)
+install_github("James-Thorson/FishLife")
+library(FishLife)
+})
+
+
+```
+
+
+#Load catch data of species
+
+```{r}
+#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
+focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+
+unique(focalspeciescatch$NombreCientifico) #6 species 
+
+#create a new dataframe to isolate your species of interest 
+gulf_grouper<-focalspeciescatch%>%
+  filter(NombreCientifico=="Mycteroperca jordani")
+
+```
+
+
+
+```{r}
+#Plots catch over given years, simply change the name of the dataframe ie "Octopus"
+graph_GulfGrouper <-ggplot(gulf_grouper, aes(x=Ano, y=MT))+
+  geom_line(size=1)+
+  ggtitle("Gulf Grouper Catch")+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Yearly total catch catch (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+ggplotly(graph)
+
+
+```
+
+
+#Run CatchMSY
+https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-2979.2012.00485.x
+
+Above is the link to the reference publication "A simple method for estimating MSY from catch and resilience"
+
+```{r}
+year_gulf_grouper<-c(gulf_grouper$Ano) #vector of years
+catch_gulf_grouper<-c(gulf_grouper$MT) #vector of catch date 
+
+?catchmsy #Provides more information on the function itself
+
+#Initial catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
+0.5327/19.555
+
+#final year catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
+19.555/19.555
+
+catchmsy(year=year_gulf_grouper,
+                catch=catch_gulf_grouper,
+    l0=list(low=0.5,up=0.9,step=0),#biomass in year in relation to K, Initial catch divided by highest catch
+    lt=list(low= 0.3,up=0.7,refyr=2015),#biomass in last year in relation to K, years catch divided by highest catch
+    k=list(dist="unif",low=19.555,up=195.55), #carrying capacity; low=highest reported catch, high=highest catch*100
+    r=list(dist="unif",low=0.025,up=0.1), #intrinsic growth rate based on resiliene 
+    M=list(dist="unif",low=0.1,up=0.9), #Natural mortality 
+    nsims=30000, #Monte carlo simulations 
+    catchout = (1), #saving the monte carlo simulations that can later be graphed
+    grout = 1, #output just to console, 
+    graphs = c(1, 2,3,4,5,6,7,8,9,10,11))
+
+
+#on fish base "Resilience (Ref. 69278):  Very Low, minimum population doubling time more than 14 years (Preliminary K or Fecundity.). "
+
+```
+
+Graphs:
+1. Time series of catched with overlaid estimate of MSY (solid line) and and 95% limit (dashed lines)
+2. Point plot of plausible k versus r values, dots show r-k combinations that are compatible with catch series
+3. Histogram of plausible r values, posterior densities distribution
+4. Histogram of plausible k values, posterior densities distribution
+5. Histogram of M values, posterior densities distribution
+6. Histogram of MSY from plausible values of l0,k,r, and Bmsy/k 
+7. Histogram of Bmsy from plausible values of l0,k,r, and Bmsy/k
+8. Histogram of Fmsy from plausible values of l0,k,r, and Bmsy/k; fishing mortality at MSY is r/2
+9. Histogram of Umsy values from Fmsy and M; Umsy is exploitation rate at MSY
+10. Histogram of overfishing limit (OFL) in last year+1 values from Umsys
+11. Line plots of accepted and rejected biomass trajectores with median and 2.5th and 97.5th percentiles (in red)
+
