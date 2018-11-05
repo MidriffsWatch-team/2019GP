@@ -38,14 +38,14 @@ MT_60 - inflated to 60% unreported catch
 ```{r}
 #loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
 focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+View(focalspeciescatch)
 
-unique(focalspeciescatch$NombreCientifico) #6 species 
+unique(focalspeciescatch$NombreCientifico) #7 species 
 
 #create a new dataframe to isolate your species of interest 
 snapper_sp<-focalspeciescatch%>%
   filter(NombreCientifico=="Lutjanus argentiventris")
 View(snapper_sp)
-
 
 #Create vectors for the cmsy2 function
 year_snapper_sp <- c(snapper_sp$Ano) #vector of years
