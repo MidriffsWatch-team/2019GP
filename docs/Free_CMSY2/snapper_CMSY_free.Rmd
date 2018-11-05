@@ -50,6 +50,7 @@ View(snapper_sp)
 #Create vectors for the cmsy2 function
 year_snapper_sp <- c(snapper_sp$Ano) #vector of years
 catch_snapper_sp <- c(snapper_sp$MT) #vector of catch date 
+View(catch_snapper_sp)
 
 #new datafram to isolate catch increase by 20%
 catch20_snapper_sp<- c(snapper_sp$MT_20)
@@ -83,24 +84,52 @@ Paper: https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsy1
 
 ```{r}
 
-year_snapper<-c(snapper_sp$Ano) #vector of years
-catch_snapper<-c(snapper_sp$MT) #vector of catch date 
+?cmsy2
 
-#reslience = unsure, saying medium, not on fish base or other preliminary searches
+#Regular landings 
+snapper_sp_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch_snapper_sp, resilience = "Low")
 
-# reported catch
-snapper_cmsy_free <- cmsy2(year=year_snapper, catch=catch_snapper, resilience = "Medium")
-snapper_cmsy_free_plots <- plot_dlm(a)
+snapper_sp_cmsy_free_plots <- plot_dlm(snapper_sp_cmsy_free)
 
-snapper_cmsy_free$ref_pts
-snapper_cmsy_free$ref_ts
+snapper_sp_cmsy_free
+snapper_sp_cmsy_free_plots
+snapper_sp_cmsy_free$ref_pts
+snapper_sp_cmsy_free$ref_ts
+
+##results:MSY= 0.000338; Bmsy = 0.0024; B/Bmsy in last year  = 0.23; Fishing mortality in last year = 0.101; Exploitation F/Fmsy  = 1.55
 
 
-#20% increase of reported catch
+#Landings inflated 20%
+snapper_sp_20_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch20_snapper_sp, resilience = "Low")
 
-#40% increase of reported catch
+snapper_sp_20_cmsy_free_plots <- plot_dlm(snapper_sp_20_cmsy_free)
 
-#60% increase of reported catch
+snapper_sp_20_cmsy_free$ref_pts
+snapper_sp_20_cmsy_free$ref_ts
+##results 20%:MSY= 0.00041;  Bmsy = 0.0029; B/Bmsy in last year  = 0.234; Fishing mortality in last year = 0.098; Exploitation F/Fmsy  = 1.48
+
+
+#Landings inflated 40%
+snapper_sp_40_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch40_snapper_sp, resilience = "Low")
+
+snapper_sp_40_cmsy_free_plots <- plot_dlm(snapper_sp_40_cmsy_free)
+
+snapper_sp_40_cmsy_free$ref_pts
+snapper_sp_40_cmsy_free$ref_ts
+
+##results 40%: MSY= 0.000485; Bmsy = 0.00344; B/Bmsy in last year  = 0.229; Fishing mortality in last year = 0.0985; Exploitation F/Fmsy  = 1.52
+
+
+#Landings inflated 60%
+snapper_sp_60_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch60_snapper_sp, resilience = "Medium")
+
+snapper_sp_60_cmsy_free_plots <- plot_dlm(snapper_sp_60_cmsy_free)
+
+snapper_sp_60_cmsy_free$ref_pts
+snapper_sp_60_cmsy_free$ref_ts
+
+##results 60%: MSY= 0.000651; Bmsy = 0.0023; B/Bmsy in last year  =  0.22; Fishing mortality in last year = 0.175; Exploitation F/Fmsy  = 1.4
+
 
 ```
 
