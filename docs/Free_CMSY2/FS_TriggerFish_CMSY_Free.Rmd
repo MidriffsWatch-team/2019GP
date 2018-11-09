@@ -78,6 +78,7 @@ plot_dlm(FS_Triggerfish_CMSY40)
 
 FS_Triggerfish_CMSY60 <- cmsy2(year=year, catch=catch60, resilience = "Low")
 plot_dlm(FS_Triggerfish_CMSY60)
+FS_Triggerfish_CMSY60
 
 ```
 

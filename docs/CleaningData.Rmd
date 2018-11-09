@@ -135,7 +135,6 @@ ranked<-merge(ranked, v, by="NombreCientifico")
 ranked<-merge(ranked, l, by="NombreCientifico")
 ranked<-merge(ranked, tracy, by="NombreCientifico")
 
-write.csv(ranked, file="ranked.csv")
 
 
 

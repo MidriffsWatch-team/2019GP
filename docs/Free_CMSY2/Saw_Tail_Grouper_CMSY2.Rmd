@@ -58,24 +58,31 @@ catch60<- c(saw_tail_grouper$MT_60)
 
 ```{r}
 saw_tail_grouperM <- cmsy2(year=year, catch=catch, resilience = "Very low")
-saw_tail_grouperM
 
-plot_dlm(saw_tail_groueprM)
-
+plot_dlm(saw_tail_grouperM)
+saw_tail_grouperM$ref_pts
+saw_tail_grouperM$ref_ts
 #Landings inflated 20%
 
 saw_tail_grouperM20 <- cmsy2(year=year, catch=catch20, resilience = "Very low")
+
 plot_dlm(saw_tail_grouperM20)
+saw_tail_grouperM20$ref_pts
+saw_tail_grouperM20$ref_ts
 
 #Landings inflated 40%
 
 saw_tail_grouperM40 <- cmsy2(year=year, catch=catch40, resilience = "Very low")
 plot_dlm(saw_tail_grouperM40)
+saw_tail_grouperM40$ref_pts
+saw_tail_grouperM40$ref_ts
 
 #Landings inflated 60%
 
 saw_tail_grouperM60 <- cmsy2(year=year, catch=catch60, resilience = "Very low")
 plot_dlm(saw_tail_grouperM60)
+saw_tail_grouperM60$ref_pts
+saw_tail_grouperM60$ref_ts
 
 ```
 \

@@ -1,0 +1,226 @@
+---
+title: "Branch and PT MPA Model"
+author: "Seleni Cruz"
+date: "November 8, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This model represents marine reserve in one dimensional space using the following equation 
+
+
+$$
+N_{i,t+1}= N_{i,t} + N_{i,t} r_i (1- (N_{i,t}/K_i)) - u_{i,t} N_{i,t} + m(N_{i-1, t} + N_{i+1, t})- 2m_{i,t} N_{i,t}
+$$
+
+where $u_{i,t}= u_{out}$if i is outside the reserve, and $u_{i,t}= 0$ if i is inside the reserve. ,$ N_t$ the number of fish in each cell i in time period t, while 2m is the diffusion rate (m is mrate in the code, some migration rate) out of each cell. Logistic growth in each cell is represented by parameters r and K as usual.
+
+
+#Part 1: Code for a harvest vector 
+This part of the code sets the explotiation rate inside and outside the MPA (ie inside the MPA exploitation rate should be zero).
+
+Given the harvest rate outside the MPA (u.out), 
+the total number of cells/patches (ncells), 
+and the width of the MPA (MPA.width)
+this function returns a vector of harvest rates in each cell. 
+
+```{r}
+calc.harvest.vec <- function(u.out, ncells, MPA.width)  {
+   u.vec <- vector(length=ncells) #create vector to store harvest rates in each cell hence the the length is ncells 
+   u.vec[] <- u.out       #set every cell to u.out, equivalent to u.vec[1:ncells] <- u.out   
+   if (MPA.width > 0) {   #no need to do this if there is no MPA! 
+      MPA.begin <- round((ncells-MPA.width)/2)+1  #start cell of MPAin the middle of ncells 
+      MPA.end <- MPA.begin + MPA.width -1         #end cell of MPA in the middle of ncells 
+      u.vec[MPA.begin:MPA.end] <- 0        
+   }
+   return(u.vec)
+}
+
+calc.harvest.vec(u.out=0.5, ncells=100, MPA.width =5) 
+
+
+```
+
+#Part 2: MPA Model 
+When using vectors in a function there is no need to use the [i] since the function is looping through number of steps not the number of cells.
+
+
+```{r}
+MPA.model <- function(r, K, u.out, ncells, nsteps, 
+                      MPA.width, mrate) {
+   #harvest rate in each cell using function described in part 1
+   u.vec <- calc.harvest.vec(u.out=u.out, ncells=ncells, MPA.width=MPA.width)
+   
+   #Population in each cell, empty cells place holder for later calcualtions 
+   pop <- vector(length=ncells) 
+   
+   #set starting population in vector pop in each cell 
+   # equal to K; this can be biomass estimate at first time step
+    pop[]<-K
+   
+  # this models assumed pacman movement of individuals in the cells; where individuals moving off the right appear on the left and vice versa; there are other movement simulations that can be considered 
+   #vector left.cells storing the cell numbers of cells to the left of each cell
+   left.cell<- c(ncells, 1: (ncells-1))
+    
+   #vector right.cells storing the cell numbers of cells to the right of each cell
+   right.cell<- c(2: ncells, 1) #Start at 2 since the fist cell (think corner) cannot move to the right, only to the left. the :1 wraps the area around 
+   
+   print(left.cell) #print allows you to see what the vectors look like to make sure they are right; not necessary when running simulations but are a good check 
+   print(right.cell)
+   print(u.vec)
+   print(pop)
+   
+   #plot the initial numbers
+   plot(x=1:ncells, y=pop, xlab="Cell number", lwd=3,
+        ylab="Population size", ylim=c(0, 1.05*max(pop)), 
+        type="l", yaxs="i", xaxs="i")
+   
+   #loop through the time steps (nsteps or # of years)
+   for (i in 1:nsteps) {
+      #Vector "leaving" is number of individuals leaving each cell 
+      #Number leaving each cell is 2*movement rate*pop size
+     #since i used vector operation there is no need to loop 
+      leaving<-2*mrate*pop
+      
+      #The number of immigrants is 1/2 those leaving cells to the left and 1/2 those leaving cells to the right. 
+      #The idea here is that individuals evely migrate to left and right cells
+      arriving<-0.5*leaving[left.cell]+ 0.5*leaving[right.cell]
+      
+      #surplus production from the logistic model
+      surplus<- r*pop *(1-pop/K)
+      
+      #Using Traceys Pt model, we would need to include the new variables in the first line of the function
+       b_next = b + ((phi + 1) / phi ) * g * b * (1 -  (b ^ phi)  / (phi + 1)) - g * f_intervention * b - g * f_nonintervention * b
+      
+      #catches = harvest rate in each cell times the population size 
+      #basically how much are we catching at each time step
+      catches<- u.vec*pop
+      
+      
+      #Now that we caught some fish and some migrated we update the population numbers
+      pop<-pop+surplus-catches- leaving+ arriving
+      
+      #plot the population in each cell (uncomment when ready); plot allows us to see what population numbers look like in each cell as the model steps through each time step. We should see higher population inside MPA since harvest rate is 0.
+      lines(x=1:ncells, y=pop, lwd=(nsteps-i+1)/nsteps*3)
+   }
+}
+MPA.model(r=0.2, K=1000, u.out=0.4, ncells=21,
+          MPA.width=5, nsteps=10, mrate=0.2)
+```
+
+
+
+#Part 3: Calculating long term equilibrium catch 
+Modifies MPA.Model function so that it returns the sum of the catches in the final year. We will use this function to compute equilibrium catch under different scenarios of harvest rate and MPA size. This allows us to turn MPA switches on and off as well as harvest rates.
+
+```{r}
+MPA.eqm.catch <- function(r, K, u.out, ncells, nsteps, 
+                      MPA.width, mrate) {
+   #harvest rate in each cell
+   u.vec <- calc.harvest.vec(u.out=u.out, ncells=ncells, MPA.width=MPA.width)
+   
+   #Population in each cell
+   pop <- vector(length=ncells) 
+   
+   #set starting population in vector pop in each cell 
+   # equal to K
+    pop[]<-K
+   
+   #vector left.cells storing the cell numbers of  
+   # cells to the left of each cell
+   left.cell<- c(ncells, 1: (ncells-1))
+    
+   #vector right.cells storing the cell numbers of 
+   # cells to the right of each cell
+   right.cell<- c(2: ncells, 1) #Start at 2 since the fist cell cannot move to the right, only to the left. the :1 wraps the area around 
+
+   #loop through the time steps
+   for (i in 1:nsteps) {
+      #Vector "leaving" of number leaving each cell 
+      #Number leaving each cell is 2*movement rate*pop size
+      leaving<-2*mrate*pop
+      
+      #The number of immigrants is 1/2 those leaving cells to the left and 1/2 those leaving cells to the right. 
+      #This is a complicated expression, take a minute to think it through!
+      arriving<-0.5*leaving[left.cell]+ 0.5*leaving[right.cell]
+      
+      #surplus production from the logistic model
+      surplus<- r*pop *(1-pop/K)
+      
+      #catches = harvest rate in each cell times the population size 
+      catches<- u.vec*pop
+      
+      #update the population numbers
+      pop<-pop+surplus-catches- leaving+ arriving
+      
+   }
+   return(sum(catches)) 
+}
+
+MPA.eqm.catch(r=0.2, K=1000, u.out=0.4, ncells=21,
+          MPA.width=5, nsteps=10, mrate=0.2)
+```
+
+#Part 4: Eq yield by harvest rate and reseve size 
+We will be looping through different values for the number of cells in the MPA and for the harvest rate outside the MPA, calculating equilibrium yield using MPA.eqm.catch() for each combination of values, and then creating a contour plot of the yield at each combination of values.
+
+```{r}
+contour.width.harvest <- function(r=0.2, K=1000, ncells=100, nsteps=1000, mrate=0.2) {
+   #vector MPA.widths[] to loop over; empty vectors as place holders
+   MPA.widths <- 1:100  
+
+   #vector harvest[] to loop over
+   harvest <- seq(0,0.5,length.out=100)   
+   
+   #matrix catch.mat[] to store the equilibrium catches; rows are harvest, columns are MPA widths
+   catch.mat<-matrix(nrow=length(harvest), ncol=length(MPA.widths))
+    
+   #loop through widths *and* loop through harvest rates
+   #storing equilibrium summed catches from MPA.eqm.catch() 
+   #length(harvest) used since the matrix will not recognize cell 0.5 column 10. Technicaly does not exist.
+   
+  for (i in 1:length(harvest)){
+    for (j in 1:length(MPA.widths)){
+      catch.mat[i, j]<-MPA.eqm.catch(r=r, K=K, u.out=harvest[i], ncells=ncells,MPA.width=MPA.widths[j], nsteps=nsteps, mrate=mrate)
+    }
+  }
+   print(paste(i,j))  #this prints out the current loop number for progress
+   
+   
+   #Plot a contour showing total catches by MPAwidth and harvest rate
+   #xvalues are the harvest values, y values are MPA.widths, and 
+   #z values are equilibrium catches stored in the matrix
+   contour(x=harvest, y=MPA.widths, z=catch.mat,
+           xlab="Harvest rate",  ylab="MPA width", 
+           xaxs="i",yaxs="i", levels=c(100,200,300, 500,
+                                       seq(1000,5000,500)))
+   
+   #return the resulting values for catches
+   return(catch.mat)
+}
+
+contour.width.harvest()
+
+
+#pdf("Figures//newfig.pdf",width=8, height=5)
+x <- contour.width.harvest(r=0.2, K=1000, ncells=100, 
+                           nsteps=100, mrate=0.1) 
+#dev.off()
+
+#lower movement rate
+x <- contour.width.harvest(r=0.2, K=1000, ncells=100, 
+                           nsteps=100, mrate=0.05) 
+
+#higher value of r
+x <- contour.width.harvest(r=0.5, K=1000, ncells=100, 
+                           nsteps=100, mrate=0.1) 
+```
+
+
+
+
+
+
