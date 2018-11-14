@@ -68,10 +68,10 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
    #vector right.cells storing the cell numbers of cells to the right of each cell
    right.cell<- c(2: ncells, 1) #Start at 2 since the fist cell (think corner) cannot move to the right, only to the left. the :1 wraps the area around 
    
-   print(left.cell) #print allows you to see what the vectors look like to make sure they are right; not necessary when running simulations but are a good check 
-   print(right.cell)
-   print(u.vec)
-   print(pop)
+   #print(left.cell) #print allows you to see what the vectors look like to make sure they are right; not necessary when running simulations but are a good check 
+   #print(right.cell)
+   #print(u.vec)
+   #print(pop)
    
    #plot the initial numbers
    plot(x=1:ncells, y=pop, xlab="Cell number", lwd=3,
@@ -84,28 +84,30 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
       #Number leaving each cell is 2*movement rate*pop size
      #since i used vector operation there is no need to loop 
       leaving<-2*mrate*pop
+      print(leaving)
       
       #The number of immigrants is 1/2 those leaving cells to the left and 1/2 those leaving cells to the right. 
       #The idea here is that individuals evely migrate to left and right cells
       arriving<-0.5*leaving[left.cell]+ 0.5*leaving[right.cell]
+      print(arriving)
       
       #surplus production from the logistic model
       surplus<- r*pop *(1-pop/K)
-      
+      print (surplus)
       #catches = harvest rate in each cell times the population size 
       #basically how much are we catching at each time step
       catches<- u.vec*pop
-      
+      print(catches)
       
       #Now that we caught some fish and some migrated we update the population numbers
       pop<-pop+surplus-catches- leaving+ arriving
-      
+      print(pop)
       #plot the population in each cell (uncomment when ready); plot allows us to see what population numbers look like in each cell as the model steps through each time step. We should see higher population inside MPA since harvest rate is 0.
       lines(x=1:ncells, y=pop, lwd=(nsteps-i+1)/nsteps*3)
    }
 }
-MPA.model(r=0.2, K=1000, u.out=0.4, ncells=21,
-          MPA.width=5, nsteps=10, mrate=0.2)
+MPA.model(r=0.02, K=1000, u.out=0.4, ncells=5,
+          MPA.width=2, nsteps=2, mrate=0.2)
 ```
 
 
