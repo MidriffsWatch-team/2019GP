@@ -84,30 +84,36 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
       #Number leaving each cell is 2*movement rate*pop size
      #since i used vector operation there is no need to loop 
       leaving<-2*mrate*pop
-      print(leaving)
+      #print(leaving)
       
       #The number of immigrants is 1/2 those leaving cells to the left and 1/2 those leaving cells to the right. 
       #The idea here is that individuals evely migrate to left and right cells
       arriving<-0.5*leaving[left.cell]+ 0.5*leaving[right.cell]
-      print(arriving)
+      #print(arriving)
       
       #surplus production from the logistic model
       surplus<- r*pop *(1-pop/K)
-      print (surplus)
+      #print (surplus)
       #catches = harvest rate in each cell times the population size 
       #basically how much are we catching at each time step
       catches<- u.vec*pop
-      print(catches)
+      #print(catches)
       
       #Now that we caught some fish and some migrated we update the population numbers
       pop<-pop+surplus-catches- leaving+ arriving
-      print(pop)
+      #print(pop)
       #plot the population in each cell (uncomment when ready); plot allows us to see what population numbers look like in each cell as the model steps through each time step. We should see higher population inside MPA since harvest rate is 0.
+      
+      result<-cbind(surplus, catches, pop)
+      
       lines(x=1:ncells, y=pop, lwd=(nsteps-i+1)/nsteps*3)
    }
+   return(result)
 }
-MPA.model(r=0.02, K=1000, u.out=0.4, ncells=5,
-          MPA.width=2, nsteps=2, mrate=0.2)
+
+Burrito
+MPA.model(r=0.566, K=1209, u.out=0.2148, ncells=100,
+          MPA.width=5, nsteps=5, mrate=0.5)
 ```
 
 
