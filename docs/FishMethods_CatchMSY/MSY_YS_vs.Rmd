@@ -1,0 +1,85 @@
+---
+title: "MSY Yellow Snapper"
+author: "Vienna Saccomanno"
+date: "October 22, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r package download}
+
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(fishmethods)
+})
+
+```
+
+
+```{r filtering out the species}
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+ filter(Estado== "Baja california sur"| Estado=="Sonora")
+
+#unique(catch$NombrePrincipal)
+
+small_scale<-catch%>%
+ filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+ group_by(NombreCientifico, Ano)%>%
+ summarize(MT= (sum(PesoVivo)/1000))
+
+#unique(catch$NombreCientifico)  #316 species
+
+
+yellowsnapper<-small_scale%>%
+ filter(NombreCientifico=="Lutjanus argentiventris")
+View(yellowsnapper)
+```
+
+
+```{r species parameters}
+year<-c(yellowsnapper$Ano) #vector of years
+catch<-c(yellowsnapper$MT) #vector of catch date
+
+plot(yellowsnapper$Ano, yellowsnapper$MT, type="l")
+?catchmsy
+
+#Initial catch divided by highest catch for lo in the model
+1.19970/211.75220
+#=0.005665585
+
+
+#final year catch divided by highest catch for lt
+103.17780/211.75220
+#=0.4872573
+
+# for K, lower bound will be the year with highest catch and low bound will be greatest catch*100
+211.75220*100
+#=21175.22
+```
+
+
+```{r}
+catchmsy(year=year,
+               catch=catch,
+               catchCV=NULL,#Addresses uncertainty but we don't need it
+   l0=list(low=0.5,up=0.9,step=0),#biomass in year 1 in relation to K, Initial catch divided by highest catch
+   lt=list(low= 0.01,up=0.3,refyr=2015),
+   k=list(dist="unif",low=211.752220,up=2117.522), #carrying capacity; low bound=highest reported catch, high=highest catch*100
+   r=list(dist="unif",low=0.05,up=0.5), #intrinsic growth rate based on resiliene; Low  0.05–0.5
+   M=list(dist="unif",low=0.1,up=0.4), #Natural mortality
+   nsims=30000, #Monte carlo simulations
+   catchout = (1), #saving the monte carlo simulations that can later be graphed
+   grout = 1, #output just to console,
+   graphs = c(1, 2,3,4,5,6,7,8,9,10,11))
+
+catchmsy
+```
+

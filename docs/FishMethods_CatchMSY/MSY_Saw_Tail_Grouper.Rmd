@@ -1,0 +1,96 @@
+---
+title: "MSY_Saw_Tail_Grouper"
+author: "Valeria Tamayo Cañadas"
+date: "30/10/2018"
+output: html_document
+---
+
+#Packages 
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(plotly)
+  library(fishmethods)
+  library(devtools)
+})
+
+
+```
+
+
+#Load catch data of species
+
+```{r}
+#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
+focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+
+unique(focalspeciescatch$NombreCientifico) #6 species 
+
+#create a new dataframe to isolate your species of interest 
+saw_tail_grouper<-focalspeciescatch%>%
+  filter(NombreCientifico=="Mycteroperca prionura")
+
+```
+
+
+
+```{r}
+#Plots catch over given years, simply change the name of the dataframe ie "Octopus"
+graph <-ggplot(saw_tail_grouper, aes(x=Ano, y=MT))+
+  geom_line(size=1)+
+  ggtitle("Saw Tail Grouper Catch")+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Yearly total catch catch (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+ggplotly(graph)
+
+
+```
+
+
+#Run CatchMSY
+https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-2979.2012.00485.x
+
+Above is the link to the reference publication "A simple method for estimating MSY from catch and resilience"
+
+```{r}
+year_saw_tail_grouper<-c(saw_tail_grouper$Ano) #vector of years
+catch_saw_tail_grouper<-c(saw_tail_grouper$MT) #vector of catch date 
+
+?catchmsy #Provides more information on the function itself
+
+#Initial catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
+0.0737/1.63548
+
+
+#final year catch divided by highest catch; use ranges listed in the Martell publication based on this ratio
+1.63548/1.63548
+
+catchmsy(year=year_saw_tail_grouper,
+                catch=catch_saw_tail_grouper,
+    l0=list(low=0.5,up=0.9,step=0),#biomass in year in relation to K, Initial catch divided by highest catch fromt he paper on an easy way to calculate MSY and r included.
+    lt=list(low= 0.3,up=0.7,refyr=2015),#biomass in last year in relation to K, years catch divided by highest catch
+    k=list(dist="unif",low=1.63548,up=150), #carrying capacity; low=highest reported catch, high=highest catch*100
+    r=list(dist="unif",low=0.02,up=0.06), #intrinsic growth rate based on resilience 
+    M=list(dist="unif",low=0.1,up=0.9), #Natural mortality we have not been changing this one
+    nsims=30000, #Monte carlo simulations 
+    catchout = (1), #saving the monte carlo simulations that can later be graphed
+    grout = 1, #output just to console, 
+    graphs = c(1, 2,3,4,5,6,7,8,9,10,11))
+
+
+#on fish base "Resilience (Ref. 69278):  Very Low, minimum population doubling time more than 14 years (Preliminary K or Fecundity.). "
+
+
+```
