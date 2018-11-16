@@ -48,7 +48,7 @@ library(here)
 library(dplyr)
 library(tidyr)
 library(plyr)
-cmsy2_result<-read.csv(here("docs", "Free_CMSY2", "cmsy2_results.csv"))
+cmsy2_result <- read.csv(here("docs", "Free_CMSY2", "cmsy2_results.csv"))
 ```
 
 
