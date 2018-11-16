@@ -1,0 +1,56 @@
+---
+title: "Octopus_BranchMPAmodel"
+author: "Juliette Verstaen"
+date: "11/15/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+title: "Branch MPA Model"
+author: "Seleni Cruz"
+date: "November 8, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This model represents marine reserve in one dimensional space using the following equation 
+
+
+$$
+N_{i,t+1}= N_{i,t} + N_{i,t} r_i (1- (N_{i,t}/K_i)) - u_{i,t} N_{i,t} + m(N_{i-1, t} + N_{i+1, t})- 2m_{i,t} N_{i,t}
+$$
+
+where $u_{i,t}= u_{out}$if i is outside the reserve, and $u_{i,t}= 0$ if i is inside the reserve. ,$ N_t$ the number of fish in each cell i in time period t, while 2m is the diffusion rate (m is mrate in the code, some migration rate) out of each cell. Logistic growth in each cell is represented by parameters r and K as usual.
+
+
+#Part 1: Code for a harvest vector 
+This part of the code sets the explotiation rate inside and outside the MPA (ie inside the MPA exploitation rate should be zero).
+
+Given the harvest rate outside the MPA (u.out), 
+the total number of cells/patches (ncells), 
+and the width of the MPA (MPA.width)
+this function returns a vector of harvest rates in each cell. 
+
+```{r}
+calc.harvest.vec <- function(u.out, ncells, MPA.width)  {
+   u.vec <- vector(length=ncells) #create vector to store harvest rates in each cell hence the the length is ncells 
+   u.vec[] <- u.out       #set every cell to u.out, equivalent to u.vec[1:ncells] <- u.out   
+   if (MPA.width > 0) {   #no need to do this if there is no MPA! 
+      MPA.begin <- round((ncells-MPA.width)/2)+1  #start cell of MPAin the middle of ncells 
+      MPA.end <- MPA.begin + MPA.width -1         #end cell of MPA in the middle of ncells 
+      u.vec[MPA.begin:MPA.end] <- 0        
+   }
+   return(u.vec)
+}
+
+calc.harvest.vec(u.out=0.5, ncells=100, MPA.width =5) 
+
+
+```
