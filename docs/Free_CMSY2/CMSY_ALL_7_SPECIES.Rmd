@@ -91,7 +91,7 @@ catch40<- c(species$MT_40)
 catch60<- c(species$MT_60)
 
 #Regular landings 
-reg <- cmsy2(year=year, catch=catch, resilience = "Medium")
+reg <- cmsy2(year=year, catch=catch, resilience = "Low")
 r<-reg$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-reg$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-reg$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -101,7 +101,7 @@ last<-reg$ref_ts[,]%>% tail(1)
 one<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 20%
-sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Medium")
+sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Low")
 r<-sp_20$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_20$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_20$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -111,7 +111,7 @@ last<-sp_20$ref_ts[,]%>% tail(1)
 two<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 40%
-sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Medium")
+sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Low")
 r<-sp_40$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_40$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_40$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -147,7 +147,7 @@ catch40<- c(species$MT_40)
 catch60<- c(species$MT_60)
 
 #Regular landings 
-reg <- cmsy2(year=year, catch=catch, resilience = "Medium")
+reg <- cmsy2(year=year, catch=catch, resilience = "Low")
 r<-reg$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-reg$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-reg$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -157,7 +157,7 @@ last<-reg$ref_ts[,]%>% tail(1)
 one<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 20%
-sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Medium")
+sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Low")
 r<-sp_20$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_20$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_20$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -167,7 +167,7 @@ last<-sp_20$ref_ts[,]%>% tail(1)
 two<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 40%
-sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Medium")
+sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Low")
 r<-sp_40$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_40$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_40$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -177,7 +177,7 @@ last<-sp_40$ref_ts[,]%>% tail(1)
 three<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 60%
-sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Medium")
+sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Low")
 r<-sp_60$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_60$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_60$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -204,7 +204,7 @@ catch40<- c(species$MT_40)
 catch60<- c(species$MT_60)
 
 #Regular landings 
-reg <- cmsy2(year=year, catch=catch, resilience = "Medium")
+reg <- cmsy2(year=year, catch=catch, resilience = "Very low")
 r<-reg$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-reg$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-reg$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -214,7 +214,7 @@ last<-reg$ref_ts[,]%>% tail(1)
 one<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 20%
-sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Medium")
+sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Very low")
 r<-sp_20$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_20$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_20$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -224,7 +224,7 @@ last<-sp_20$ref_ts[,]%>% tail(1)
 two<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 40%
-sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Medium")
+sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Very low")
 r<-sp_40$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_40$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_40$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -234,7 +234,7 @@ last<-sp_40$ref_ts[,]%>% tail(1)
 three<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 60%
-sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Medium")
+sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Very low")
 r<-sp_60$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_60$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_60$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -260,7 +260,7 @@ catch40<- c(species$MT_40)
 catch60<- c(species$MT_60)
 
 #Regular landings 
-reg <- cmsy2(year=year, catch=catch, resilience = "Medium")
+reg <- cmsy2(year=year, catch=catch, resilience = "Very low")
 r<-reg$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-reg$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-reg$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -270,7 +270,7 @@ last<-reg$ref_ts[,]%>% tail(1)
 one<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 20%
-sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Medium")
+sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Very low")
 r<-sp_20$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_20$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_20$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -280,7 +280,7 @@ last<-sp_20$ref_ts[,]%>% tail(1)
 two<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 40%
-sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Medium")
+sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Very low")
 r<-sp_40$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_40$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_40$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -290,7 +290,7 @@ last<-sp_40$ref_ts[,]%>% tail(1)
 three<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 60%
-sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Medium")
+sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Very low")
 r<-sp_60$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_60$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_60$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -372,7 +372,7 @@ catch40<- c(species$MT_40)
 catch60<- c(species$MT_60)
 
 #Regular landings 
-reg <- cmsy2(year=year, catch=catch, resilience = "Medium")
+reg <- cmsy2(year=year, catch=catch, resilience = "Low")
 r<-reg$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-reg$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-reg$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -382,7 +382,7 @@ last<-reg$ref_ts[,]%>% tail(1)
 one<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 20%
-sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Medium")
+sp_20 <- cmsy2(year=year, catch=catch20, resilience = "Low")
 r<-sp_20$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_20$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_20$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -392,7 +392,7 @@ last<-sp_20$ref_ts[,]%>% tail(1)
 two<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 40%
-sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Medium")
+sp_40 <- cmsy2(year=year, catch=catch40, resilience = "Low")
 r<-sp_40$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_40$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_40$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
@@ -402,7 +402,7 @@ last<-sp_40$ref_ts[,]%>% tail(1)
 three<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 60%
-sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Medium")
+sp_60 <- cmsy2(year=year, catch=catch60, resilience = "Low")
 r<-sp_60$ref_pts[1,2:4]%>% rename(r=est, r_lo=lo, r_hi=hi)
 k<-sp_60$ref_pts[2,2:4]%>%rename(k=est, k_lo=lo, k_hi=hi)
 msy<-sp_60$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)

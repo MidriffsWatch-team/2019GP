@@ -128,10 +128,10 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
     return(summary.output) # can change this to out for more details 
 }
 
-MPA<-MPA.model(r=0.5655254, K=1209, u.out=0.2148, ncells=100,
+MPA<-MPA.model(r=0.2822, K=120, u.out=0.0152, ncells=100,
           MPA.width=5, nsteps=5, mrate=0.5)
 
-NoMPA<-MPA.model(r=0.566, K=1209, u.out=0.2148, ncells=100,
+NoMPA<-MPA.model(r=0.2822, K=120, u.out=0.0152, ncells=100,
           MPA.width=0, nsteps=5, mrate=0.5) #assuming no MPA MPA.width set to 0 everything else remains the same 
 ```
 
