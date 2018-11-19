@@ -1,0 +1,117 @@
+---
+title: "Branch MPA Model"
+author: "Seleni Cruz"
+date: "November 8, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(here)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(plyr)
+```
+
+
+```{r}
+harvest <- function(fishing, patches, MPA.width)  {
+   fishing.vec <- vector(length=patches)
+   fishing.vec[] <- fishing 
+   if (MPA.width > 0) {  
+      MPA.begin <- round((patches-MPA.width)/2)+1
+      MPA.end <- MPA.begin + MPA.width -1         
+      fishing.vec[MPA.begin:MPA.end] <- 0        
+   }
+   return(fishing.vec)
+}
+
+harvest(fishing=0.5, patches=100, MPA.width =5) 
+```
+
+
+
+#MPA Model 
+
+```{r}
+MPA.model <- function(r, K, fishing, N0, patches, years, 
+                      MPA.width, mrate) {
+   fishing.vec <- harvest(fishing=fishing, patches=patches, MPA.width=MPA.width)
+   
+   pop <- vector(length=patches) 
+   pop[]<-N0
+   
+   left.patch<- c(patches, 1: (patches-1))
+    
+   right.patch<- c(2: patches, 1) 
+  
+   result<- vector(length=5)
+   out=result
+   summary<-vector(length=5)
+   summary.output=summary
+
+   for (i in 1:years) {
+     
+      leaving<-2*mrate*pop
+      
+      arriving<-0.5*leaving[left.patch]+ 0.5*leaving[right.patch]
+     
+      surplus<- r*pop *(1-pop/K)
+      
+      catches<- fishing.vec*pop
+     
+      pop<-pop+surplus-catches- leaving+ arriving
+      
+      result=cbind(leaving, arriving, surplus, catches, pop)
+      
+      out=cbind(out, result)
+      
+      summary=cbind(leave=sum(leaving), arrive=sum(arriving), sur = sum(surplus), catch=sum(catches), biomass = sum(pop))
+     
+      summary.output= rbind (summary.output, summary)
+   }
+    return(summary.output) 
+}
+
+MPA<-MPA.model(r=0.2822, K=2, N0=0.60, fishing=1, patches=100,
+          MPA.width=5, years=50, mrate=0.5)
+
+NoMPA<-MPA.model(r=0.2822, K=2,  N0=0.60, fishing=1, patches=100,
+          MPA.width=0, years=50, mrate=0.5) #assuming no MPA MPA.width set to 0 everything else remains the same 
+```
+
+
+```{r}
+
+MPA.df<- data.frame(MPA[-1,])%>%
+  mutate(year=c(2015:2064), State="MPA")
+
+NoMPA.df<-data.frame(NoMPA[-1,])%>%
+    mutate(year=c(2015:2064), State="No_MPA")
+
+merge<-rbind(MPA.df, NoMPA.df)
+
+ggplot(data=merge, aes(x=year, y=biomass, color=State))+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Projected biomass (MT)")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+```
+
+
+```{r}
+ggplot(data=merge, aes(x=year, y=catch, color=State))+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Projected catch (MT)")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+```
+
+
+
+

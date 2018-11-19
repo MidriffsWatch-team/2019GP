@@ -1,0 +1,83 @@
+---
+title: "Focal Landing Sites"
+author: "Seleni Cruz"
+date: "October 23, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, include=FALSE}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+   library(tidyr)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(plotly)
+  library(reshape)
+})
+```
+
+###Load Catch data and list of focal species
+Filter national data set to just Sonora and Baja California and exclude industrial species 
+```{r, include=FALSE}
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+   filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  tidyr::separate(NombreCientifico,into="Genus", sep=" ", extra='drop', remove=FALSE)
+
+focalgenus<-read.csv(here("raw_data", "Genus.csv"))
+
+LandingSites<- read.csv (here("raw_data", "landingsites.csv"))%>%
+  filter(Confirmado=="y")  #29 landing sites 
+
+genus<-merge(catch, focalgenus, by= "Genus") #16 genus represented of all families 
+unique(genus$Genus)
+
+#Merge catchfocalspecies with landing sites identifies in BC and Sonora 
+focallandingsites<-merge(genus, LandingSites, by= "SitioDesembarque")
+
+#Calculate total catch in the region by year and number of species reported in each year 
+catch_genus<-focallandingsites%>%
+  group_by(Genus, Ano)%>%
+  summarize(MT=sum(PesoVivo)/1000)%>%
+  filter(length(unique(Ano))>5|length(unique(Ano))==5)%>%
+  mutate(MT_20= MT*1.2, MT_40= MT*1.4, MT_60=MT*1.6)
+
+write.csv(catch_genus, "catch_by_genus.csv")
+
+```
+
+
+```{r, echo=FALSE}
+
+graph5 <-ggplot(catch_genus, aes(x=Ano, y=MT, color=Genus))+
+  #tiff('yearly_catch_focal_species.tiff', units="in", width=10, height=5, res=300)+
+  geom_line(size=1)+
+  geom_point()+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of Genus after filtering by landing", subtitle= "2000-2015")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+ggplotly(graph5)
+
+
+```
+
+
+
+```{r, fig.width=8, fig.height=12, echo=FALSE}
+graph6<-graph5+
+   facet_wrap(~ Genus, scales = "free_y", ncol=2)
+
+ggplotly(graph6)
+```
+

@@ -1,0 +1,63 @@
+---
+title: "Untitled"
+author: "Seleni Cruz"
+date: "November 18, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(dplyr)
+  library(tidyr)
+  library(devtools)
+  devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2) # Chris Free updated package for CMSY2
+})
+```
+
+
+```{r, message=FALSE}
+catch_genus<-read.csv(here("docs", "catch_by_genus.csv"))
+Genus<-as.vector(unique(catch_genus$Genus))
+resilience<-c("Low", "Low", "Medium", "Medium", "Medium", "Medium", "Low", "Medium", "Very low", "Medium", "Medium")
+data<-catch_genus%>% filter(Genus=="Anisotremus")
+```
+
+
+#Burrito Grunt 
+```{r, message=FALSE}
+stock<-function(data, resilience){
+  require(datalimited2)
+  
+  out<-vector(length=37)
+  variables<-out
+  
+  year<-as.vector(data$Ano, mode='numeric')
+  
+  catches<-(data[,4:7])
+  
+  for (i in colnames(catches)){
+    catch=catches[,i]
+  
+    cmsy=cmsy2(year=year, catch=catch, resilience = resilience)
+    out=cbind(r= cmsy$ref_pts[1,2:4], 
+           k= cmsy$ref_pts[2,2:4],
+           msy= cmsy$ref_pts[3,2:4], 
+           bmsy= cmsy$ref_pts[5,2:4], 
+          cmsy$ref_ts[,] %>% tail(1))
+    
+    variables=rbind(variables, out)
+  }
+  return(variables)
+}
+
+stock(data=data, resilience="Low")
+
+A<-reg$ref_ts[,1:6]%>%mutate(catch=0)%>%data.frame()
+```
