@@ -36,7 +36,7 @@ calc.harvest.vec <- function(u.out, ncells, MPA.width)  {
    return(u.vec)
 }
 
-calc.harvest.vec(u.out=0.5, ncells=100, MPA.width =5) 
+#calc.harvest.vec(u.out=0.5, ncells=100, MPA.width =5) 
 
 
 ```
@@ -47,6 +47,7 @@ calc.harvest.vec(u.out=0.5, ncells=100, MPA.width =5)
 library(here)
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 library(plyr)
 cmsy2_result<-read.csv(here("docs", "Free_CMSY2", "cmsy2_results.csv"))
 ```
@@ -55,7 +56,7 @@ cmsy2_result<-read.csv(here("docs", "Free_CMSY2", "cmsy2_results.csv"))
 #Part 2: MPA Model 
 When using vectors in a function there is no need to use the [i] since the function is looping through number of steps not the number of cells.
 ```{r}
-MPA.model <- function(r, K, u.out, ncells, nsteps, 
+MPA.model <- function(r, K, u.out, N0, ncells, nsteps, 
                       MPA.width, mrate) {
    #harvest rate in each cell using function described in part 1
    u.vec <- calc.harvest.vec(u.out=u.out, ncells=ncells, MPA.width=MPA.width)
@@ -65,7 +66,7 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
    
    #set starting population in vector pop in each cell 
    # equal to K; this can be biomass estimate at first time step
-    pop[]<-K
+    pop[]<-N0
    
   # this models assumed pacman movement of individuals in the cells; where individuals moving off the right appear on the left and vice versa; there are other movement simulations that can be considered 
    #vector left.cells storing the cell numbers of cells to the left of each cell
@@ -128,35 +129,41 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
     return(summary.output) # can change this to out for more details 
 }
 
-MPA<-MPA.model(r=0.2822, K=120, u.out=0.0152, ncells=100,
-          MPA.width=5, nsteps=5, mrate=0.5)
+MPA<-MPA.model(r=0.2822, K=2, N0=0.60, u.out=1, ncells=100,
+          MPA.width=5, nsteps=50, mrate=0.5)
 
-NoMPA<-MPA.model(r=0.2822, K=120, u.out=0.0152, ncells=100,
-          MPA.width=0, nsteps=5, mrate=0.5) #assuming no MPA MPA.width set to 0 everything else remains the same 
+NoMPA<-MPA.model(r=0.2822, K=2,  N0=0.60, u.out=1, ncells=100,
+          MPA.width=0, nsteps=50, mrate=0.5) #assuming no MPA MPA.width set to 0 everything else remains the same 
 ```
 
 
 ```{r}
+
 MPA.df<- data.frame(MPA[-1,])%>%
-  mutate(year=c(2015:2019))%>%
-  rename(c("leave"="MPAleave", "arrive"="MPAarrive", "sur"="MPAsurplus", "catch"= "MPAcatch", "biomass"="MPAbiomass"))
+  mutate(year=c(2015:2064), State="MPA")
+  #rename(c("leave"="MPAleave", "arrive"="MPAarrive", "sur"="MPAsurplus", "catch"= "MPAcatch", "biomass"="MPAbiomass"))
 NoMPA.df<-data.frame(NoMPA[-1,])%>%
-    mutate(year=c(2015:2019))
+    mutate(year=c(2015:2064), State="No_MPA")
 
-merge<-merge(MPA.df, NoMPA.df, by="year")
+merge<-rbind(MPA.df, NoMPA.df)
 
-
-ggplot(data=merge, aes(x=year))+
-  geom_line(aes(y=MPAbiomass), color="blue")+
-  geom_line(aes(y=biomass), color="green")+
-  geom_point(aes(y=MPAbiomass), color="blue")+
-  geom_point(aes(y=biomass))+
+ggplot(data=merge, aes(x=year, y=biomass, color=State))+
+  geom_point()+
+  geom_line()+
   labs(x="Year", y="Projected biomass (MT)")+
   theme_classic()+
   theme(legend.title=element_blank())
 ```
 
 
+```{r}
+ggplot(data=merge, aes(x=year, y=catch, color=State))+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Projected catch (MT)")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+```
 
 
 
