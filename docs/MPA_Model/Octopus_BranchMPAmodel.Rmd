@@ -34,7 +34,7 @@ Octopus
 Average r and K values
 Raw catch numbers, no estimate of illegal catch included
 ```{r}
-MPA.model <- function(r, K, u.out, ncells, nsteps, 
+MPA.model <- function(r, K, N0, u.out, ncells, nsteps, 
                       MPA.width, mrate) {
    #harvest rate in each cell using function described in part 1
    u.vec <- calc.harvest.vec(u.out=u.out, ncells=ncells, MPA.width=MPA.width)
@@ -44,7 +44,7 @@ MPA.model <- function(r, K, u.out, ncells, nsteps,
    
    #set starting population in vector pop in each cell 
    # equal to K; this can be biomass estimate at first time step
-    pop[]<-K
+    pop[]<-N0
    
   # this models assumed pacman movement of individuals in the cells; where individuals moving off the right appear on the left and vice versa; there are other movement simulations that can be considered 
    #vector left.cells storing the cell numbers of cells to the left of each cell
