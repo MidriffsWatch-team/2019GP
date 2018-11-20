@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Function CMSY2"
 author: "Seleni Cruz"
 date: "November 18, 2018"
 output: html_document
@@ -32,11 +32,15 @@ data<-catch_genus%>% filter(Genus=="Anisotremus")
 
 #Burrito Grunt 
 ```{r, message=FALSE}
+
 stock<-function(data, resilience){
+  library(magrittr)
   require(datalimited2)
   
-  out<-vector(length=37)
-  variables<-out
+  variables <- tibble(r_min = NA,
+                      r = NA,
+                      r_max = NA,
+                      )
   
   year<-as.vector(data$Ano, mode='numeric')
   
@@ -45,15 +49,20 @@ stock<-function(data, resilience){
   for (i in colnames(catches)){
     catch=catches[,i]
   
-    cmsy=cmsy2(year=year, catch=catch, resilience = resilience)
-    out=cbind(r= cmsy$ref_pts[1,2:4], 
-           k= cmsy$ref_pts[2,2:4],
-           msy= cmsy$ref_pts[3,2:4], 
-           bmsy= cmsy$ref_pts[5,2:4], 
-          cmsy$ref_ts[,] %>% tail(1))
+    cmsy <- datalimited2::cmsy2(year=year, catch=catch, resilience = resilience)
     
-    variables=rbind(variables, out)
+    out <- tibble(r= cmsy$ref_pts[1,2:4], 
+                  k= cmsy$ref_pts[2,2:4],
+                  msy= cmsy$ref_pts[3,2:4], 
+                  bmsy= cmsy$ref_pts[5,2:4], 
+                  cmsy$ref_ts[,] %>% tail(1))
+    
+    variables <- rbind(variables, out)
   }
+  
+  variables %<>%
+    drop_na()
+  
   return(variables)
 }
 
