@@ -26,35 +26,20 @@ suppressPackageStartupMessages({
 ###Load Catch data and list of focal species
 Filter national data set to just Sonora and Baja California and exclude industrial species 
 ```{r, include=FALSE}
-#Load Conapedsca Catch data and filter national data set to just Sonora and Baja California and exclude industrial species
-catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+focalspecies<-read.csv(here::here("raw_data", "finalfocalspecies.csv"))
+LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
+  filter(Confirmado=="y") 
+
+
+catch<- readRDS (here::here("raw_data", "conapesca.RDS"))%>%
   filter(Estado=="Baja california"| Estado=="Sonora")%>%
-   filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+   filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  merge(LandingSites, by="SitioDesembarque")%>%
+  merge(focalspecies, by="NombreCientifico")
 
-#Load focal species
-focalspecies<-read.csv(here("raw_data", "finalfocalspecies.csv"))
-
-#loading landing sites verified by Eda 
-LandingSites<- read.csv (here("raw_data", "landingsites.csv"))%>%
-  filter(Confirmado=="y")  #29 landing sites 
-
-
-#merge catch with landing sites and calculate weight in metric tons 
-focal_landing<-merge(catch, LandingSites, by = "SitioDesembarque")%>%
-  group_by(NombreCientifico, Ano)%>% 
-  summarize(MT=sum(PesoVivo)/1000)
-
-unique(focal_landing$NombreCientifico) #163 speices that are landed at 29 landing sites in the MRI
-
-#Calculating total yearly landings of all 163 species every year 
-yearlylanding<- focal_landing%>%
-  group_by(Ano)%>%
-  summarize(yr_land= sum(MT))
-
-mean(yearlylanding$yr_land)
 
 #Calculating total landings for each 163 speies across all years, column years is the number of years for which data is available for that species    
-specieslanding<- focal_landing%>%
+specieslanding<- catch%>%
   group_by(NombreCientifico)%>%
   summarize(sp_land= sum(MT), years=length(unique(Ano)))
 
@@ -66,15 +51,9 @@ toplandings<-focal_landing%>%
 
 sum(toplandings$avergelandings)
 
-#Merge catch with focal species by Scientific name 
-catchfocalspecies<-merge(catch, focalspecies, by= "NombreCientifico")
-unique(catchfocalspecies$NombreCientifico)
-
-#Merge catchfocalspecies with landing sites identifies in BC and Sonora 
-focallandingsites<-merge(catchfocalspecies, LandingSites, by= "SitioDesembarque")
 
 #Calculate total catch in the region by year and number of species reported in each year 
-spp_catch<-focallandingsites%>%
+spp_catch<-catch%>%
   group_by(NombreCientifico, Ano)%>%
   summarize(MT=sum(PesoVivo)/1000)%>%
   filter(length(unique(Ano))>5|length(unique(Ano))==5)%>%

@@ -1,0 +1,51 @@
+---
+title: "Run Function CMSY2"
+author: "Seleni Cruz"
+date: "November 21, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(dplyr)
+  library(tidyr)
+  library(devtools)
+  devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2)
+})
+```
+
+
+```{r, message=FALSE}
+species<-read.csv(here::here("docs", "focalspeciescatch.csv"))
+
+species_priors<-read.csv(here::here("raw_data", "Species_priors.csv"))
+
+genus<-read.csv(here::here("docs", "catch_Genus.csv"))
+
+genus_priors<-read.csv(here::here("raw_data", "Genus_priors.csv"))
+```
+
+
+```{r, message=FALSE}
+
+Species<-Species_CMSY2(data=species, priors=species_priors)
+Species_pts <- Species[1]
+Species_ts <- Species[2]
+
+write.csv(Species_pts, "Species_pts.csv")
+saveRDS(Species_ts, "Species_ts.rds")
+
+Genus<-Species_CMSY2(data=genus, priors=genus_priors)
+Genus_pts <- Genus[1]
+Genus_ts<- Genus[2]
+
+write.csv(Genus_pts, "Genus_pts.csv")
+saveRDS(Genus_ts, "Genus_ts.rds")
+```

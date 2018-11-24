@@ -18,6 +18,7 @@ suppressPackageStartupMessages({
   library(tidyverse)
   library(here)
    library(tidyr)
+  library(stringr)
   library(ggplot2)
   library(dplyr)
   library(plotly)
@@ -25,43 +26,35 @@ suppressPackageStartupMessages({
 })
 ```
 
+Aggregating all smallscale fisheries by Genus not only focal species. 
+There are 61 Genus in the initial list of focal species from COBI. If we are aggregating at the GEnus level why not include all that have over 5 yeas of data. 
 
 ```{r, include=FALSE}
 LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
   filter(Confirmado=="y")
 
-focalgenus<-read.csv(here::here("raw_data", "Genus.csv"))
+All_Genus<-read.csv(here::here("raw_data", "Focal_sp_Genus.csv"))
 
 catch<- readRDS (here::here("raw_data", "conapesca.RDS"))%>%
   filter(Estado=="Baja california"| Estado=="Sonora")%>%
-   merge(LandingSites, by="SitioDesembarque")%>%
-  mutate(NombreCientifico = str_replace(NombreCientifico, "Lutjanus spp.", "Lutjanus spp"))%>%
-  tidyr::separate(NombreCientifico,into="Genus", sep=" ", extra='drop', remove=FALSE)%>%
-  merge(LandingSites, by="SitioDesembarque")%>%
-  merge(focalgenus, by="Genus")
-
+   filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  tidyr::separate(NombreCientifico, into="Genus", sep=" ", extra="drop", remove=FALSE)%>%
+  merge(LandingSites, by="SitioDesembarque")
 
 catch_genus<-catch%>%
-  group_by(Genus, Ano)%>%
-  summarize(MT=sum(PesoVivo)/1000)%>%
-  mutate(MT_20= MT*1.2, MT_40= MT*1.4, MT_60=MT*1.6)%>%
-  filter(length(unique(Ano))>5|length(unique(Ano))==5)%>%
-  dplyr::rename(NombreCientifico=Genus)
-
-write.csv(catch_genus, "catch_genus.csv")
-
-detail_genus<-catch%>%
   group_by(Genus, NombreCientifico, Ano)%>%
   summarize(MT=sum(PesoVivo)/1000)%>%
+  mutate(MT_20= MT*1.2, MT_40= MT*1.4, MT_60=MT*1.6)%>%
   filter(length(unique(Ano))>5|length(unique(Ano))==5)
 
-summary<-detail_genus%>%
+summary<-catch_genus%>%
   group_by(Genus)%>%
   summarize(MT=sum(MT), 
             species=length(unique(NombreCientifico)), 
                            years=length(unique(Ano)))
-specieslevel<- detail_genus%>%
-  group_by(NombreCientifico)%>%
+
+specieslevel<- catch_genus%>%
+  group_by(Genus, NombreCientifico)%>%
   summarize(MT=sum(MT))
 
 ```
@@ -94,7 +87,7 @@ graph1+
 
 ```{r, echo=FALSE}
 grouper<-catch_genus%>%
-  filter(Genus=="Epinephelus")
+  filter(Genus=="Caulolatilus")
 
 ggplot(grouper, aes(x=Ano, y=MT, color=NombreCientifico))+
   geom_line()+

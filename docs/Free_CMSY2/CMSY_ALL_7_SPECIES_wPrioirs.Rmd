@@ -18,7 +18,7 @@ suppressPackageStartupMessages({
 
 
 ```{r, message=FALSE}
-focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+focalspeciescatch<-read.csv(here::here("docs", "focalspeciescatch.csv"))
 ```
 
 
@@ -41,6 +41,8 @@ msy<-reg$ref_pts[3,2:4]%>%rename(msy=est, msy_lo=lo, msy_hi=hi)
 bmsy<-reg$ref_pts[5,2:4]%>%rename(bmsy=est, bmsy_lo=lo, bmsy_hi=hi)
 last<-reg$ref_ts[,]%>% tail(1)
 
+reg$ref_ts
+reg$ref_pts
 one<-cbind(r, k, msy, bmsy, last)
 
 #Landings inflated 20%
