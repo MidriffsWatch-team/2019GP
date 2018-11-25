@@ -1,7 +1,7 @@
 ---
-title: "Bumphead_Parrotfish_Priors_BranchMPAmodel"
+title: "Mycteroperca_BranchMPAmodel"
 author: "Juliette Verstaen"
-date: "11/24/2018"
+date: "11/25/2018"
 output: html_document
 ---
 
@@ -71,18 +71,18 @@ MPA.model <- function(r, K, fishing, B0, patches, years, MPA.width, mrate) {
     return(summary.output) 
 }
 
-MPA_bumphead_parrot <- MPA.model(r=0.865, 
-                 K=07.96,
-                 B0=03.72, 
+MPA_mycteroperca <- MPA.model(r=0.06203851, 
+                 K=9979.77575,
+                 B0=3169.472, 
                  fishing=0.1, 
                  patches=100,
                  MPA.width=5,
                  years=50, 
                  mrate=0.5)
 
-NoMPA_bumphead_parrot <- MPA.model(r=0.865,
-                   K=07.96, 
-                   B0=03.72, 
+NoMPA_mycteroperca <- MPA.model(r=0.06203851,
+                   K=9979.77575, 
+                   B0=3169.472, 
                    fishing=0.1, 
                    patches=100,
                    MPA.width=0, 
@@ -94,13 +94,13 @@ NoMPA_bumphead_parrot <- MPA.model(r=0.865,
 
 ```{r}
 
-MPA_bumphead_parrot.df <- data.frame(MPA_bumphead_parrot[-1,])%>%
+MPA_mycteroperca.df <- data.frame(MPA_mycteroperca[-1,])%>%
   mutate(year=c(2015:2064), State="MPA")
 
-NoMPA_bumphead_parrot.df <- data.frame(bumphead_parrot[-1,])%>%
+NoMPA_mycteroperca.df <- data.frame(NoMPA_mycteroperca[-1,])%>%
     mutate(year=c(2015:2064), State="No_MPA")
 
-merge_bumphead_parrot <- rbind(MPA_bumphead_parrot.df, NoMPA_bumphead_parrot.df)
+merge_mycteroperca <- rbind(MPA_mycteroperca.df, NoMPA_mycteroperca.df)
 
 #merge_octopus_1 <- filter(merge_octopus, catch != "NaN")
 
@@ -112,7 +112,7 @@ merge_bumphead_parrot <- rbind(MPA_bumphead_parrot.df, NoMPA_bumphead_parrot.df)
 #  theme_classic()+
 #  theme(legend.title=element_blank())
 
-ggplot(data = merge_bumphead_parrot, aes(x = year, y = biomass, colour = State))+
+ggplot(data = merge_mycteroperca, aes(x = year, y = biomass, colour = State))+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Projected biomass (MT)")+
@@ -124,7 +124,7 @@ ggplot(data = merge_bumphead_parrot, aes(x = year, y = biomass, colour = State))
 
 
 ```{r}
-ggplot(data = merge_bumphead_parrot, aes( x = year, y = catch, colour = State))+
+ggplot(data = merge_mycteroperca, aes( x = year, y = catch, colour = State))+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Projected catch (MT)")+
