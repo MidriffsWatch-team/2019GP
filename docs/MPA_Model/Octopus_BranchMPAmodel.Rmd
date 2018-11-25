@@ -33,6 +33,13 @@ calc.harvest.vec(u.out=0.5, ncells=100, MPA.width =5)
 Octopus
 Average r and K values
 Raw catch numbers, no estimate of illegal catch included
+
+TO DO:
+add N0, K is not the starting value
+  b is N0
+  k/100 becuase its total and there are 100 cells
+  make sure to use k that is multiplied by 1000
+change the r and k estiamtes to values from the priors table
 ```{r}
 MPA.model <- function(r, K, N0, u.out, ncells, nsteps, 
                       MPA.width, mrate) {
