@@ -1,0 +1,124 @@
+---
+title: "Aggregated by Genus"
+author: "Seleni Cruz"
+date: "October 23, 2018"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, include=FALSE}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+   library(tidyr)
+  library(stringr)
+  library(ggplot2)
+  library(dplyr)
+  library(plotly)
+  library(reshape)
+})
+```
+
+Aggregating all smallscale fisheries by Genus not only focal species. 
+There are 61 Genus in the initial list of focal species from COBI. If we are aggregating at the GEnus level why not include all that have over 5 yeas of data. 
+
+```{r, include=FALSE}
+LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
+  filter(Confirmado=="y")
+
+All_Genus<-read.csv(here::here("raw_data", "Focal_sp_Genus.csv"))
+
+catch<- readRDS (here::here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+   filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))%>%
+  tidyr::separate(NombreCientifico, into="Genus", sep=" ", extra="drop", remove=FALSE)%>%
+  merge(LandingSites, by="SitioDesembarque")
+
+catch_genus<-catch%>%
+  group_by(Genus, NombreCientifico, Ano)%>%
+  summarize(MT=sum(PesoVivo)/1000)%>%
+  mutate(MT_20= MT*1.2, MT_40= MT*1.4, MT_60=MT*1.6)%>%
+  filter(length(unique(Ano))>5|length(unique(Ano))==5)
+
+summary<-catch_genus%>%
+  group_by(Genus)%>%
+  summarize(MT=sum(MT), 
+            species=length(unique(NombreCientifico)), 
+                           years=length(unique(Ano)))
+
+specieslevel<- catch_genus%>%
+  group_by(Genus, NombreCientifico)%>%
+  summarize(MT=sum(MT))
+
+```
+
+
+```{r, echo=FALSE}
+
+graph1<-ggplot(catch_genus, aes(x=Ano, y=MT, color=Genus))+
+  #tiff('yearly_catch_focal_species.tiff', units="in", width=10, height=5, res=300)+
+  geom_line(size=1)+
+  geom_point()+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of Genus after filtering by landing", subtitle= "2000-2015")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+graph1
+#ggplotly(graph5)
+```
+
+
+
+```{r, fig.width=10, fig.height=12, echo=FALSE}
+graph1+
+   facet_wrap(~ Genus, scales = "free_y", ncol=2)
+  #tiff('cacthbygenus.tiff', units="in", width=10, height=12, res=300)
+
+#ggplotly(graph6)
+```
+
+```{r, echo=FALSE}
+grouper<-catch_genus%>%
+  filter(Genus=="Caulolatilus")
+
+ggplot(grouper, aes(x=Ano, y=MT, color=NombreCientifico))+
+  geom_line()+
+  theme_classic()+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of two Epinephelus grouper species ", subtitle= "2000-2015")
+
+#ggplotly(grouper)
+
+```
+
+```{r, echo=FALSE}
+snapper<-catch_genus%>%
+  filter(Genus=="Lutjanus")
+
+ggplot(snapper, aes(x=Ano, y=MT, color=NombreCientifico))+
+  geom_line()+
+  theme_classic()+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of five Lutjanus snapper species ", subtitle= "2000-2015")
+
+#ggplotly(snapper)
+```
+
+```{r, echo=FALSE}
+grouper2<-catch_genus%>%
+  filter(Genus=="Mycteroperca")
+
+ggplot(grouper2, aes(x=Ano, y=MT, color=NombreCientifico))+
+  geom_line()+
+  theme_classic()+
+  labs(x="Year", y="Yearly total catch catch (MT)", title="Yearly Catch of two Mycteroperca grouper species ", subtitle= "2000-2015")
+
+#ggplotly(grouper2)
+```
+

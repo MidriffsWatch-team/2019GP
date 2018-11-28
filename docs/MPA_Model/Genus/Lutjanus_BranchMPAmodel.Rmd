@@ -1,0 +1,134 @@
+---
+title: "Lutjanus_BranchMPAmodel"
+author: "Juliette Verstaen"
+date: "11/25/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Packages 
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(plotly)
+  library(fishmethods)
+  library(devtools)
+ devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2) # Chris Free updated package for CMSY2
+})
+
+
+```
+
+
+```{r}
+harvest <- function(fishing, patches, MPA.width)  {
+   fishing.vec <- vector(length=patches)
+   fishing.vec[] <- fishing 
+   if (MPA.width > 0) {  
+      MPA.begin <- round((patches-MPA.width)/2)+1
+      MPA.end <- MPA.begin + MPA.width -1         
+      fishing.vec[MPA.begin:MPA.end] <- 0        
+   }
+   return(fishing.vec)
+}
+#harvest(fishing=0.5, patches=20, MPA.width =5) 
+```
+
+
+#MPA Model 
+
+```{r}
+MPA.model <- function(r, K, fishing, B0, patches, years, MPA.width, mrate) {
+     fishing.vec <- harvest(fishing=fishing, patches=patches, MPA.width=MPA.width)
+     biomass <- vector(length=patches) 
+     biomass[]<-B0
+     left.patch<- c(patches, 1: (patches-1))
+     right.patch<- c(2: patches, 1) 
+  
+     summary<-vector(length=5)
+     summary.output=summary
+
+   for (i in 1:years) {
+      leaving<-2*mrate*biomass
+      arriving<-0.5*leaving[left.patch]+ 0.5*leaving[right.patch]
+      surplus<- r*biomass *(1-biomass/K)
+      catches<- fishing.vec*biomass
+      biomass<-biomass+surplus-catches- leaving+ arriving
+      
+      summary=cbind(leave=sum(leaving), arrive=sum(arriving), surplus = sum(surplus), catch=sum(catches), biomass = sum(biomass))
+      summary.output= rbind (summary.output, summary)
+   }
+    return(summary.output) 
+}
+
+MPA_lutjanus <- MPA.model(r=0.2822, 
+                 K=3058.21000,
+                 B0=980.9472, 
+                 fishing=0.1, 
+                 patches=100,
+                 MPA.width=5,
+                 years=50, 
+                 mrate=0.5)
+
+NoMPA_lutjanus <- MPA.model(r=0.2822,
+                   K=3058.21000, 
+                   B0=980.9472, 
+                   fishing=0.1, 
+                   patches=100,
+                   MPA.width=0, 
+                   years=50, 
+                   mrate=0.5) 
+
+```
+
+
+```{r}
+
+MPA_lutjanus.df <- data.frame(MPA_lutjanus[-1,])%>%
+  mutate(year=c(2015:2064), State="MPA")
+
+NoMPA_lutjanus.df <- data.frame(NoMPA_lutjanus[-1,])%>%
+    mutate(year=c(2015:2064), State="No_MPA")
+
+merge_lutjanus <- rbind(MPA_lutjanus.df, NoMPA_lutjanus.df)
+
+#merge_octopus_1 <- filter(merge_octopus, catch != "NaN")
+
+
+#ggplot() +
+#  geom_point(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
+#  geom_line(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
+#  labs(x="Year", y="Projected biomass (MT)")+
+#  theme_classic()+
+#  theme(legend.title=element_blank())
+
+ggplot(data = merge_lutjanus, aes(x = year, y = biomass, colour = State))+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Projected biomass (MT)")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+
+
+```
+
+
+```{r}
+ggplot(data = merge_lutjanus, aes( x = year, y = catch, colour = State))+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Projected catch (MT)")+
+  theme_classic()+
+  theme(legend.title=element_blank())
+        
+```

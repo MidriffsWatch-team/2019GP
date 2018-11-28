@@ -8,13 +8,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-```{r}
-library(here)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(plyr)
-```
 
 
 ```{r}
@@ -28,8 +21,7 @@ harvest <- function(fishing, patches, MPA.width)  {
    }
    return(fishing.vec)
 }
-
-harvest(fishing=0.5, patches=100, MPA.width =5) 
+#harvest(fishing=0.5, patches=20, MPA.width =5) 
 ```
 
 
@@ -37,50 +29,33 @@ harvest(fishing=0.5, patches=100, MPA.width =5)
 #MPA Model 
 
 ```{r}
-MPA.model <- function(r, K, fishing, N0, patches, years, 
-                      MPA.width, mrate) {
-   fishing.vec <- harvest(fishing=fishing, patches=patches, MPA.width=MPA.width)
-   
-   pop <- vector(length=patches) 
-   pop[]<-N0
-   
-   left.patch<- c(patches, 1: (patches-1))
-    
-   right.patch<- c(2: patches, 1) 
+MPA.model <- function(r, K, fishing, B0, patches, years, MPA.width, mrate) {
+     fishing.vec <- harvest(fishing=fishing, patches=patches, MPA.width=MPA.width)
+     biomass <- vector(length=patches) 
+     biomass[]<-B0
+     left.patch<- c(patches, 1: (patches-1))
+     right.patch<- c(2: patches, 1) 
   
-   result<- vector(length=5)
-   out=result
-   summary<-vector(length=5)
-   summary.output=summary
+     summary<-vector(length=5)
+     summary.output=summary
 
    for (i in 1:years) {
-     
-      leaving<-2*mrate*pop
-      
+      leaving<-2*mrate*biomass
       arriving<-0.5*leaving[left.patch]+ 0.5*leaving[right.patch]
-     
-      surplus<- r*pop *(1-pop/K)
+      surplus<- r*biomass *(1-biomass/K)
+      catches<- fishing.vec*biomass
+      biomass<-biomass+surplus-catches- leaving+ arriving
       
-      catches<- fishing.vec*pop
-     
-      pop<-pop+surplus-catches- leaving+ arriving
-      
-      result=cbind(leaving, arriving, surplus, catches, pop)
-      
-      out=cbind(out, result)
-      
-      summary=cbind(leave=sum(leaving), arrive=sum(arriving), sur = sum(surplus), catch=sum(catches), biomass = sum(pop))
-     
+      summary=cbind(leave=sum(leaving), arrive=sum(arriving), surplus = sum(surplus), catch=sum(catches), biomass = sum(biomass))
       summary.output= rbind (summary.output, summary)
    }
     return(summary.output) 
 }
 
-MPA<-MPA.model(r=0.2822, K=2, N0=0.60, fishing=1, patches=100,
-          MPA.width=5, years=50, mrate=0.5)
+MPA<-MPA.model(r=0.588, K=240, B0=120, fishing=0.1, patches=100,MPA.width=5, years=50, mrate=0.5)
 
-NoMPA<-MPA.model(r=0.2822, K=2,  N0=0.60, fishing=1, patches=100,
-          MPA.width=0, years=50, mrate=0.5) #assuming no MPA MPA.width set to 0 everything else remains the same 
+NoMPA<-MPA.model(r=0.588, K=240, B0=120, fishing=0.1, patches=100,
+          MPA.width=0, years=50, mrate=0.5) 
 ```
 
 
