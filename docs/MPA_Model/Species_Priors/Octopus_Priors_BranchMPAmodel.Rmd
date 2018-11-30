@@ -77,7 +77,7 @@ MPA_octopus <- MPA.model(r=0.566,
                  fishing=0.1, 
                  patches=100,
                  MPA.width=5,
-                 years=50, 
+                 years=36, 
                  mrate=0.5)
 
 NoMPA_octopus <- MPA.model(r=0.566,
@@ -86,7 +86,7 @@ NoMPA_octopus <- MPA.model(r=0.566,
                    fishing=0.1, 
                    patches=100,
                    MPA.width=0, 
-                   years=50, 
+                   years=36, 
                    mrate=0.5) 
 
 ```
@@ -95,43 +95,36 @@ NoMPA_octopus <- MPA.model(r=0.566,
 ```{r}
 
 MPA_octopus.df <- data.frame(MPA_octopus[-1,])%>%
-  mutate(year=c(2015:2064), State="MPA")
+  mutate(year=c(2015:2050), State="MPA")
 
 NoMPA_octopus.df <- data.frame(NoMPA_octopus[-1,])%>%
-    mutate(year=c(2015:2064), State="No_MPA")
+    mutate(year=c(2015:2050), State="No_MPA")
 
 merge_octopus <- rbind(MPA_octopus.df, NoMPA_octopus.df)
 
-merge_octopus_1 <- filter(merge_octopus, catch != "NaN")
+#merge_octopus_1 <- filter(merge_octopus, catch != "NaN")
 
-
-ggplot() +
-  geom_point(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
-  geom_line(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
-  labs(x="Year", y="Projected biomass (MT)")+
-  theme_classic()+
-  theme(legend.title=element_blank())
-
-
-
-ggplot(data = merge_octopus_1, aes(x = year, y = biomass, fill = State))+
+ggplot(data = merge_octopus, aes(x = year, y = biomass, colour = State))+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Projected biomass (MT)")+
   theme_classic()+
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())+
+  ggtitle("Octopus Predicted Biomass 2015-2050")
+
 
 
 ```
 
 
 ```{r}
-ggplot(data = merge_octopus_1, aes( x = year, y = catch, colour = State))+
+ggplot(data = merge_octopus, aes( x = year, y = catch, colour = State))+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Projected catch (MT)")+
   theme_classic()+
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())+
+  ggtitle("Octopus Predicted Catch 2015-2050")
         
 ```
 
