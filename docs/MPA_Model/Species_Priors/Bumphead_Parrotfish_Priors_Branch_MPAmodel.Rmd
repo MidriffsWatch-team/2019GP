@@ -102,22 +102,14 @@ NoMPA_bumphead_parrot.df <- data.frame(NoMPA_bumphead_parrot[-1, ])%>%
 
 merge_bumphead_parrot <- rbind(MPA_bumphead_parrot.df, NoMPA_bumphead_parrot.df)
 
-#merge_octopus_1 <- filter(merge_octopus, catch != "NaN")
-
-
-#ggplot() +
-#  geom_point(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
-#  geom_line(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
-#  labs(x="Year", y="Projected biomass (MT)")+
-#  theme_classic()+
-#  theme(legend.title=element_blank())
 
 ggplot(data = merge_bumphead_parrot, aes(x = year, y = biomass, colour = State))+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Projected biomass (MT)")+
   theme_classic()+
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())+
+  ggtitle("Bumphead Parrotfish Predicted Biomass 2015-2030")
 
 ##note: when ran it for more than 15 years, the No_MPA did the same thing as the MPA is doing and then graph was too far out to see anything
 
@@ -130,6 +122,7 @@ ggplot(data = merge_bumphead_parrot, aes( x = year, y = catch, colour = State))+
   geom_line()+
   labs(x="Year", y="Projected catch (MT)")+
   theme_classic()+
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())+
+  ggtitle("Bumphead Parrotfish Predicted Catch 2015 - 2030")
         
 ```

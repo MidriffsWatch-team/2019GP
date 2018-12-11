@@ -77,7 +77,7 @@ MPA_gulf_grouper <- MPA.model(r=0.326,
                  fishing=0.1, 
                  patches=100,
                  MPA.width=5,
-                 years=50, 
+                 years=45, 
                  mrate=0.5)
 
 NoMPA_gulf_grouper <- MPA.model(r=0.326,
@@ -86,7 +86,7 @@ NoMPA_gulf_grouper <- MPA.model(r=0.326,
                    fishing=0.1, 
                    patches=100,
                    MPA.width=0, 
-                   years=50, 
+                   years=45, 
                    mrate=0.5) 
 
 ```
@@ -95,29 +95,21 @@ NoMPA_gulf_grouper <- MPA.model(r=0.326,
 ```{r}
 
 MPA_gulf_grouper.df <- data.frame(MPA_gulf_grouper[-1,])%>%
-  mutate(year=c(2015:2064), State="MPA")
+  mutate(year=c(2015:2059), State="MPA")
 
 NoMPA_gulf_grouper.df <- data.frame(NoMPA_gulf_grouper[-1,])%>%
-    mutate(year=c(2015:2064), State="No_MPA")
+    mutate(year=c(2015:2059), State="No_MPA")
 
 merge_gulf_grouper <- rbind(MPA_gulf_grouper.df, NoMPA_gulf_grouper.df)
 
-#merge_octopus_1 <- filter(merge_octopus, catch != "NaN")
-
-
-#ggplot() +
-#  geom_point(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
-#  geom_line(data = MPA_octopus.df, aes(x = year, y = biomass, color = State))+
-#  labs(x="Year", y="Projected biomass (MT)")+
-#  theme_classic()+
-#  theme(legend.title=element_blank())
 
 ggplot(data = merge_gulf_grouper, aes(x = year, y = biomass, colour = State))+
   geom_point()+
   geom_line()+
   labs(x="Year", y="Projected biomass (MT)")+
   theme_classic()+
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())+
+  ggtitle("Gulf Grouper Predicted Biomass 2015-2059")
 
 
 ```
@@ -129,7 +121,8 @@ ggplot(data = merge_gulf_grouper, aes( x = year, y = catch, colour = State))+
   geom_line()+
   labs(x="Year", y="Projected catch (MT)")+
   theme_classic()+
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())+
+  ggtitle("Gulf Grouper Predicted Catch 2015-2059")
         
 ```
 
