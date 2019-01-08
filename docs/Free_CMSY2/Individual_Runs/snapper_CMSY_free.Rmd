@@ -1,0 +1,134 @@
+---
+title: "yellow_snapper_cmsy_free"
+author: "Vienna Saccomanno"
+date: "November 2, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load packages}
+
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  #library(plotly)
+  library(fishmethods)
+  library(devtools)
+devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2) # Chris Free updated package for CMSY2
+})
+
+```
+
+#Load catch data of species
+#Loading datset of 7 species with catch data and catch inflated to 20%, 40% and 60% unreported catch 
+
+MT - regular yearly catch 
+MT_20 - inflated to 20% unreported catch
+MT_40- inflated to 40% unreported catch
+MT_60 - inflated to 60% unreported catch
+
+```{r}
+#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
+focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+#View(focalspeciescatch)
+
+unique(focalspeciescatch$NombreCientifico) #7 species 
+
+#create a new dataframe to isolate your species of interest 
+snapper_sp<-focalspeciescatch%>%
+  filter(NombreCientifico=="Lutjanus argentiventris")
+#View(snapper_sp)
+
+#Create vectors for the cmsy2 function
+year_snapper_sp <- c(snapper_sp$Ano) #vector of years
+catch_snapper_sp <- c(snapper_sp$MT) #vector of catch date 
+#View(catch_snapper_sp)
+
+#new datafram to isolate catch increase by 20%
+catch20_snapper_sp<- c(snapper_sp$MT_20)
+#new datafram to isolate catch increase by 40%
+catch40_snapper_sp<- c(snapper_sp$MT_40)
+#new datafram to isolate catch increase by 60%
+catch60_snapper_sp<- c(snapper_sp$MT_60)
+
+```
+
+```{r plots}
+
+#Plots catch over given years
+graph_snapper <-ggplot(snapper_sp, aes(x=Ano, y=MT))+
+  geom_line(size=1)+
+  ggtitle("Snapper Catch")+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Yearly total catch catch (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+ggplotly(graph_snapper)
+```
+FAO considers a maximally sustainable fished stock to be between 0.8 and 1.2 BMSY, an overfished stock to be <0.8 BMSY, and an underfished stock to be >1.2 BMSY. For US federally managed fisheries, NOAA reports on what fraction of stocks are overfished (https://www.fisheries.noaa.gov/feature-story/status-stocks-2017), usually defined as being <0.5 BMSY, though the exact ratio differs by region and type of stock
+
+Paper: https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsy138/5133277
+
+
+```{r}
+
+
+#Regular landings 
+snapper_sp_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch_snapper_sp, resilience = "Low")
+
+snapper_sp_cmsy_free_plots <- plot_dlm(snapper_sp_cmsy_free)
+
+
+snapper_sp_cmsy_free_plots
+snapper_sp_cmsy_free$ref_pts
+snapper_sp_cmsy_free$ref_ts
+
+##results:MSY= 0.000338; Bmsy = 0.0024; B/Bmsy in last year  = 0.23; Fishing mortality in last year = 0.101; Exploitation F/Fmsy  = 1.55
+
+
+#Landings inflated 20%
+snapper_sp_20_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch20_snapper_sp, resilience = "Low")
+
+snapper_sp_20_cmsy_free_plots <- plot_dlm(snapper_sp_20_cmsy_free)
+
+snapper_sp_20_cmsy_free$ref_pts
+snapper_sp_20_cmsy_free$ref_ts
+##results 20%:MSY= 0.00041;  Bmsy = 0.0029; B/Bmsy in last year  = 0.234; Fishing mortality in last year = 0.098; Exploitation F/Fmsy  = 1.48
+
+
+#Landings inflated 40%
+snapper_sp_40_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch40_snapper_sp, resilience = "Low")
+
+snapper_sp_40_cmsy_free_plots <- plot_dlm(snapper_sp_40_cmsy_free)
+
+snapper_sp_40_cmsy_free$ref_pts
+snapper_sp_40_cmsy_free$ref_ts
+
+##results 40%: MSY= 0.000485; Bmsy = 0.00344; B/Bmsy in last year  = 0.229; Fishing mortality in last year = 0.0985; Exploitation F/Fmsy  = 1.52
+
+
+#Landings inflated 60%
+snapper_sp_60_cmsy_free <- cmsy2(year=year_snapper_sp, catch=catch60_snapper_sp, resilience = "Medium")
+
+snapper_sp_60_cmsy_free_plots <- plot_dlm(snapper_sp_60_cmsy_free)
+
+snapper_sp_60_cmsy_free$ref_pts
+snapper_sp_60_cmsy_free$ref_ts
+
+##results 60%: MSY= 0.000651; Bmsy = 0.0023; B/Bmsy in last year  =  0.22; Fishing mortality in last year = 0.175; Exploitation F/Fmsy  = 1.4
+
+
+```
+
