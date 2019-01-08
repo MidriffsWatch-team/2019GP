@@ -2,24 +2,29 @@
 title: "Graph MPA patch model output"
 author: "Seleni Cruz"
 date: "January 7, 2019"
-output: html_document
+output:
+  pdf_document: default
+  papersize: legal
+  html_document: default
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, message=FALSE, echo=FALSE}
+suppressPackageStartupMessages({
 library(dplyr)
 library(here)
 library(ggplot2)
 library(plotly)
+})
 ```
 
 
-#Biomass projection when catch data was not inflated
+#Genera Biomass projection when catch data was not inflated
 
-```{r, echo=FALSE,  message=FALSE, }
+```{r, echo=FALSE,  message=FALSE}
 Genus<-read.csv(here::here("data", "Genus_patchmodel.csv"))%>%
   filter(Adjusted=="MT")
 
@@ -37,11 +42,11 @@ graph2<-graph1+
 
 ```
 
-```{r, fig.height= 20, fig.width=10}
-ggplotly(graph2)
+```{r, fig.height= 30, fig.width=20, echo=FALSE}
+graph2
 ```
 
-#Biomass projection when catch data was inflated 20%
+#Genera Biomass projection when catch data was inflated 20%
 ```{r, echo=FALSE,  message=FALSE, }
 Genus<-read.csv(here::here("data", "Genus_patchmodel.csv"))%>%
   filter(Adjusted=="MT_20")
@@ -60,13 +65,13 @@ graph2<-graph1+
 
 ```
 
-```{r, fig.height= 20, fig.width=10}
-ggplotly(graph2)
+```{r, fig.height= 30, fig.width=20, , echo=FALSE}
+graph2
 ```
 
-#Biomass projection when catch data was inflated 40%
+#Genera Biomass projection when catch data was inflated 40%
 
-```{r, echo=FALSE,  message=FALSE, }
+```{r, echo=FALSE,  message=FALSE }
 Genus<-read.csv(here::here("data", "Genus_patchmodel.csv"))%>%
   filter(Adjusted=="MT_40")
 
@@ -84,13 +89,13 @@ graph2<-graph1+
 
 ```
 
-```{r, fig.height= 20, fig.width=10}
-ggplotly(graph2)
+```{r, fig.height= 30, fig.width=20, echo=FALSE}
+graph2
 ```
 
-#Biomass projection when catch data was inflated 60%
+#Genera Biomass projection when catch data was inflated 60%
 
-```{r, echo=FALSE,  message=FALSE, }
+```{r, echo=FALSE,  message=FALSE }
 Genus<-read.csv(here::here("data", "Genus_patchmodel.csv"))%>%
   filter(Adjusted=="MT_60")
 
@@ -108,7 +113,106 @@ graph2<-graph1+
 
 ```
 
-```{r, fig.height= 20, fig.width=10}
-ggplotly(graph2)
+```{r, fig.height= 30, fig.width=20, echo=FALSE}
+graph2
 ```
+
+#Species Biomass projection when catch data was not inflated
+
+```{r, echo=FALSE,  message=FALSE }
+Species<-read.csv(here::here("data", "Species_patchmodel.csv"))%>%
+  filter(Adjusted=="MT")
+
+graph1<-ggplot(Species, aes(x=Year, y=Biomass_est, color=Status))+
+ geom_line(size=1)+
+  #geom_point()+
+  labs(x="Year", y="Biomass (MT)", title="Biomass by Species 2015-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+graph2<-graph1+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+
+```
+
+```{r, fig.height= 10, fig.width=10, echo=FALSE}
+graph2
+```
+
+#Species Biomass projection when catch data was inflated 20%
+
+```{r, echo=FALSE,  message=FALSE }
+Species<-read.csv(here::here("data", "Species_patchmodel.csv"))%>%
+  filter(Adjusted=="MT_20")
+
+graph1<-ggplot(Species, aes(x=Year, y=Biomass_est, color=Status))+
+ geom_line(size=1)+
+  #geom_point()+
+  labs(x="Year", y="Biomass (MT)", title="Biomass by Species 2015-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+graph2<-graph1+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+
+```
+
+```{r, fig.height= 10, fig.width=10, echo=FALSE}
+graph2
+```
+
+#Species Biomass projection when catch data was inflated 40%
+
+```{r, echo=FALSE,  message=FALSE }
+Species<-read.csv(here::here("data", "Species_patchmodel.csv"))%>%
+  filter(Adjusted=="MT_40")
+
+graph1<-ggplot(Species, aes(x=Year, y=Biomass_est, color=Status))+
+ geom_line(size=1)+
+  #geom_point()+
+  labs(x="Year", y="Biomass (MT)", title="Biomass by Species 2015-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+graph2<-graph1+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+
+```
+
+```{r, fig.height= 10, fig.width=10, echo=FALSE}
+graph2
+```
+
+#Species Biomass projection when catch data was inflated 60%
+
+```{r, echo=FALSE,  message=FALSE }
+Species<-read.csv(here::here("data", "Species_patchmodel.csv"))%>%
+  filter(Adjusted=="MT_60")
+
+graph1<-ggplot(Species, aes(x=Year, y=Biomass_est, color=Status))+
+ geom_line(size=1)+
+  #geom_point()+
+  labs(x="Year", y="Biomass (MT)", title="Biomass by Species 2015-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+graph2<-graph1+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+
+```
+
+```{r, fig.height= 10, fig.width=10, echo=FALSE}
+graph2
+```
+
+
+
 

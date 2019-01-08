@@ -1,11 +1,10 @@
 ---
-title: "Aggregated by Genus"
+title: "Aggregated by Genera"
 author: "Seleni Cruz"
 date: "October 23, 2018"
 output:
-  html_document: default
   pdf_document: default
-  word_document: default
+  papersize: legal
 ---
 
 ```{r setup, include=FALSE}
@@ -26,8 +25,6 @@ suppressPackageStartupMessages({
 })
 ```
 
-Aggregating all smallscale fisheries by Genus not only focal species. 
-There are 61 Genus in the initial list of focal species from COBI. If we are aggregating at the GEnus level why not include all that have over 5 yeas of data. 
 
 ```{r, include=FALSE}
 LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
@@ -92,24 +89,23 @@ graph1<-ggplot(catch_genus, aes(x=Ano, y=MT, color=NombreCientifico))+
   labs(x="Year", y="Yearly total catch catch (MT)", title="Catch series of 33 Genera", subtitle= "2000-2015")+
   theme_classic()+
   scale_x_continuous(expand=c(0,0))+
-  scale_y_continuous(expand=c(0,0))+
-  theme(legend.title=element_blank())
-graph1
+  scale_y_continuous(expand=c(0,0))
+#graph1
 
-ggplotly(graph1)
+#ggplotly(graph1)
 ```
 
 
 
-```{r, fig.width=10, fig.height=20, echo=FALSE}
+```{r, fig.width=15, fig.height=20, echo=FALSE}
 graph2<-graph1+
    facet_wrap(~ NombreCientifico, scales = "free_y", ncol=2)
   #tiff('cacthbygenus.tiff', units="in", width=10, height=12, res=300)
 
-ggplotly(graph2)
+graph2
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 grouper<-catch_genus%>%
   filter(NombreCientifico=="Caulolatilus")
 

@@ -1,8 +1,11 @@
 ---
-title: "Focal Landing Sites"
+title: "7 Focal Species"
 author: "Seleni Cruz"
 date: "October 23, 2018"
-output: html_document
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -23,8 +26,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-###Load Catch data and list of focal species
-Filter national data set to just Sonora and Baja California and exclude industrial species 
+
 ```{r, include=FALSE}
 focalspecies<-read.csv(here::here("raw_data", "finalfocalspecies.csv"))
 LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
@@ -42,17 +44,17 @@ sum(catch$PesoVivo/1000)
 
 
 #Calculating total landings for each 163 speies across all years, column years is the number of years for which data is available for that species    
-specieslanding<- catch%>%
-  group_by(NombreCientifico)%>%
-  summarize(sp_land= sum(MT), years=length(unique(Ano)))
+#specieslanding<- catch%>%
+ # group_by(NombreCientifico)%>%
+  #summarize(sp_land= sum(MT), years=length(unique(Ano)))
 
 #Calculating average landings of species across all years by species 
-toplandings<-specieslanding%>%
-  group_by(NombreCientifico)%>%
-  summarize(avergelandings=mean(MT))%>%
-  mutate(percent=(avergelandings/sum(avergelandings)*100))
+#toplandings<-specieslanding%>%
+ # group_by(NombreCientifico)%>%
+  #summarize(avergelandings=mean(MT))%>%
+  #mutate(percent=(avergelandings/sum(avergelandings)*100))
 
-sum(toplandings$avergelandings)
+#sum(toplandings$avergelandings)
 
 
 #Calculate total catch in the region by year and number of species reported in each year 
@@ -64,12 +66,12 @@ spp_catch<-catch%>%
 
 sum(spp_catch$MT)
 
-write.csv(spp_catch, file = file.choose(new = T))
+#write.csv(spp_catch, file = file.choose(new = T))
 
 ```
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 
 graph5 <-ggplot(spp_catch, aes(x=Ano, y=MT, color=NombreCientifico))+
   #tiff('yearly_catch_focal_species.tiff', units="in", width=10, height=5, res=300)+
@@ -92,12 +94,12 @@ ggplotly(graph5)
 graph6<-graph5+
    facet_wrap(~ NombreCientifico, scales = "free_y", ncol=2)
 
-ggplotly(graph6)
+graph6
 ```
 
-Total value of landings is $411,467 
 
-```{r}
+
+```{r, include=FALSE}
 value2014<-spp_catch%>%
   filter(Ano=="2014")%>%
   merge(focalspecies, by="NombreCientifico")%>%
