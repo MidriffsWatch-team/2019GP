@@ -1,0 +1,135 @@
+---
+title: "Humphead_Parrot_CMSY_Free"
+author: "Juliette"
+date: "October 31, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#Packages 
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+  library(rfishbase)
+  library(plotly)
+  library(fishmethods)
+  library(devtools)
+devtools::install_github("cfree14/datalimited2") 
+  library(datalimited2) # Chris Free updated package for CMSY2
+})
+
+
+```
+
+
+#Load catch data of species
+
+```{r}
+#loading catch data of 6 species with more than 5 years of catch data, detailed code for this dataset is in the "landing sites.rmd" in docs 
+focalspeciescatch<-read.csv(here("docs", "focalspeciescatch.csv"))
+
+unique(focalspeciescatch$NombreCientifico) #6 species 
+
+#create a new dataframe to isolate your species of interest 
+bumphead_parrot<-focalspeciescatch%>%
+  filter(NombreCientifico=="Scarus perrico")
+
+#Create vectors for the cmsy2 function
+year_bumphead_parrot <- c(bumphead_parrot$Ano) #vector of years
+catch_bumphead_parrot <- c(bumphead_parrot$MT) #vector of catch date 
+
+#new datafram to isolate catch increase by 20%
+catch20_bumphead_parrot<- c(bumphead_parrot$MT_20)
+#new datafram to isolate catch increase by 40%
+catch40_bumphead_parrot<- c(bumphead_parrot$MT_40)
+#new datafram to isolate catch increase by 60%
+catch60_bumphead_parrot<- c(bumphead_parrot$MT_60)
+
+
+
+
+```
+
+
+```{r}
+
+#Plots catch over given years, simply change the name of the dataframe ie "Octopus"
+graph_BumpheadParrot <-ggplot(bumphead_parrot, aes(x=Ano, y=MT))+
+  geom_line(size=1)+
+  ggtitle("Bumphead Parrot")+
+  geom_point()+
+  geom_line()+
+  labs(x="Year", y="Yearly total catch catch (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+ggplotly(graph_BumpheadParrot)
+
+```
+
+
+
+FAO considers a maximally sustainable fished stock to be between 0.8 and 1.2 BMSY, an overfished stock to be <0.8 BMSY, and an underfished stock to be >1.2 BMSY. For US federally managed fisheries, NOAA reports on what fraction of stocks are overfished (https://www.fisheries.noaa.gov/feature-story/status-stocks-2017), usually defined as being <0.5 BMSY, though the exact ratio differs by region and type of stock
+
+Paper: https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsy138/5133277
+
+```{r}
+
+
+
+?cmsy2
+
+#Regular landings 
+bumphead_parrot_cmsy_free <- cmsy2(year=year_bumphead_parrot, catch=catch_bumphead_parrot, resilience = "Medium")
+
+bumphead_parrot_cmsy_free_plots <- plot_dlm(bumphead_parrot_cmsy_free)
+
+bumphead_parrot_cmsy_free$ref_pts
+bumphead_parrot_cmsy_free$ref_ts
+
+##results:viable r-k graph has very wide range; MSY= 0.175; BMSY = 0.000602
+
+
+#Landings inflated 20%
+bumphead_parrot_20_cmsy_free <- cmsy2(year=year_bumphead_parrot, catch=catch20_bumphead_parrot, resilience = "Medium")
+
+bumphead_parrot_20_cmsy_free_plots <- plot_dlm(bumphead_parrot_20_cmsy_free)
+
+bumphead_parrot_20_cmsy_free$ref_pts
+bumphead_parrot_20_cmsy_free$ref_ts
+
+##results:viable r-k graph has very wide range; MSY= 0.208; BMSY all overfished except year 2015
+
+
+#Landings inflated 40%
+bumphead_parrot_40_cmsy_free <- cmsy2(year=year_bumphead_parrot, catch=catch40_bumphead_parrot, resilience = "Medium")
+
+bumphead_parrot_40_cmsy_free_plots <- plot_dlm(bumphead_parrot_40_cmsy_free)
+
+bumphead_parrot_40_cmsy_free$ref_pts
+bumphead_parrot_40_cmsy_free$ref_ts
+
+##results:viable r-k graph has very wide range; MSY= 0.244; BMSY all overfished except year 2015
+
+
+#Landings inflated 60%
+bumphead_parrot_60_cmsy_free <- cmsy2(year=year_bumphead_parrot, catch=catch60_bumphead_parrot, resilience = "Medium")
+
+bumphead_parrot_60_cmsy_free_plots <- plot_dlm(bumphead_parrot_60_cmsy_free)
+
+bumphead_parrot_60_cmsy_free$ref_pts
+bumphead_parrot_60_cmsy_free$ref_ts
+
+##results:viable r-k graph has very wide range; MSY= 0.276; BMSY all overfished except year 2015
+```
