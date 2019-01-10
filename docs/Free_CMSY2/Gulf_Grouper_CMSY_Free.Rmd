@@ -101,7 +101,7 @@ gulf_grouper_cmsy_free_plots <- plot_dlm(gulf_grouper_cmsy_free)
 gulf_grouper_cmsy_free$ref_pts
 gulf_grouper_cmsy_free$ref_ts
 
-##results: viable r-k pairs graph is super weird; MSY= 14.149; BMSY < 0.8 = overfished except for 2014 and 2015 which is barely over
+##results: viable r-k pairs graph is super weird; MSY= 14.149; BMSY < 0.8 = overfished except for 2014 and 2015 which is barely over. BMSY=0.463
 
 #Landings inflated 20%
 gulf_grouper_20_cmsy_free <- cmsy2(year=year_gulf_grouper, catch=catch20_gulf_grouper, resilience = "Very low")
@@ -123,7 +123,7 @@ gulf_grouper_40_cmsy_free_plots <- plot_dlm(gulf_grouper_40_cmsy_free)
 gulf_grouper_40_cmsy_free$ref_pts
 gulf_grouper_40_cmsy_free$ref_ts
 
-##results: viable r-k pairs graph is super weird; MSY= 19.908; BMSY < 0.8 = overfished except for 2014 and 2015 which is barely over. 2013 is exactly 8
+##results: viable r-k pairs graph is super weird; MSY= 19.908; BMSY < 0.8 = overfished except for 2014 and 2015 which is barely over. 2013 is exactly 8. 
 
 
 #Landings inflated 60%

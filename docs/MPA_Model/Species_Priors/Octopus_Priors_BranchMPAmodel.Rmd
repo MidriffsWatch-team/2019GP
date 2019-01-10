@@ -114,7 +114,6 @@ biomass_octopus_graph <- ggplot(data = merge_octopus, aes(x = year, y = biomass,
 
 
 
-totalbiomass_mpa <- integrate(dnorm, biomass_octopus_graph)
 
 sum_bio_mpa_octo <-cumsum(MPA_octopus.df$biomass)
 
@@ -123,7 +122,11 @@ sum_bio_nompa_octo <- cumsum(NoMPA_octopus.df$biomass)
 diff_mpa_biomass <- sum_bio_mpa_octo-sum_bio_nompa_octo
 diff_mpa_biomass
 
+total_biomass <- sum(diff_mpa_biomass)
+total_biomass
+
 ```
+
 
 
 ```{r}
@@ -137,6 +140,16 @@ catch_ocotopus_graph <- ggplot(data = merge_octopus, aes( x = year, y = catch, c
 
 ggplotly(catch_ocotopus_graph)
         
+
+sum_catch_mpa_octo <-cumsum(MPA_octopus.df$catch)
+
+sum_catch_nompa_octo <- cumsum(NoMPA_octopus.df$catch)
+
+diff_mpa_catch <- sum_catch_mpa_octo-sum_catch_nompa_octo
+diff_mpa_catch
+
+total_biomass <- sum(diff_mpa_catch)
+total_biomass
 ```
 
 

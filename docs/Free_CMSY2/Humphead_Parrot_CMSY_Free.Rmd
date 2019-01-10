@@ -98,7 +98,7 @@ bumphead_parrot_cmsy_free_plots <- plot_dlm(bumphead_parrot_cmsy_free)
 bumphead_parrot_cmsy_free$ref_pts
 bumphead_parrot_cmsy_free$ref_ts
 
-##results:viable r-k graph has very wide range; MSY= 0.175; BMSY all overfished except year 2015
+##results:viable r-k graph has very wide range; MSY= 0.175; BMSY = 0.000602
 
 
 #Landings inflated 20%
