@@ -1,0 +1,359 @@
+---
+title: "Juliette_Functions"
+author: "Juliette Verstaen"
+date: "1/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#############
+#CMSY2 Function
+##############
+
+#create a datatable for the cmsy data to go into
+
+#in this function, tell it what data to use, load packaes
+Species_CMSY2 <- function(data, priors) {
+  library(dplyr)
+  require(datalimited2)
+  
+
+#create a dataframe of all the variables you want stored  
+  variables <- data.frame(Name=NA,
+                          Adjusted=NA,
+                          r=NA,
+                          r.low=NA,
+                          r.hi=NA,
+                          k=NA,
+                          k.low=NA,
+                          k.hi=NA
+                          msy=NA,
+                          msy.low=NA,
+                          msy.hi=NA,
+                          bmsy=NA,
+                          bmsy.low=NA,
+                          bsmy.hi=NA,
+                          year=NA,
+                          catch=NA,
+                          catch_ma=NA,
+                          b=NA,
+                          b_low=NA,
+                          b_hi=NA,
+                          bbmsy=NA,	
+                          bbmsy_lo=NA,	
+                          bbmsy_hi=NA,	
+                          s=NA,	
+                          s_lo=NA,	
+                          s_hi=NA,	
+                          f=NA,	
+                          f_lo=NA,	
+                          f_hi=NA,	
+                          fmsy=NA,	
+                          fmsy_lo=NA,	
+                          fmsy_hi=NA,	
+                          ffmsy=NA,	
+                          ffmsy_lo=NA,	
+                          ffmsy_hi=NA,	
+                          er=NA))
+ 
+##QUESTION: how is this different than the varibles. will proabbly figure it out as I go through 
+  ref_ts <- data.frame(Name=NA,
+                          Adjusted=NA,
+                          r=NA,
+                          r.low=NA,
+                          r.hi=NA,
+                          k=NA,
+                          k.low=NA,
+                          k.hi=NA
+                          msy=NA,
+                          msy.low=NA,
+                          msy.hi=NA,
+                          bmsy=NA,
+                          bmsy.low=NA,
+                          bsmy.hi=NA,
+                          year=NA,
+                          catch=NA,
+                          catch_ma=NA,
+                          b=NA,
+                          b_low=NA,
+                          b_hi=NA,
+                          bbmsy=NA,	
+                          bbmsy_lo=NA,	
+                          bbmsy_hi=NA,	
+                          s=NA,	
+                          s_lo=NA,	
+                          s_hi=NA,	
+                          f=NA,	
+                          f_lo=NA,	
+                          f_hi=NA,	
+                          fmsy=NA,	
+                          fmsy_lo=NA,	
+                          fmsy_hi=NA,	
+                          ffmsy=NA,	
+                          ffmsy_lo=NA,	
+                          ffmsy_hi=NA,	
+                          er=NA))
+                          
+##create a vector for all the species
+
+Species <- as.vector(unique(data$NombreCientifico))
+
+##QUESTION these few lines of code are confusing ish to me
+for(s in Species) {
+  df <- data%>% filter(NombreCientifico == s)
+  
+  year<-as.vector(df$Ano, mode='numeric')
+
+#how do you know which rows in the df it will be  
+  catches<-(df[4:7])
+  
+#what does var stand for? is it just a subset of the data "priors" and then you make varibles from that
+
+  var <- subset(priors, NombreCientifico == s)
+  
+  resilience <- (var$Resilience)
+  r.lo <- (var$r_lo)
+  r.hi <- (var$r_hi)
+  
+  for (i in 1:ncol(catches)) {
+    catch <- catches[,i]
+    
+  #what does adjusted do?
+    adjusted <- c(colnames(catches[i]))
+
+#should r.hi be renmaed r.high    
+    cmsy <- datalimited2 :: cmsy2(year=year, catch=catch, reslience=resilience, r.low=r.lo, rhi=r.hi)
+
+#saying where from the cmsy output the data points we want are located    
+    out <- data.frame(Name = s, 
+                        Adjusted = adjusted,
+                        r = cmsy$ref_pts[1,2], 
+                        r.low = cmsy$ref_pts[1,3], 
+                        r.hi = cmsy$ref_pts[1,4],
+                        k = cmsy$ref_pts[2,2], 
+                        k.low = cmsy$ref_pts[2,3], 
+                        k.hi = cmsy$ref_pts[2,4],
+                        msy = cmsy$ref_pts[3,2], 
+                        msy.low = cmsy$ref_pts[3,3], 
+                        msy.hi = cmsy$ref_pts[3,4],
+                        bmsy = cmsy$ref_pts[5,2], 
+                        bmsy.low = cmsy$ref_pts[5,3],
+                        bmsy.hi = cmsy$ref_pts[5,4],
+                        year = cmsy$ref_ts[tail(1),1],	
+                        catch = cmsy$ref_ts[tail(1),2],	
+                        catch_ma = cmsy$ref_ts[tail(1),3],	
+                        b = cmsy$ref_ts[tail(1),4],	
+                        b_lo = cmsy$ref_ts[tail(1),5],	
+                        b_hi = cmsy$ref_ts[tail(1),6],	
+                        bbmsy = cmsy$ref_ts[tail(1),7],	
+                        bbmsy_lo = cmsy$ref_ts[tail(1),8],	
+                        bbmsy_hi = cmsy$ref_ts[tail(1),9],	
+                        s = cmsy$ref_ts[tail(1),10],	
+                        s_lo = cmsy$ref_ts[tail(1),11],	
+                        s_hi = cmsy$ref_ts[tail(1),12],	
+                        f = cmsy$ref_ts[tail(1),13],	
+                        f_lo = cmsy$ref_ts[tail(1),14],	
+                        f_hi = cmsy$ref_ts[tail(1),15],	
+                        fmsy = cmsy$ref_ts[tail(1),16],	
+                        fmsy_lo = cmsy$ref_ts[tail(1),17],	
+                        fmsy_hi = cmsy$ref_ts[tail(1),18],	
+                        ffmsy = cmsy$ref_ts[tail(1),19],	
+                        ffmsy_lo = cmsy$ref_ts[tail(1),20],	
+                        ffmsy_hi = cmsy$ref_ts[tail(1),21],	
+                        er = cmsy$ref_ts[tail(1),22])
+    
+   # create a data frame with the list of variables from befor and the output generated from the cmsy2
+  
+  variables <-rbind(variables, out)
+  
+  output <- data.frame(cmsy$ref_ts)
+  
+  #renaming columing after creating the outputs into a df
+  output <- output%>%
+    mutate(Name = c(s),
+    Adjusted = c(adjsuted))
+
+#i am confusing with ref_ts for some reason, i think i jsut need to go back and look at what the cmsmy2 outputs look like    
+   ref_ts <- rbind(ref_ts, output)
+    
+  }
+}
+
+  return (list(variables[-1,], ref_ts[-1,]))
+}
+
+##########
+#Harvest function
+##########
+
+harvest <- function(fishing, patches, MPA.width)  {
+  fishing.vec <- vector(length=patches)
+  fishing.vec[] <- fishing ####what is this doing??
+  if(MPA.width >0)  {
+  ##this is just making the MPA in the middle yea
+    MPA.begin <- round((patches - MPA.width)/2)+1
+    MPA.end <- MPA.begin + MPA.width -1
+  #i dont get this line of code  
+    fishing.vec[MPA.begin:MPA.end] <- 0
+  }
+  return(fishing.vec)
+}
+
+#######
+###Biological Patch Model Function
+######
+
+MPA.Model <- function(r, K, fishing, biomass, pacthes, years, MPA.width, mrate) {
+
+  library(dplyr)
+  library(magrittr) #what is in this library?
+  
+  f.rate <- harvest(fishing=fishing, patches=patches, MPA.width=MPA.width)
+  Biomass <- vector(length=patches)
+  Biomass[] <-biomass
+  left.patch <- c(patches, 1: (patches-1))
+  right.patch <- c(2: patches, 1)
+  
+  summary <- data.frame(Year=NA,
+                        Leave=NA,
+                        Arrive=NA,
+                        Surplus=NA, 
+                        Catch=NA,
+                        Biomass=NA)
+
+#double check that year 1 is 2016 in output data                    Years <- as.vector(2015:(2015+years))
+  
+  for (i in Years) {
+  
+
+    leaving <- 2*mrate*Biomass
+    arriving <- 0.5*leaving[left.patch]+0.5*leaving[right.patch]
+    surplus <- r*Biomass*(1-Biomass/K)
+    catches <- f.rate*Biomass
+    Biomass <- Biomass+surplus-catches-leaving+arriving
+    output<- data.frame (Year= i,
+                          Leave = sum(leaving),
+                          Arrive= sum(arriving),
+                          Surplus = sum(surplus),
+                          Catch = sum(catches),
+                          Biomass = sum(Biomass)
+              )
+        summary <- rbind (summary, output)
+  }
+  
+    return(summary[-1,])
+}
+
+##########
+##Biological patch model function: looping over average, low and high estiamtes of variables
+##########
+
+Scearios <- function(data, patches, years, MPA.width, mrate) {
+  library(dplyr)
+  out <- data.frame(Name=NA,
+                    Adjusted= NA)
+                    
+    R <- as.numeric(data[,3:5])
+    k <- as.numeric(data[,6:8])
+    Fishing <- as.numeric(data[,9:11])
+    Biomass <- as.numeric(data[,12:14])
+  
+  # why length R and not other variables  
+    for(s in 1:length(R)){
+    fishing <- Fishing[s]
+    r <- R[s]
+    K <- (k[s]/patches)
+    biomass <- (Biomass[s]/patches)
+    
+    MPA <- MPA.Model(r=r, K=K, biomass=biomass,fishing=fishing, patches=patches, MPA.width=MPA.width, years=years, mrate=mrate)
+ 
+ #calling to vectors made earlier correct?
+  out<-(cbind(out, MPA))
+  }
+  out<- out[,-c(9,15)]
+  
+  out<-out %>%
+    mutate(Name=data$Name,
+           Adjusted=data$Adjusted)
+  
+  names(out) <- c("Name",
+                  "Adjusted", 
+                  "Year",
+                  "Leave_est",
+                  "Arrive_est", 
+                  "Surplus_est",
+                  "Catch_est",
+                  "Biomass_est", 
+                  "Leave_lo",
+                  "Arrive_lo", 
+                  "Surplus_lo",
+                  "Catch_lo",
+                  "Biomass_lo", 
+                  "Leave_hi",
+                  "Arrive_hi", 
+                  "Surplus_hi",
+                  "Catch_hi",
+                  "Biomass_hi")
+  return(out[-1,])
+}
+
+
+#########
+#####Biological Patch Model Function
+#Looping through all fisheries and infated catch
+########
+
+Biological.Model <- function(df, patches, years, MPA.width, mrate) {
+
+results<- data.frame(Name = NA,
+                       Adjusted = NA, 
+                       Year = NA,
+                       Leave_est = NA,
+                       Arrive_est = NA, 
+                       Surplus_est = NA,
+                       Catch_est = NA,
+                       Biomass_est = NA, 
+                       Leave_lo = NA,
+                       Arrive_lo = NA, 
+                       Surplus_lo = NA,
+                       Catch_lo = NA,
+                       Biomass_lo = NA, 
+                       Leave_hi = NA,
+                       Arrive_hi = NA, 
+                       Surplus_hi = NA,
+                       Catch_hi = NA,
+                       Biomass_hi = NA)
+  for(i in 1:nrow(df)) {
+    
+    data <- df[i,]
+    
+    scen <- Scenarios(data=data, patches=patches, years=years, MPA.width=MPA.width, mrate=mrate)  
+    
+    results <- rbind(results, scen)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

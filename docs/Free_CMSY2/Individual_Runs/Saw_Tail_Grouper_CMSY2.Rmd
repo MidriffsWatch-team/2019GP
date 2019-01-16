@@ -83,6 +83,6 @@ saw_tail_grouperM60 <- cmsy2(year=year, catch=catch60, resilience = "Very low")
 plot_dlm(saw_tail_grouperM60)
 saw_tail_grouperM60$ref_pts
 saw_tail_grouperM60$ref_ts
-
+#Bmsy = 18.5
 ```
 \
