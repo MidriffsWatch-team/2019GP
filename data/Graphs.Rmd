@@ -3,9 +3,9 @@ title: "Graph MPA patch model output"
 author: "Seleni Cruz"
 date: "January 7, 2019"
 output:
-  pdf_document: default
-  papersize: legal
   html_document: default
+  papersize: legal
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE, message=FALSE}
@@ -25,6 +25,12 @@ library(plotly)
 #Genera Biomass projection when catch data was not inflated
 
 ```{r, echo=FALSE,  message=FALSE}
+Biomass<-read.csv(here::here("data", "Genus_ts.csv"))%>%
+  filter(Adjusted=="MT")
+
+
+catch<- readRDS (here::here("data", "Species_ts.rds"))
+
 Genus<-read.csv(here::here("data", "Genus_patchmodel.csv"))%>%
   filter(Adjusted=="MT")
 
