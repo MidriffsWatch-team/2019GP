@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 library(here)
 library(tidyverse)
@@ -17,11 +17,39 @@ library(tidyverse)
 
 #CMSY2 for 33 Genus 
 ```{r}
-genus<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))
+genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%>%
+   filter(Genus== "Atrina"
+        |Genus=="Octopus"
+        |Genus=="Callinectes"
+        |Genus=="Scomberomorus"
+        |Genus=="Epinephelus"
+        |Genus=="Mugil"
+        |Genus=="Panulirus"
+        |Genus=="Cephalopholis"
+        |Genus=="Dasyatis"
+        |Genus=="Micropogonias"
+        |Genus=="Caranx"
+        |Genus=="Lutjanus"
+        |Genus=="Squatina"
+        |Genus=="Sphoeroides")
 
-genus_priors<-read.csv(here::here("data", "function_inputs", "Genus_priors.csv"))
+genus_priors<-read.csv(here::here("data", "function_inputs", "Genus_priors.csv"))%>%
+   filter(Genus== "Atrina"
+        |Genus=="Octopus"
+        |Genus=="Callinectes"
+        |Genus=="Scomberomorus"
+        |Genus=="Epinephelus"
+        |Genus=="Mugil"
+        |Genus=="Panulirus"
+        |Genus=="Cephalopholis"
+        |Genus=="Dasyatis"
+        |Genus=="Micropogonias"
+        |Genus=="Caranx"
+        |Genus=="Lutjanus"
+        |Genus=="Squatina"
+        |Genus=="Sphoeroides")
 
-Genus<-Species_CMSY2(data=genus, priors=genus_priors)
+Genus<-Species_CMSY2(data=genus_catch, priors=genus_priors)
 Genus_pts <- Genus[1]
 Genus_ts<- Genus[2]
 
@@ -30,64 +58,65 @@ write.csv(Genus_ts, "Genus_ts.csv")
 
 ```
 
-#CMSY2 for 7 Species
-```{r}
-species<-read.csv(here::here("data", "function_inputs", "catch_species.csv"))
 
-species_priors<-read.csv(here::here("data", "function_inputs", "Species_priors.csv"))
-
-Species<-Species_CMSY2(data=species, priors=species_priors)
-Species_pts <- Species[1]
-Species_ts <- Species[2]
-
-write.csv(Species_pts, "Species_pts.csv")
-write.csv(Species_ts, "Species_ts.csv")
-
-
-
-min(5, 3)
-```
-
-
-#Biologial Patch model for 33 Genus
+#Biologial Patch model for 14 Genus projecting 2016-2035
 ```{r}
 Genus_pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
-  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi)
+  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate)
 
-Genus_MPA<-Biological.Model(df=Genus_pts, patches=100, years=20, MPA.width=5, mrate=0.5)
+MPA.matrix<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
-Genus_NO_MPA<-Biological.Model(df=Genus_pts, patches=100, years=20, MPA.width=0, mrate=0.5)
+devtools::install_github("r-lib/progress")
+library(progress)
 
-Genus_MPA<- Genus_MPA%>%
-  replace(Genus_MPA < 0, 0)%>%
+pb <- progress_bar$new(
+  format = "  downloading [:bar] :percent in :elapsed",
+  total = 100, clear = FALSE, width= 60)
+for (i in 1:100) {
+  pb$tick()
+  Sys.sleep(1 / 100)
+}
+
+Genus_MPA_mat<-Biological.Model(df=Genus_pts, years=20, MPA.matrix = MPA.matrix, MPA=1)
+
+Genus_NO_MPA<-Biological.Model(df=Genus_pts, years=20, MPA.matrix = MPA.matrix, MPA=0)
+
+Genus_MPA<- Genus_MPA_mat%>%
+  replace(Genus_MPA_mat < 0, 0)%>%
   mutate(Status="MPA")
 Genus_NO_MPA<- Genus_NO_MPA%>%
   replace(Genus_NO_MPA < 0, 0)%>%
   mutate(Status="No MPA")
 
-Genus<- rbind(Genus_MPA, Genus_NO_MPA)
-write.csv(Genus, "Genus_patchmodel.csv")
+Genus_patchmodel<- rbind(Genus_MPA, Genus_NO_MPA)%>%
+  select(Name, Adjusted, Year, Biomass_est, Biomass_lo, Biomass_hi, Catch_est, Catch_lo, Catch_hi, Status)
+
+write.csv(Genus_patchmodel, "Genus_2D_patchmodel.csv")
+
 
 ```
 
-#Biologial Patch model for 7 Species 
+#Merging with Catch and biomass from 2000-2015
 ```{r}
-species_pts<-read.csv(here::here("data", "Species_pts.csv"))%>%
-  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi)
+genus_ts<-read.csv(here::here("data", "Genus_ts.csv"))%>%
+  select(Name, Adjusted, year, catch, b, b_lo, b_hi)%>%
+  mutate(Catch_lo=NA, Catch_hi=NA, Status= "No MPA")
 
-Species_MPA<-Biological.Model(df=species_pts, patches=100, years=20, MPA.width=5, mrate=0.5)
+colnames(genus_ts)
+names(genus_ts)[3:10] <- c("Year", "Catch_est", "Biomass_est", "Biomass_lo", "Biomass_hi","Catch_lo", "Catch_hi", "Status")
 
-Species_NO_MPA<-Biological.Model(df=species_pts, patches=100, years=20, MPA.width=0, mrate=0.5)
+yearly_catch2<-genus_ts%>%
+  group_by(Year, Adjusted)%>%
+  summarize(Catch=sum(Catch_est))
 
-Species_MPA<- Species_MPA%>%
-  replace(Species_MPA < 0, 0)%>%
-  mutate(Status="MPA")
-Species_NO_MPA<- Species_NO_MPA%>%
-  replace(Species_NO_MPA < 0, 0)%>%
-  mutate(Status="No MPA")
+#Biomass (est, hi and lo from CMSY2) and Catch (CONAPESCA)  from 2000-2015 
+genus_ts <- genus_ts[c("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", "Biomass_hi", "Catch_est", "Catch_lo", "Catch_hi", "Status")]
 
-Species<- rbind(Species_MPA, Species_NO_MPA)
-write.csv(Species, "Species_patchmodel.csv")
+Genus_catch_biomass<- rbind(genus_ts, Genus_patchmodel)
+
+write.csv(Genus_catch_biomass, "merged_2D_output.csv")
+
 ```
+
 
 

@@ -48,13 +48,14 @@ catch_genus<-catch%>%
   group_by(Genus, Ano)%>%
   summarize(MT=sum(PesoVivo)/1000)%>%
   mutate(MT_20= MT*1.2, MT_40= MT*1.4, MT_60=MT*1.6)%>%
-  filter(length(unique(Ano))>5|length(unique(Ano))==5)%>%
-  dplyr::rename(NombreCientifico=Genus)
+  filter(length(unique(Ano))>5|length(unique(Ano))==5)
 
 length(unique(catch_genus$Genus)) #33 Genera
 
 unique(catch_genus$Genus)
+
 #write.csv(catch_genus, file = file.choose(new = T))
+
 detail_genus<-catch%>%
   filter(Genus== "Seriola"| Genus=="Cynoscion")
 length(unique(detail_genus$Ano))
