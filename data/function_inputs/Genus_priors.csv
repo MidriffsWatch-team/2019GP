@@ -1,34 +1,34 @@
-Common Name ,NombreCientifico,Resilience,r_lo,r_hi
-Atlantic Spanish mackerel,Scomberomorus,Medium,,
-Crab,Callinectes,High,,
-octopus,Octopus,Medium,,
-Mollusc,Atrina,Low,,
-White mullet,Mugil,Medium,,
-Graysby,Cephalopholis,Medium,,
-Diamond Stingray,Dasyatis,Low,,
-Rooster Hind,Epinephelus,Very low,,
-Gulf weakfish,Micropogonias,Medium,,
-Yellowtail amberjack,Caranx,Low,,
-Pacific angelshark,Squatina,Very low,,
-Finescale triggerfish,Balistes,Low,,
-Ocean whitefish,Caulolatilus,Low,,
-Shovelnose guitarfish,Rhinobatos,Low,,
-Yellow snapper,Lutjanus,Low,,
-Bullseye puffer,Sphoeroides,Medium,,
-Chocolate clam,Megapitaria,Low,,
-lobster,Panulirus,Low,,
-Gulf Grouper,Mycteroperca,Very low,,
-Pacific barracuda,Sphyraena,Medium,,
-Bared sand bass,Paralabrax,Medium,,
-Mexican hogfish,Bodianus,Low,,
-Snubnose pompano,Trachinotus,Medium,,
-Queen conch,Strombus,High,,
-Burrito Grunt ,Anisotremus,Low,,
-Wavyline Grunt,Microlepidotus,Medium,,
-Blacktip shark,Carcharhinus,Low,,
-North Pacific Hake,Merluccius,Medium,,
-"Pacific Spotted Scorpionfish, Stone Scorpionfish",Scorpaena,Low,,
-Scalloped hammerhead,Sphyrna,Very low,,
-Spanish Grunt,Haemulon,Medium,,
-Bumphead parrotfish,Scarus,Medium,,
-Roosterfish,Nematistius,Low,,
+Common Name ,Genus,Resilience,r_lo,r_hi,mrate
+Atlantic Spanish mackerel,Scomberomorus,Medium,,,0.2
+Crab,Callinectes,High,,,0.2
+octopus,Octopus,Medium,,,0.815243285
+Mollusc,Atrina,Low,,,0.2
+White mullet,Mugil,Medium,,,0.2
+Graysby,Cephalopholis,Medium,,,0.2
+Diamond Stingray,Dasyatis,Low,,,0.388389894
+Rooster Hind,Epinephelus,Very low,,,0.2
+Gulf weakfish,Micropogonias,Medium,,,0.2
+Yellowtail amberjack,Caranx,Low,,,0.2
+Pacific angelshark,Squatina,Very low,,,0.2
+Finescale triggerfish,Balistes,Low,,,0.2
+Ocean whitefish,Caulolatilus,Low,,,0.2
+Shovelnose guitarfish,Rhinobatos,Low,,,0.2
+Yellow snapper,Lutjanus,Low,,,0.2
+Bullseye puffer,Sphoeroides,Medium,,,0.2
+Chocolate clam,Megapitaria,Low,,,0.2
+lobster,Panulirus,Low,,,0.2
+Gulf Grouper,Mycteroperca,Very low,,,0.2
+Pacific barracuda,Sphyraena,Medium,,,0.2
+Bared sand bass,Paralabrax,Medium,,,0.2
+Mexican hogfish,Bodianus,Low,,,0.2
+Snubnose pompano,Trachinotus,Medium,,,0.2
+Queen conch,Strombus,High,,,0.2
+Burrito Grunt ,Anisotremus,Low,,,0.2
+Wavyline Grunt,Microlepidotus,Medium,,,0.2
+Blacktip shark,Carcharhinus,Low,,,0.2
+North Pacific Hake,Merluccius,Medium,,,0.2
+"Pacific Spotted Scorpionfish, Stone Scorpionfish",Scorpaena,Low,,,0.2
+Scalloped hammerhead,Sphyrna,Very low,,,0.2
+Spanish Grunt,Haemulon,Medium,,,0.2
+Bumphead parrotfish,Scarus,Medium,,,0.2
+Roosterfish,Nematistius,Low,,,0.2

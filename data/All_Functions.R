@@ -74,16 +74,16 @@ Species_CMSY2<-function(data, priors){
                        ffmsy_hi=NA,	
                        er=NA)
   
-  Species <- as.vector(unique(data$NombreCientifico))
+  Genus <- as.vector(unique(data$Genus))
   
-  for (s in Species){
-    df <- data%>% filter(NombreCientifico == s) 
+  for (s in Genus){
+    df <- data%>% filter(Genus == s) 
     
     year<-as.vector(df$Ano, mode='numeric')
     
     catches<-(df[,4:7])
     
-    var <-subset(priors, NombreCientifico == s)
+    var <-subset(priors, Genus == s)
     
     resilience <- (var$Resilience)
     r.lo<- (var$r_lo)
@@ -138,7 +138,7 @@ Species_CMSY2<-function(data, priors){
       output<- data.frame(cmsy$ref_ts)
       
       output<- output%>%
-        mutate(Name = c(s), 
+        mutate(Name = s, 
                Adjusted = c(adjusted))
       
       ref_ts<- rbind(ref_ts, output)
@@ -164,21 +164,37 @@ harvest <- function(fishing, patches, MPA.width)  {
   return(fishing.vec)
 }
 
+fishing.matrix <- function(fishing, MPA, MPA.matrix)  {
+  
+  freq <-table(MPA.matrix)
+  displace<- fishing*freq[2]
+  new_F <- fishing + displace
+  
+  if (MPA == 0){
+    MPA.matrix[MPA.mat = 0] <- new_F
+    MPA.matrix[MPA.mat = 1] <- new_F }
+  else {
+    MPA.matrix[MPA.mat = 0] <- new_F
+    MPA.matrix[MPA.mat = 1] <- 0
+  }
+  return(MPA.matrix)
+}
+
+
 ######################################################################
 #Biological Patch Model Function
 #
 ######################################################################
 
-MPA.Model<- function(r, K, fishing, biomass, patches, years, 
-                     MPA.width, mrate){
+MPA.Model <- function(r, K, fishing, biomass, patches, years, MPA.width, mrate){
   library(dplyr)
   library(magrittr)
   
   f.rate <- harvest(fishing=fishing, patches=patches, MPA.width=MPA.width)
-  Biomass <- vector(length=patches) 
-  Biomass[]<-biomass
-  left.patch<- c(patches, 1: (patches-1))
-  right.patch<- c(2: patches, 1)
+  Biomass <- vector(length=patches)
+  Biomass[] <-biomass
+  left.patch <- c(patches, 1: (patches-1))
+  right.patch <- c(2: patches, 1)
   
   summary<- data.frame(Year=NA,
                        Leave=NA, 

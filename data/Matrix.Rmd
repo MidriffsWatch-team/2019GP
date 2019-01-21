@@ -1,0 +1,62 @@
+---
+title: "Presentation Graphs"
+author: "Seleni Cruz"
+date: "January 16, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(Matrix)
+
+MPA.matrix<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
+table(MPA.matrix)
+
+MPA<-fishing.matrix(fishing = 0.2, MPA=1, MPA.matrix = MPA.matrix)
+table(MPA)
+
+No_MPA<-fishing.matrix(fishing = 0.2, MPA=0, MPA.matrix = MPA.matrix)
+table(No_MPA)
+
+```
+
+
+```{r}
+  patches=5
+
+  l.patch <- c(patches, 1: (patches-1))
+  left.patch<-as.matrix(do.call(rbind, replicate(patches, l.patch, simplify=FALSE)))
+  
+  
+   surplus <- 0.2*left.patch *(1-left.patch/10)
+   
+  r.patch <- c(2: patches, 1)
+  right.patch<-as.matrix(do.call(rbind, replicate(patches, l.patch, simplify=FALSE)))
+  
+  u.patch <- c(patches, 1: (patches-1))
+  up.patch<-as.matrix(do.call(cbind, replicate(patches, u.patch, simplify=FALSE)))
+
+  d.patch <- c(2: patches, 1)
+  down.patch<-as.matrix(do.call(cbind, replicate(patches, d.patch, simplify=FALSE)))
+  
+leaving <- 100
+
+
+arriving <- 0.25*leaving[left.patch]+ 0.25*leaving[right.patch] + 0.25*leaving[up.patch] + 0.25*leaving[down.patch]
+
+for(row in 1:nrow(right.patch)) {
+    for(col in 1:ncol(right.patch)) {
+        arriving <- 0.25*leaving[left.patch]+ 
+                    0.25*leaving[right.patch] + 
+                    0.25*leaving[up.patch] + 
+                    0.25*leaving[down.patch]
+    }
+  return(arriving)
+}
+
+```
+
