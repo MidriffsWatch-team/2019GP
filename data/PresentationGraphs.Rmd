@@ -25,7 +25,11 @@ DF<-read.csv((here::here("data", "merged_2D_output.csv")))
 cummulative_Octopus<- DF%>%
   filter(Adjusted=="MT")%>%
   filter(!(Year=="2000"))%>%
-  filter(Name=="Octopus")%>%
+  filter(Name=="Octopus")
+
+cummulative_MT<- DF%>%
+  filter(Adjusted=="MT")%>%
+  filter(!(Year=="2000"))%>%
   group_by(Year, Status, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Biomass_lo=sum(Biomass_lo), 
@@ -71,7 +75,9 @@ percent<- merge(cummulative_MPA, cummulative_No_MPA, by=c("Adjusted","Year"))%>%
 ```
 
 ```{r, echo=FALSE, message=FALSE}
+
 ggplot(cummulative_Octopus, aes(x=Year, y=Biomass_est, color=Status))+
+ggplot(cummulative_MT, aes(x=Year, y=Biomass_est, color=Status))+
  geom_line(size=2)+
   #tiff('cummulative_biomass.tif', units="in", width=8, height=5, res=300)+
   #geom_ribbon(aes(ymin=Biomass_lo, ymax=Biomass_hi, fill=Status), alpha=0.2)+
@@ -89,7 +95,9 @@ ggplot(cummulative_Octopus, aes(x=Year, y=Biomass_est, color=Status))+
 
 
 ```{r, echo=FALSE, message=FALSE}
+
 ggplot(cummulative_Octopus, aes(x=Year, y=Catch_est, color=Status))+
+ggplot(cummulative_MT, aes(x=Year, y=Catch_est, color=Status))+
  geom_line(size=2)+
    #tiff('cummulative_catch.tif', units="in", width=8, height=5, res=300)+
   #geom_ribbon(aes(ymin=Catch_lo, ymax=Catch_hi, fill=Status), alpha=0.2)+

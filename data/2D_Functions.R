@@ -1,10 +1,15 @@
 ######################################################################
 #Harvest function 
+<<<<<<< HEAD
 #Even redistribution of fising effort 
+=======
+#Redistribution of fising effort 
+>>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
 ######################################################################
 
 fishing.matrix<- function (fishing, MPA, MPA.matrix){
   freq<- table(MPA.matrix)
+<<<<<<< HEAD
   MPA.patch<- as.numeric(freq[2])
   NoMPA.patch<-as.numeric(freq[1])
   
@@ -17,6 +22,21 @@ fishing.matrix<- function (fishing, MPA, MPA.matrix){
     else {MPA.matrix[,]<- fishing
     }
   return(MPA.matrix)}
+=======
+  MPA<- as.numeric(freq[2])
+  NoMPA<-as.numeric(freq[1])
+  
+  displace<- (fishing*MPA)/NoMPA
+  new_F<- fishing+displace
+  
+  if (MPA==0){MPA.matrix[,]<- fishing}
+  
+  else{MPA.matrix[MPA.matrix==0]<- new_F
+      MPA.matrix[MPA.matrix==1]<-0}
+  
+  return(MPA.matrix)
+}
+>>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
 
 ######################################################################
 #Biological 2-D Patch Model Function
@@ -31,7 +51,11 @@ MPA.Model <- function(r, K, fishing, biomass, MPA, years, MPA.matrix, mrate){
   Biomass <- MPA.matrix
   Biomass[,] <- biomass
   
+<<<<<<< HEAD
   patches <- 106 #dimensions of the mpa matrix
+=======
+  patches <- 106 #dimenssions of the mpa matrix
+>>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
   
   l.patch <- c(patches, 1: (patches-1))
   left.patch<-as.matrix(do.call(rbind, replicate(patches, l.patch, simplify=FALSE)))
@@ -55,7 +79,11 @@ MPA.Model <- function(r, K, fishing, biomass, MPA, years, MPA.matrix, mrate){
   Years<- as.vector(2015:(2015+years))
   
   for (i in Years){
+<<<<<<< HEAD
     leaving <- 4*mrate*Biomass 
+=======
+    leaving <- mrate*Biomass 
+>>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
     
     for(row in 1:nrow(right.patch)) {
       for(col in 1:ncol(right.patch)) {
