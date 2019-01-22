@@ -1,15 +1,10 @@
 ######################################################################
 #Harvest function 
-<<<<<<< HEAD
 #Even redistribution of fising effort 
-=======
-#Redistribution of fising effort 
->>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
 ######################################################################
 
 fishing.matrix<- function (fishing, MPA, MPA.matrix){
   freq<- table(MPA.matrix)
-<<<<<<< HEAD
   MPA.patch<- as.numeric(freq[2])
   NoMPA.patch<-as.numeric(freq[1])
   
@@ -22,21 +17,6 @@ fishing.matrix<- function (fishing, MPA, MPA.matrix){
     else {MPA.matrix[,]<- fishing
     }
   return(MPA.matrix)}
-=======
-  MPA<- as.numeric(freq[2])
-  NoMPA<-as.numeric(freq[1])
-  
-  displace<- (fishing*MPA)/NoMPA
-  new_F<- fishing+displace
-  
-  if (MPA==0){MPA.matrix[,]<- fishing}
-  
-  else{MPA.matrix[MPA.matrix==0]<- new_F
-      MPA.matrix[MPA.matrix==1]<-0}
-  
-  return(MPA.matrix)
-}
->>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
 
 ######################################################################
 #Biological 2-D Patch Model Function
@@ -51,12 +31,8 @@ MPA.Model <- function(r, K, fishing, biomass, MPA, years, MPA.matrix, mrate){
   Biomass <- MPA.matrix
   Biomass[,] <- biomass
   
-<<<<<<< HEAD
-  patches <- 106 #dimensions of the mpa matrix
-=======
   patches <- 106 #dimenssions of the mpa matrix
->>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
-  
+
   l.patch <- c(patches, 1: (patches-1))
   left.patch<-as.matrix(do.call(rbind, replicate(patches, l.patch, simplify=FALSE)))
   
@@ -78,19 +54,19 @@ MPA.Model <- function(r, K, fishing, biomass, MPA, years, MPA.matrix, mrate){
   
   Years<- as.vector(2015:(2015+years))
   
+  arriving <- matrix(nrow=nrow(MPA.matrix), ncol= ncol(MPA.matrix), 0)
+  
   for (i in Years){
-<<<<<<< HEAD
-    leaving <- 4*mrate*Biomass 
-=======
-    leaving <- mrate*Biomass 
->>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
     
-    for(row in 1:nrow(right.patch)) {
-      for(col in 1:ncol(right.patch)) {
-        arriving <- 0.25*leaving[left.patch]+ 
-          0.25*leaving[right.patch] + 
-          0.25*leaving[up.patch] + 
-          0.25*leaving[down.patch]
+    leaving <- mrate*Biomass 
+    
+    for(row in 1:nrow(arriving)) {
+      for(col in 1:ncol(arriving)) {
+        
+        arriving [row, col] <- 0.25*leaving[left.patch[row, col]]+ 
+                               0.25*leaving[right.patch[row, col]] + 
+                               0.25*leaving[up.patch[row, col]] + 
+                               0.25*leaving[down.patch[row, col]]
       }
       } #close nested forloop for calculating arriving
     
@@ -98,7 +74,7 @@ MPA.Model <- function(r, K, fishing, biomass, MPA, years, MPA.matrix, mrate){
     
     catches <- f.matrix * Biomass
     
-    Biomass <- Biomass+surplus-catches- leaving+ arriving
+    Biomass <- Biomass + surplus - catches - leaving + arriving
     
     output<- data.frame (Year= i, 
                          Leave = sum(leaving) , 
@@ -126,6 +102,7 @@ Scenarios <- function(data, MPA, years, MPA.matrix) {
   Fishing <- as.numeric(data[,9:11])
   Biomass <- as.numeric(data[,12:14])
   mrate<- as.numeric(data[,15])
+  
   all.patches<-11236
 
   for (s in 1:length(R)){
@@ -133,6 +110,7 @@ Scenarios <- function(data, MPA, years, MPA.matrix) {
     K <- (k[s]/all.patches)
     fishing <- Fishing[s]
     biomass<- (Biomass[s]/all.patches)
+    mrate<- mrate
     
     MPA<-MPA.Model(r=r, K=K, biomass=biomass, fishing=fishing, MPA=MPA,
                    MPA.matrix=MPA.matrix, years=years, mrate=mrate)
@@ -190,6 +168,8 @@ Biological.Model<- function(df, years, MPA, MPA.matrix) {
                        Surplus_hi = NA,
                        Catch_hi = NA,
                        Biomass_hi = NA)
+  ptm<-proc.time() #time lapse
+  
   for(i in 1:nrow(df)) {
     
     data <- df[i,]
@@ -198,6 +178,8 @@ Biological.Model<- function(df, years, MPA, MPA.matrix) {
     
     results <- rbind(results, scen)
   }
+  
+  print(proc.time() -ptm)
   
   return(results[-1,])
 }

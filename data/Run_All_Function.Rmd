@@ -68,38 +68,16 @@ Genus_pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
 data<-Genus_pts[37,]
 
 MPA.matrix<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
+table(MPA.matrix)
 
 Genus_MPA<-Biological.Model(df=data, years=20, MPA.matrix = MPA.matrix, MPA=1)
 
 Genus_NO_MPA<-Biological.Model(df=data, years=20, MPA.matrix = MPA.matrix, MPA=0)
-=======
-
-#Biologial Patch model for 14 Genus projecting 2016-2035
-```{r}
-Genus_pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
-  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate)
-
-MPA.matrix<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
-
-devtools::install_github("r-lib/progress")
-library(progress)
-
-pb <- progress_bar$new(
-  format = "  downloading [:bar] :percent in :elapsed",
-  total = 100, clear = FALSE, width= 60)
-for (i in 1:100) {
-  pb$tick()
-  Sys.sleep(1 / 100)
-}
-
-Genus_MPA_mat<-Biological.Model(df=Genus_pts, years=20, MPA.matrix = MPA.matrix, MPA=1)
-
-Genus_NO_MPA<-Biological.Model(df=Genus_pts, years=20, MPA.matrix = MPA.matrix, MPA=0)
->>>>>>> de9f8c943fd1d7aa8237ecf3671b46117caa200c
 
 Genus_MPA<- Genus_MPA_mat%>%
   replace(Genus_MPA_mat < 0, 0)%>%
   mutate(Status="MPA")
+
 Genus_NO_MPA<- Genus_NO_MPA%>%
   replace(Genus_NO_MPA < 0, 0)%>%
   mutate(Status="No MPA")
