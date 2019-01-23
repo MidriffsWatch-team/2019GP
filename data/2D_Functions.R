@@ -57,16 +57,17 @@ MPA.Model <- function(r, K, fishing, biomass, MPA, years, MPA.matrix, mrate){
   arriving <- matrix(nrow=nrow(MPA.matrix), ncol= ncol(MPA.matrix), 0)
   
   for (i in Years){
-    
+
     leaving <- mrate*Biomass 
     
-    for(row in 1:nrow(arriving)) {
-      for(col in 1:ncol(arriving)) {
+    for(row in 1:nrow(right.patch)) {
+      for(col in 1:ncol(right.patch)) {
         
         arriving [row, col] <- 0.25*leaving[left.patch[row, col]]+ 
-                               0.25*leaving[right.patch[row, col]] + 
-                               0.25*leaving[up.patch[row, col]] + 
-                               0.25*leaving[down.patch[row, col]]
+                                0.25*leaving[right.patch[row, col]] + 
+                                0.25*leaving[up.patch[row, col]] + 
+                                0.25*leaving[down.patch[row, col]]
+
       }
       } #close nested forloop for calculating arriving
     
