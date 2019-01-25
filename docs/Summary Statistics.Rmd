@@ -1,0 +1,139 @@
+---
+title: "Summary Stats"
+author: "Seleni Cruz"
+date: "January 14, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Loading packages
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(here)
+  library(ggplot2)
+  library(dplyr)
+  library(sf)
+})
+```
+
+
+```{r}
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  mutate(MT=(PesoVivo)/1000)
+
+t_catch<-catch%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(catch$NombreCientifico))
+
+small<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  mutate(MT=(PesoVivo)/1000)%>%
+  filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+
+small_catch<-small%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(small$NombreCientifico))
+
+industrial<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  mutate(MT=(PesoVivo)/1000)%>%
+  filter((NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+
+in_catch<-industrial%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(ind$NombreCientifico))
+```
+
+```{r}
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  mutate(MT=(PesoVivo)/1000)
+
+t_catch<-catch%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(catch$NombreCientifico))
+
+small<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  mutate(MT=(PesoVivo)/1000)%>%
+  filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+
+small_catch<-small%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(small$NombreCientifico))
+
+industrial<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  mutate(MT=(PesoVivo)/1000)%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  filter((NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+
+in_catch<-industrial%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(industrial$NombreCientifico))
+```
+
+```{r}
+LandingSites<- read.csv (here::here("raw_data", "landingsites.csv"))%>%
+  filter(Confirmado=="y")
+
+catch<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  merge(LandingSites, by="SitioDesembarque")%>%
+  mutate(MT=(PesoVivo)/1000)
+
+t_catch<-catch%>%
+  group_by(NombreCientifico)%>%
+  summarize(total=sum(MT))
+
+length(unique(catch$NombreCientifico))
+
+small<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  mutate(MT=(PesoVivo)/1000)%>%
+  merge(LandingSites, by="SitioDesembarque")%>%
+  filter(!(NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+
+small_catch<-small%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(small$NombreCientifico))
+
+industrial<- readRDS (here("raw_data", "conapesca.RDS"))%>%
+  mutate(MT=(PesoVivo)/1000)%>%
+  filter(Estado=="Baja california"| Estado=="Sonora")%>%
+  merge(LandingSites, by="SitioDesembarque")%>%
+  filter((NombrePrincipal=="Macarela"|NombrePrincipal=="Sardina"|NombrePrincipal=="Camaron"|NombrePrincipal=="Corvina"|NombrePrincipal=="Calamar"|NombrePrincipal=="Anchoveta"))
+
+in_catch<-industrial%>%
+  group_by(Ano)%>%
+  summarize(total=sum(MT))
+
+length(unique(industrial$NombreCientifico))
+
+
+```
+
+
+
+
+
+
+
+
+
+

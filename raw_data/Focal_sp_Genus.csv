@@ -1,101 +1,101 @@
-Genus,Nombre científico,Nombre común,Grupo,Importancia comercial,Especie objetivo,Calidad,Sitio,Min2014,Max2014,Avg2014,Min2018,Max2018,Avg2018
-Alphestes,Alphestes immaculatus ,Cabrilla marihuana,fish,Pesca artesanal,No,Segunda,RGI,5,5,5,,,
-Anisotremus,Anisotremus davidsonii,Canelo,fish,Pesca artesanal,No,Segunda,RGI,5,5,5,10,15,12.5
-Anisotremus,Anisotremus interruptus,Burrito liso,fish,Pesca artesanal,No,Segunda,RGI,5,5,5,10,10,10
-Argopecten,Argopecten ventricosus,Almeja catarina,invertebrate,Pesca artesanal,No,Segunda,RGI,60,60,60,,,
-Atractoscion,Atractoscion nobilis,Cabicucho,fish,Pesca artesanal,Si,Primera,RGI,72,72,72,100,150,125
-Atrina,Atrina maura,Callo de redondo,invertebrate,Pesca artesanal,Si,Primera,RGI,150,180,180,330,350,340
-Atrina,Atrina tuberculosa,Callo de riñon,invertebrate,Pesca artesanal,Si,Primera,RGI,260,300,280,450,500,475
-Balistes,Balistes polylepis,Cochito,fish,Pesca artesanal,Si,Primera,RGI/Baja,12,12,12,20,25,22.5
-Bodianus,Bodianus diplotaenia,Vieja,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,35,35,35
-Calamus,Calamus brachysomus,Mojarra blanca,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,10,15,12.5
-Callinectes,Callinectes arcuatus,Jaiba azul,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,12,16,14,30,40,35
-Callinectes,Callinectes bellicosus,Jaiba verde,invertebrate,Pesca artesanal,Si,Segunda,RGI/Baja,12,20,16,30,40,35
-Caranx,Caranx melampygus,Jurel azul,fish,Pesca artesanal,Si,Primera,RGI/Baja,12,20,16,35,40,37.5
-Carcharhinus,Carcharhinus leucas,Tiburón lobero,fish,Pesca artesanal,Si,Primera,RGI,10,10,10,15,28,21.5
-Carcharhinus,Carcharhinus limbatus,Tiburón volador,fish,Pesca artesanal,Si,Primera,RGI,10,10,10,12,28,20
-Carcharhinus,Carcharhinus obscurus,Tiburón barroso,fish,Pesca artesanal,Si,Primera,RGI,10,10,10,15,28,21.5
-Caulolatilus,Caulolatilus affinis,Conejo,fish,Pesca artesanal,Si,Segunda,RGI/Baja,10,12,11,20,30,25
-Caulolatilus,Caulolatilus princeps,Pierna,fish,Pesca artesanal,Si,Segunda,RGI/Baja,10,12,11,20,24,22
-Cephalopholis,Cephalopholis panamensis ,Enjambre/cabrilla,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,20,30,25
-Coryphaena,Coryphaena hippurus,Dorado,fish,Pesca artesanal,No,Primera,RGI/Baja,18,20,19,,,
-Cynoscion,Cynoscion othonopterus,Curvina golfina,fish,Pesca artesanal,No,Segunda,RGI,12,12,12,28,30,29
-Cynoscion,Cynoscion parvipinnis,Curvina aleta corta,fish,Pesca artesanal,Si,Segunda,RGI,10,12,11,15,15,15
-Cynoscion,Cynoscion reticulatus,Curvina rayada,fish,Pesca artesanal,Si,Segunda,RGI,10,12,11,,,
-Cynoscion,Dasyatis dipterura,Corvina,fish,Pesca artesanal,,,RGI,,,,,,20
-Dasyatis,Diplobatis ommata,Manta arenera,fish,Pesca artesanal,Si,Primera,RGI,18,20,19,25,25,25
-Diplobatis,Dosinia ponderosa,Guitarra elécttrica manchada,fish,Pesca artesanal,Si,Segunda,RGI,4,4,4,15,15,15
-Dosinia,Epinephelus analogus,Almeja reyna,invertebrate,Pesca artesanal,Si,Segunda,RGI/Baja,10,12,11,,,400*
-Epinephelus,Epinephelus labriformis,Pinta,fish,Pesca artesanal,No,Primera,RGI/Baja,45,45,45,50,70,60
-Epinephelus,Euvola vogdesi,Cabrilla piedrera,fish,Pesca artesanal,No,Segunda,RGI/Baja,25,25,25,50,50,50
-Euvola,Farfantepenaeus californiensis,Almeja voladora,invertebrate,Pesca artesanal,No,Segunda,RGI,60,60,60,,,
-Farfantepenaeus,Haemulon flaviguttatum,Camaron café,invertebrate,Pesca artesanal,Si,Primera,RGI,120,150,150,100,180,140
-Haemulon,Haemulon maculicauda,Rayadillo aleta amarilla,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,10,10,10
-Haemulon,Haemulon scudderi,Rayadillo,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,10,10,10
-Haemulon,Haemulon sexfasciatum,Burrito,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,10,10,10
-Haemulon,Haemulon steindachneri,Burrito,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,10,10,10
-Haemulon,Hexaplex erythrostomus,Burrito,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,,,
-Hexaplex,Hexaplex nigritus,Caracol chino rosa,invertebrate,Pesca artesanal,Si,Segunda,RGI,40,50,45,80,80,80
-Hexaplex,Hexaplex princeps,Caracol chino negro,invertebrate,Pesca artesanal,Si,Segunda,RGI,40,50,45,80,80,80
-Hexaplex,Holothuria impatiens,Caracol chino,invertebrate,Pesca artesanal,Si,Segunda,RGI,40,40,40,80,80,80
-Holothuria,Holothuria lubrica,Pepino,invertebrate,Pesca artesanal,Si,Primera,RGI,80,80,80,,,
-Holothuria,Hoplopagrus guentherii,Pepino,invertebrate,Pesca artesanal,Si,Primera,RGI,80,80,80,,,
-Hoplopagrus,Hyporthodus acanthistius,Pargo coconaco,fish,Pesca artesanal,Si,Primera,RGI/Baja,45,45,45,45,50,47.5
-Hyporthodus,Hyporthodus niphobles,Baqueta,fish,Pesca artesanal,Si,Primera,RGI/Baja,60,75,67.5,7,100,53.5
-Hyporthodus,Isostichopus fuscus,Baqueta plomuda,fish,Pesca artesanal,Si,Primera,RGI/Baja,60,75,67.5,,,90
-Isostichopus,Litopenaeus stylirostris,Pepino de mar,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,300,350,325,500,500,500
-Litopenaeus,Lutjanus argentiventris,Camaron azul,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,150,250,200,200,200,200
-Lutjanus,Lutjanus guttatus,Pargo amarillo,fish,Pesca artesanal,Si,Primera,RGI/Baja,35,45,40,45,50,47.5
-Lutjanus,Lutjanus novemfasciatus,Pargo lunarejo,fish,Pesca artesanal,Si,Primera,RGI/Baja,35,45,40,45,50,47.5
-Lutjanus,Lutjanus peru,Pargo dienton,fish,Pesca artesanal,Si,Primera,RGI/Baja,35,45,40,45,50,47.5
-Lutjanus,Megapitaria squalida,Huachinango,fish,Pesca artesanal,Si,Primera,RGI/Baja,35,45,40,50,80,65
-Megapitaria,Microlepidotus inornatus,Almeja chocolata,invertebrate,Pesca artesanal,Si,Segunda,RGI/Baja,10,10,10,40,40,40*
-Merluccius,Mugil cephalus,Merluza,fish,Pesca artesanal,,,RGI,,,,15,15,15
-Microlepidotus,Mugil curema,Ronco rayadillo,fish,Pesca artesanal,No,Segunda,RGI/Baja,5,5,5,,,
-Micropogonias,Mycteroperca jordani ,Chano,fish,Pesca artesanal,,,RGI,,,,,,15
-Mugil,Mycteroperca prionura,Lisa cabezona,fish,Pesca artesanal,Si,Segunda,RGI,6,12,9,12,20,16
-Mugil,Mycteroperca rosacea,Lisa blanca,fish,Pesca artesanal,Si,Segunda,RGI,6,12,9,,,15
-Mycteroperca,Mycteroperca xenarcha ,Baya,fish,Pesca artesanal,Si,Primera,RGI/Baja,50,60,55,50,60,55
-Mycteroperca,Myliobatis californica,Garropa aserrada,fish,Pesca artesanal,No,Primera,RGI/Baja,45,45,45,50,50,50
-Mycteroperca,Myliobatis longirostris,Cabrilla sardinera,fish,Pesca artesanal,Si,Primera,RGI/Baja,45,45,45,50,50,50
-Mycteroperca,Nematistius pectoralis,Cabrilla escoba,fish,Pesca artesanal,No,Primera,RGI/Baja,45,50,47.5,50,50,50
-Myliobatis,Nicholsina denticulata,Manta tecolote,fish,Pesca artesanal,Si,Primera,RGI,10,10,10,20,50,35
-Myliobatis,Nodipecten subnodosus,Manta gavilán,fish,Pesca artesanal,Si,Primera,RGI,15,15,15,25,25,25
-Nematistius,Octopus alecto,"Gallo, papagallo",fish,Pesca artesanal,No,Segunda,RGI,15,15,15,10,15,12.5
-Nicholsina,Octopus bimaculatus,Perico baboso,fish,Pesca artesanal,No,Segunda,RGI,50,50,50,,,
-Nodipecten,Octopus fitchi,Almeja mano de león,invertebrate,Pesca artesanal,No,Primera,RGI/Baja,130,130,130,,,
-Octopus,Octopus hubbsorum,Pulpo,invertebrate,Pesca artesanal,Si,Primera,RGI,40,50,45,100,120,110
-Octopus,Panulirus inflatus,Pulpo lunarejo,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,40,50,45,100,120,110
-Octopus,Panulirus interruptus,Pulpo,invertebrate,Pesca artesanal,Si,Primera,RGI,40,50,45,100,120,110
-Octopus,Paralabrax auroguttatus,Pulpo verde,invertebrate,Pesca artesanal,Si,Primera,RGI,40,50,45,100,120,110
-Panulirus,Paralabrax loro,Langosta azul,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,120,130,125,200,200,200
-Panulirus,Paralabrax maculatofasciatus,Langosta roja,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,120,130,125,200,200,200
-Paralabrax,Pinctada mazatlanica,Extranjero,fish,Pesca artesanal,Si,Primera,RGI/Baja,15,15,15,22,25,23.5
-Paralabrax,Pinna rugosa,Extranjero cachete amarillo,fish,Pesca artesanal,Si,Primera,RGI/Baja,15,15,15,22,22,22
-Paralabrax,Pteria sterna,Cabrilla arenera,fish,Pesca artesanal,Si,Segunda,RGI/Baja,8,12,10,10,15,12.5
-Paralichthys,Rhizoprionodon longurio,Lenguado,fish,Pesca artesanal,,,RGI,,,,40,100,70
-Pinctada,Scarus compressus,Madre perla,invertebrate,Pesca artesanal,No,Segunda,RGI,80,80,80,,,
-Pinna,Scarus ghobban,Callo de hacha,invertebrate,Pesca artesanal,Si,Primera,RGI,150,150,150,,,
-Pteria,Scarus perrico,Callo de árbol,invertebrate,Pesca artesanal,Si,Primera,RGI,80,80,80,50,50,50
-Rhinobatos,Scomberomorus concolor,Payaso,fish,Pesca artesanal,,,RGI,,,,,,20
-Rhizoprionodon,Scomberomorus sierra,Tiburon bironcha,fish,Pesca artesanal,No,Primera,RGI,24,24,24,15,28,21.5
-Scarus,Scorpaena plumieri,Perico cola chata,fish,Pesca artesanal,No,Segunda,RGI/Baja,30,30,30,,,
-Scarus,Semicossyphus pulcher,Perico azul,fish,Pesca artesanal,No,Segunda,RGI/Baja,30,30,30,35,35,35
-Scarus,Seriola lalandi,Perico,fish,Pesca artesanal,No,Segunda,RGI/Baja,30,30,30,,,
-Scomberomorus,Sphoeroides annulatus,"Sierra, macarela",fish,Pesca artesanal,Si,Segunda,RGI/Baja,10,15,12.5,20,25,22.5
-Scomberomorus,Sphoeroides lobatus,Sierra del Pacífico,fish,Pesca artesanal,Si,Segunda,RGI/Baja,10,15,12.5,22,22,22
-Scorpaena,Sphyraena argentea,"Lupón, pez escorpión",fish,Pesca artesanal,No,Segunda,RGI,5,5,5,,,
-Semicossyphus,Sphyraena ensis,Vieja Californiana,fish,Pesca artesanal,No,Segunda,RGI/Baja,35,35,35,,,
-Seriola,Sphyrna lewini ,Jurel aleta amarilla,fish,Pesca artesanal,Si,Primera,RGI/Baja,10,10,10,20,40,30
-Sphoeroides,Spondylus limbatus,Botete Diana,fish,Pesca artesanal,Si,Primera,RGI,45,45,45,,,60
-Sphoeroides,Stereolepis gigas,Botete verrugoso,fish,Pesca artesanal,Si,Primera,RGI,40,40,40,,,60
-Sphyraena,Strombus galeatus,Barracuda,fish,Pesca artesanal,No,Segunda,RGI,5,5,5,,,
-Sphyraena,Trachinotus paitensis,Barracuda,fish,Pesca artesanal,No,Segunda,RGI,5,5,5,10,15,12.5
-Sphyrna,Trachinotus rhodopus ,"Cornuda, tiburón martillo",fish,Pesca artesanal,Si,Primera,RGI,10,10,10,20,28,24
-Spondylus,Urobatis concentricus,Callo de escarlopa,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,130,160,150,250,300,275
-Squatina,Squatina californica,Angelito,fish,Pesca artesanal,,,RGI,,,,,,25
-Stereolepis,Micropogonias megalops,Pescada,fish,Pesca artesanal,No,Segunda,RGI/Baja,45,45,45,,,
-Strombus,Cynoscion spp,"Caracol buro, amarillo",invertebrate,Pesca artesanal,No,Segunda,RGI,50,50,50,80,80,80
-Trachinotus,Paralichthys woolmani,Palometa,fish,Pesca artesanal,No,Segunda,RGI,5,10,7.5,8,12,10
-Trachinotus,Merluccius productus,Pampano,fish,Pesca artesanal,No,Segunda,RGI,10,12,11,10,10,10
-Urobatis,Rhinobatos productus,Manta redonda,fish,Pesca artesanal,No,Segunda,RGI,8,8,8,25,25,25
+ScientificName ,Genus,CommonName,Group,CommercialImportance,Objective,Quality,Site,Min2014,Max2014,Avg2014,Min2018,Max2018,Avg2018
+Alphestes immaculatus ,Alphestes,Cabrilla marihuana,fish,Pesca artesanal,No,Segunda,RGI,$250 ,$250 ,$250 ,$0 ,$0 ,$0 
+Anisotremus davidsonii,Anisotremus,Canelo,fish,Pesca artesanal,No,Segunda,RGI,$250 ,$250 ,$250 ,$500 ,$750 ,$625 
+Anisotremus interruptus,Anisotremus,Burrito liso,fish,Pesca artesanal,No,Segunda,RGI,$250 ,$250 ,$250 ,$500 ,$500 ,$500 
+Argopecten ventricosus,Argopecten,Almeja catarina,invertebrate,Pesca artesanal,No,Segunda,RGI,"$3,000 ","$3,000 ","$3,000 ",$0 ,$0 ,$0 
+Atractoscion nobilis,Atractoscion,Cabicucho,fish,Pesca artesanal,Si,Primera,RGI,"$3,600 ","$3,600 ","$3,600 ","$5,000 ","$7,500 ","$6,250 "
+Atrina maura,Atrina,Callo de redondo,invertebrate,Pesca artesanal,Si,Primera,RGI,"$7,500 ","$9,000 ","$9,000 ","$16,500 ","$17,500 ","$17,000 "
+Atrina tuberculosa,Atrina,Callo de riñon,invertebrate,Pesca artesanal,Si,Primera,RGI,"$13,000 ","$15,000 ","$14,000 ","$22,500 ","$25,000 ","$23,750 "
+Balistes polylepis,Balistes,Cochito,fish,Pesca artesanal,Si,Primera,RGI/Baja,$600 ,$600 ,$600 ,"$1,000 ","$1,250 ","$1,125 "
+Bodianus diplotaenia,Bodianus,Vieja,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,"$1,750 ","$1,750 ","$1,750 "
+Calamus brachysomus,Calamus,Mojarra blanca,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$500 ,$750 ,$625 
+Callinectes arcuatus,Callinectes,Jaiba azul,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,$600 ,$800 ,$700 ,"$1,500 ","$2,000 ","$1,750 "
+Callinectes bellicosus,Callinectes,Jaiba verde,invertebrate,Pesca artesanal,Si,Segunda,RGI/Baja,$600 ,"$1,000 ",$800 ,"$1,500 ","$2,000 ","$1,750 "
+Caranx melampygus,Caranx,Jurel azul,fish,Pesca artesanal,Si,Primera,RGI/Baja,$600 ,"$1,000 ",$800 ,"$1,750 ","$2,000 ","$1,875 "
+Carcharhinus leucas,Carcharhinus,Tiburón lobero,fish,Pesca artesanal,Si,Primera,RGI,$500 ,$500 ,$500 ,$750 ,"$1,400 ","$1,075 "
+Carcharhinus limbatus,Carcharhinus,Tiburón volador,fish,Pesca artesanal,Si,Primera,RGI,$500 ,$500 ,$500 ,$600 ,"$1,400 ","$1,000 "
+Carcharhinus obscurus,Carcharhinus,Tiburón barroso,fish,Pesca artesanal,Si,Primera,RGI,$500 ,$500 ,$500 ,$750 ,"$1,400 ","$1,075 "
+Caulolatilus affinis,Caulolatilus,Conejo,fish,Pesca artesanal,Si,Segunda,RGI/Baja,$500 ,$600 ,$550 ,"$1,000 ","$1,500 ","$1,250 "
+Caulolatilus princeps,Caulolatilus,Pierna,fish,Pesca artesanal,Si,Segunda,RGI/Baja,$500 ,$600 ,$550 ,"$1,000 ","$1,200 ","$1,100 "
+Cephalopholis panamensis ,Cephalopholis,Enjambre/cabrilla,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,"$1,000 ","$1,500 ","$1,250 "
+Coryphaena hippurus,Coryphaena,Dorado,fish,Pesca artesanal,No,Primera,RGI/Baja,$900 ,"$1,000 ",$950 ,$0 ,$0 ,$0 
+Cynoscion othonopterus,Cynoscion,Curvina golfina,fish,Pesca artesanal,No,Segunda,RGI,$600 ,$600 ,$600 ,"$1,400 ","$1,500 ","$1,450 "
+Cynoscion parvipinnis,Cynoscion,Curvina aleta corta,fish,Pesca artesanal,Si,Segunda,RGI,$500 ,$600 ,$550 ,$750 ,$750 ,$750 
+Cynoscion reticulatus,Cynoscion,Curvina rayada,fish,Pesca artesanal,Si,Segunda,RGI,$500 ,$600 ,$550 ,$0 ,$0 ,$0 
+Dasyatis dipterura,Dasyatis,Manta arenera,fish,Pesca artesanal,Si,Primera,RGI,$900 ,"$1,000 ",$950 ,"$1,250 ","$1,250 ","$1,250 "
+Diplobatis ommata,Diplobatis,Guitarra elécttrica manchada,fish,Pesca artesanal,Si,Segunda,RGI,$200 ,$200 ,$200 ,$750 ,$750 ,$750 
+Dosinia ponderosa,Dosinia,Almeja reyna,invertebrate,Pesca artesanal,Si,Segunda,RGI/Baja,$500 ,$600 ,$550 ,$0 ,$0 ,#VALUE!
+Epinephelus analogus,Epinephelus,Pinta,fish,Pesca artesanal,No,Primera,RGI/Baja,"$2,250 ","$2,250 ","$2,250 ","$2,500 ","$3,500 ","$3,000 "
+Epinephelus labriformis,Epinephelus,Cabrilla piedrera,fish,Pesca artesanal,No,Segunda,RGI/Baja,"$1,250 ","$1,250 ","$1,250 ","$2,500 ","$2,500 ","$2,500 "
+Euvola vogdesi,Euvola,Almeja voladora,invertebrate,Pesca artesanal,No,Segunda,RGI,"$3,000 ","$3,000 ","$3,000 ",$0 ,$0 ,$0 
+Farfantepenaeus californiensis,Farfantepenaeus,Camaron café,invertebrate,Pesca artesanal,Si,Primera,RGI,"$6,000 ","$7,500 ","$7,500 ","$5,000 ","$9,000 ","$7,000 "
+Haemulon flaviguttatum,Haemulon,Rayadillo aleta amarilla,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$500 ,$500 ,$500 
+Haemulon maculicauda,Haemulon,Rayadillo,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$500 ,$500 ,$500 
+Haemulon scudderi,Haemulon,Burrito,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$500 ,$500 ,$500 
+Haemulon sexfasciatum,Haemulon,Burrito,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$500 ,$500 ,$500 
+Haemulon steindachneri,Haemulon,Burrito,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$0 ,$0 ,$0 
+Hexaplex erythrostomus,Hexaplex,Caracol chino rosa,invertebrate,Pesca artesanal,Si,Segunda,RGI,"$2,000 ","$2,500 ","$2,250 ","$4,000 ","$4,000 ","$4,000 "
+Hexaplex nigritus,Hexaplex,Caracol chino negro,invertebrate,Pesca artesanal,Si,Segunda,RGI,"$2,000 ","$2,500 ","$2,250 ","$4,000 ","$4,000 ","$4,000 "
+Hexaplex princeps,Hexaplex,Caracol chino,invertebrate,Pesca artesanal,Si,Segunda,RGI,"$2,000 ","$2,000 ","$2,000 ","$4,000 ","$4,000 ","$4,000 "
+Holothuria impatiens,Holothuria,Pepino,invertebrate,Pesca artesanal,Si,Primera,RGI,"$4,000 ","$4,000 ","$4,000 ",$0 ,$0 ,$0 
+Holothuria lubrica,Holothuria,Pepino,invertebrate,Pesca artesanal,Si,Primera,RGI,"$4,000 ","$4,000 ","$4,000 ",$0 ,$0 ,$0 
+Hoplopagrus guentherii,Hoplopagrus,Pargo coconaco,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$2,250 ","$2,250 ","$2,250 ","$2,250 ","$2,500 ","$2,375 "
+Hyporthodus acanthistius,Hyporthodus,Baqueta,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$3,000 ","$3,750 ","$3,375 ",$350 ,"$5,000 ","$2,675 "
+Hyporthodus niphobles,Hyporthodus,Baqueta plomuda,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$3,000 ","$3,750 ","$3,375 ",$0 ,$0 ,"$4,500 "
+Isostichopus fuscus,Isostichopus,Pepino de mar,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,"$15,000 ","$17,500 ","$16,250 ","$25,000 ","$25,000 ","$25,000 "
+Litopenaeus stylirostris,Litopenaeus,Camaron azul,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,"$7,500 ","$12,500 ","$10,000 ","$10,000 ","$10,000 ","$10,000 "
+Lutjanus argentiventris,Lutjanus,Pargo amarillo,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$1,750 ","$2,250 ","$2,000 ","$2,250 ","$2,500 ","$2,375 "
+Lutjanus guttatus,Lutjanus,Pargo lunarejo,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$1,750 ","$2,250 ","$2,000 ","$2,250 ","$2,500 ","$2,375 "
+Lutjanus novemfasciatus,Lutjanus,Pargo dienton,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$1,750 ","$2,250 ","$2,000 ","$2,250 ","$2,500 ","$2,375 "
+Lutjanus peru,Lutjanus,Huachinango,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$1,750 ","$2,250 ","$2,000 ","$2,500 ","$4,000 ","$3,250 "
+Megapitaria squalida,Megapitaria,Almeja chocolata,invertebrate,Pesca artesanal,Si,Segunda,RGI/Baja,$500 ,$500 ,$500 ,"$2,000 ","$2,000 ",#VALUE!
+Microlepidotus inornatus,Microlepidotus,Ronco rayadillo,fish,Pesca artesanal,No,Segunda,RGI/Baja,$250 ,$250 ,$250 ,$0 ,$0 ,$0 
+Mugil cephalus,Mugil,Lisa cabezona,fish,Pesca artesanal,Si,Segunda,RGI,$300 ,$600 ,$450 ,$600 ,"$1,000 ",$800 
+Mugil curema,Mugil,Lisa blanca,fish,Pesca artesanal,Si,Segunda,RGI,$300 ,$600 ,$450 ,$0 ,$0 ,$750 
+Mycteroperca jordani ,Mycteroperca,Baya,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$2,500 ","$3,000 ","$2,750 ","$2,500 ","$3,000 ","$2,750 "
+Mycteroperca prionura,Mycteroperca,Garropa aserrada,fish,Pesca artesanal,No,Primera,RGI/Baja,"$2,250 ","$2,250 ","$2,250 ","$2,500 ","$2,500 ","$2,500 "
+Mycteroperca rosacea,Mycteroperca,Cabrilla sardinera,fish,Pesca artesanal,Si,Primera,RGI/Baja,"$2,250 ","$2,250 ","$2,250 ","$2,500 ","$2,500 ","$2,500 "
+Mycteroperca xenarcha ,Mycteroperca,Cabrilla escoba,fish,Pesca artesanal,No,Primera,RGI/Baja,"$2,250 ","$2,500 ","$2,375 ","$2,500 ","$2,500 ","$2,500 "
+Myliobatis californica,Myliobatis,Manta tecolote,fish,Pesca artesanal,Si,Primera,RGI,$500 ,$500 ,$500 ,"$1,000 ","$2,500 ","$1,750 "
+Myliobatis longirostris,Myliobatis,Manta gavilán,fish,Pesca artesanal,Si,Primera,RGI,$750 ,$750 ,$750 ,"$1,250 ","$1,250 ","$1,250 "
+Nematistius pectoralis,Nematistius,"Gallo, papagallo",fish,Pesca artesanal,No,Segunda,RGI,$750 ,$750 ,$750 ,$500 ,$750 ,$625 
+Nicholsina denticulata,Nicholsina,Perico baboso,fish,Pesca artesanal,No,Segunda,RGI,"$2,500 ","$2,500 ","$2,500 ",$0 ,$0 ,$0 
+Nodipecten subnodosus,Nodipecten,Almeja mano de león,invertebrate,Pesca artesanal,No,Primera,RGI/Baja,"$6,500 ","$6,500 ","$6,500 ",$0 ,$0 ,$0 
+Octopus alecto,Octopus,Pulpo,invertebrate,Pesca artesanal,Si,Primera,RGI,"$2,000 ","$2,500 ","$2,250 ","$5,000 ","$6,000 ","$5,500 "
+Octopus bimaculatus,Octopus,Pulpo lunarejo,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,"$2,000 ","$2,500 ","$2,250 ","$5,000 ","$6,000 ","$5,500 "
+Octopus fitchi,Octopus,Pulpo,invertebrate,Pesca artesanal,Si,Primera,RGI,"$2,000 ","$2,500 ","$2,250 ","$5,000 ","$6,000 ","$5,500 "
+Octopus hubbsorum,Octopus,Pulpo verde,invertebrate,Pesca artesanal,Si,Primera,RGI,"$2,000 ","$2,500 ","$2,250 ","$5,000 ","$6,000 ","$5,500 "
+Panulirus inflatus,Panulirus,Langosta azul,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,"$6,000 ","$6,500 ","$6,250 ","$10,000 ","$10,000 ","$10,000 "
+Panulirus interruptus,Panulirus,Langosta roja,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,"$6,000 ","$6,500 ","$6,250 ","$10,000 ","$10,000 ","$10,000 "
+Paralabrax auroguttatus,Paralabrax,Extranjero,fish,Pesca artesanal,Si,Primera,RGI/Baja,$750 ,$750 ,$750 ,"$1,100 ","$1,250 ","$1,175 "
+Paralabrax loro,Paralabrax,Extranjero cachete amarillo,fish,Pesca artesanal,Si,Primera,RGI/Baja,$750 ,$750 ,$750 ,"$1,100 ","$1,100 ","$1,100 "
+Paralabrax maculatofasciatus,Paralabrax,Cabrilla arenera,fish,Pesca artesanal,Si,Segunda,RGI/Baja,$400 ,$600 ,$500 ,$500 ,$750 ,$625 
+Pinctada mazatlanica,Pinctada,Madre perla,invertebrate,Pesca artesanal,No,Segunda,RGI,"$4,000 ","$4,000 ","$4,000 ",$0 ,$0 ,$0 
+Pinna rugosa,Pinna,Callo de hacha,invertebrate,Pesca artesanal,Si,Primera,RGI,"$7,500 ","$7,500 ","$7,500 ",$0 ,$0 ,$0 
+Pteria sterna,Pteria,Callo de árbol,invertebrate,Pesca artesanal,Si,Primera,RGI,"$4,000 ","$4,000 ","$4,000 ","$2,500 ","$2,500 ","$2,500 "
+Rhizoprionodon longurio,Rhizoprionodon,Tiburon bironcha,fish,Pesca artesanal,No,Primera,RGI,"$1,200 ","$1,200 ","$1,200 ",$750 ,"$1,400 ","$1,075 "
+Scarus compressus,Scarus,Perico cola chata,fish,Pesca artesanal,No,Segunda,RGI/Baja,"$1,500 ","$1,500 ","$1,500 ",$0 ,$0 ,$0 
+Scarus ghobban,Scarus,Perico azul,fish,Pesca artesanal,No,Segunda,RGI/Baja,"$1,500 ","$1,500 ","$1,500 ","$1,750 ","$1,750 ","$1,750 "
+Scarus perrico,Scarus,Perico,fish,Pesca artesanal,No,Segunda,RGI/Baja,"$1,500 ","$1,500 ","$1,500 ",$0 ,$0 ,$0 
+Scomberomorus concolor,Scomberomorus,"Sierra, macarela",fish,Pesca artesanal,Si,Segunda,RGI/Baja,$500 ,$750 ,$625 ,"$1,000 ","$1,250 ","$1,125 "
+Scomberomorus sierra,Scomberomorus,Sierra del Pacífico,fish,Pesca artesanal,Si,Segunda,RGI/Baja,$500 ,$750 ,$625 ,"$1,100 ","$1,100 ","$1,100 "
+Scorpaena plumieri,Scorpaena,"Lupón, pez escorpión",fish,Pesca artesanal,No,Segunda,RGI,$250 ,$250 ,$250 ,$0 ,$0 ,$0 
+Semicossyphus pulcher,Semicossyphus,Vieja Californiana,fish,Pesca artesanal,No,Segunda,RGI/Baja,"$1,750 ","$1,750 ","$1,750 ",$0 ,$0 ,$0 
+Seriola lalandi,Seriola,Jurel aleta amarilla,fish,Pesca artesanal,Si,Primera,RGI/Baja,$500 ,$500 ,$500 ,"$1,000 ","$2,000 ","$1,500 "
+Sphoeroides annulatus,Sphoeroides,Botete Diana,fish,Pesca artesanal,Si,Primera,RGI,"$2,250 ","$2,250 ","$2,250 ",$0 ,$0 ,"$3,000 "
+Sphoeroides lobatus,Sphoeroides,Botete verrugoso,fish,Pesca artesanal,Si,Primera,RGI,"$2,000 ","$2,000 ","$2,000 ",$0 ,$0 ,"$3,000 "
+Sphyraena argentea,Sphyraena,Barracuda,fish,Pesca artesanal,No,Segunda,RGI,$250 ,$250 ,$250 ,$0 ,$0 ,$0 
+Sphyraena ensis,Sphyraena,Barracuda,fish,Pesca artesanal,No,Segunda,RGI,$250 ,$250 ,$250 ,$500 ,$750 ,$625 
+Sphyrna lewini ,Sphyrna,"Cornuda, tiburón martillo",fish,Pesca artesanal,Si,Primera,RGI,$500 ,$500 ,$500 ,"$1,000 ","$1,400 ","$1,200 "
+Spondylus limbatus,Spondylus,Callo de escarlopa,invertebrate,Pesca artesanal,Si,Primera,RGI/Baja,"$6,500 ","$8,000 ","$7,500 ","$12,500 ","$15,000 ","$13,750 "
+Stereolepis gigas,Stereolepis,Pescada,fish,Pesca artesanal,No,Segunda,RGI/Baja,"$2,250 ","$2,250 ","$2,250 ",$0 ,$0 ,$0 
+Strombus galeatus,Strombus,"Caracol buro, amarillo",invertebrate,Pesca artesanal,No,Segunda,RGI,"$2,500 ","$2,500 ","$2,500 ","$4,000 ","$4,000 ","$4,000 "
+Trachinotus paitensis,Trachinotus,Palometa,fish,Pesca artesanal,No,Segunda,RGI,$250 ,$500 ,$375 ,$400 ,$600 ,$500 
+Trachinotus rhodopus ,Trachinotus,Pampano,fish,Pesca artesanal,No,Segunda,RGI,$500 ,$600 ,$550 ,$500 ,$500 ,$500 
+Urobatis concentricus,Urobatis,Manta redonda,fish,Pesca artesanal,No,Segunda,RGI,$400 ,$400 ,$400 ,"$1,250 ","$1,250 ","$1,250 "
+Squatina californica,Squatina,Angelito,fish,Pesca artesanal,,,RGI,$0 ,$0 ,$0 ,$0 ,$0 ,"$1,250 "
+Micropogonias megalops,Micropogonias,Chano,fish,Pesca artesanal,,,RGI,$0 ,$0 ,$0 ,$0 ,$0 ,$750 
+Cynoscion spp,Cynoscion,Corvina,fish,Pesca artesanal,,,RGI,$0 ,$0 ,$0 ,$0 ,$0 ,"$1,000 "
+Paralichthys woolmani,Paralichthys,Lenguado,fish,Pesca artesanal,,,RGI,$0 ,$0 ,$0 ,"$2,000 ","$5,000 ","$3,500 "
+Merluccius productus,Merluccius,Merluza,fish,Pesca artesanal,,,RGI,$0 ,$0 ,$0 ,$750 ,$750 ,$750 
+Rhinobatos productus,Rhinobatos,Payaso,fish,Pesca artesanal,,,RGI,$0 ,$0 ,$0 ,$0 ,$0 ,"$1,000 "

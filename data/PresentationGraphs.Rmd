@@ -1,0 +1,162 @@
+---
+title: "Presentation Graphs"
+author: "Seleni Cruz"
+date: "January 16, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE, message=FALSE, echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(data.table)
+```
+
+
+```{r, include=FALSE, message=FALSE, echo= FALSE}
+DF<-read.csv((here::here("data", "merged_2D_output.csv")))
+
+cummulative_Octopus<- DF%>%
+  filter(Adjusted=="MT")%>%
+  filter(!(Year=="2000"))%>%
+  filter(Name=="Octopus")
+
+cummulative_MT<- DF%>%
+  filter(Adjusted=="MT")%>%
+  filter(!(Year=="2000"))%>%
+  group_by(Year, Status, Adjusted)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Biomass_lo=sum(Biomass_lo), 
+            Biomass_hi=sum(Biomass_hi), 
+            Catch_est=sum(Catch_est),
+            Catch_lo=sum(Catch_lo), 
+            Catch_hi=sum(Catch_hi))
+
+Genus_patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel.csv"))
+
+cummulative_MPA<- Genus_patchmodel%>%
+  filter(Status=="MPA")%>%
+  group_by(Adjusted, Year)%>%
+  summarize(Biomass_est_mpa=sum(Biomass_est), 
+            Biomass_lo_mpa=sum(Biomass_lo), 
+            Biomass_hi_mpa=sum(Biomass_hi), 
+            Catch_est_mpa=sum(Catch_est),
+            Catch_lo_mpa=sum(Catch_lo), 
+            Catch_hi_mpa=sum(Catch_hi))%>%
+  arrange(-desc(Adjusted),-desc(Year))
+
+cummulative_No_MPA<- Genus_patchmodel%>%
+  filter(Status=="No MPA")%>%
+  group_by(Adjusted, Year)%>%
+  summarize(Biomass_est_nompa=sum(Biomass_est), 
+            Biomass_lo_nompa=sum(Biomass_lo), 
+            Biomass_hi_nompa=sum(Biomass_hi), 
+            Catch_est_nompa=sum(Catch_est),
+            Catch_lo_nompa=sum(Catch_lo), 
+            Catch_hi_nompa=sum(Catch_hi))%>%
+  arrange(-desc(Adjusted),-desc(Year))
+
+
+
+percent<- merge(cummulative_MPA, cummulative_No_MPA, by=c("Adjusted","Year"))%>%
+  mutate(C_percent = ((Catch_est_mpa-Catch_est_nompa)/Catch_est_nompa)*100,
+         C_lo_percent = ((Catch_lo_mpa-Catch_lo_nompa)/Catch_lo_nompa)*100,
+         C_hi_percent = ((Catch_hi_mpa-Catch_hi_nompa)/Catch_hi_nompa)*100,
+         B_percent = ((Biomass_est_mpa-Biomass_est_nompa)/Biomass_est_nompa)*100,
+         B_lo_percent = ((Biomass_lo_mpa-Biomass_lo_nompa)/Biomass_lo_nompa)*100,
+         B_hi_percent = ((Biomass_hi_mpa-Biomass_hi_nompa)/Biomass_hi_nompa)*100)
+         
+```
+
+```{r, echo=FALSE, message=FALSE}
+
+ggplot(cummulative_Octopus, aes(x=Year, y=Biomass_est, color=Status))+
+ggplot(cummulative_MT, aes(x=Year, y=Biomass_est, color=Status))+
+ geom_line(size=2)+
+  #tiff('cummulative_biomass.tif', units="in", width=8, height=5, res=300)+
+  #geom_ribbon(aes(ymin=Biomass_lo, ymax=Biomass_hi, fill=Status), alpha=0.2)+
+  #geom_vline(xintercept = 2015,linetype="dotted", color="black") +
+  labs(x="Year", y="Biomass (metric tons)", title="Biomass from 2000 to 2035")+
+  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+
+```
+
+
+
+```{r, echo=FALSE, message=FALSE}
+
+ggplot(cummulative_Octopus, aes(x=Year, y=Catch_est, color=Status))+
+ggplot(cummulative_MT, aes(x=Year, y=Catch_est, color=Status))+
+ geom_line(size=2)+
+   #tiff('cummulative_catch.tif', units="in", width=8, height=5, res=300)+
+  #geom_ribbon(aes(ymin=Catch_lo, ymax=Catch_hi, fill=Status), alpha=0.2)+
+  #geom_vline(xintercept = 2015, color="black") +
+  #geom_vline(xintercept = 2019, linetype="dotted", color="black")+
+  labs(x="Year", y="Catch (metric tons)", title="Catch from 2000 to 2035")+
+  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+```
+
+
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(percent, aes(x=Year, y=B_percent_change))+
+ geom_line(size=2)+
+  geom_ribbon(aes(ymin=Blo_percent_change, ymax=Bhi_percent_change), alpha=0.2)+
+  geom_vline(xintercept = 2015, color="black") +
+  geom_vline(xintercept = 2019, linetype="dotted", color="black")+
+  labs(x="Year", y="Percent change", title="Percent Change in Biomass 2000-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+```
+
+
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(percent, aes(x=Year, y=C_percent_change))+
+ geom_line(size=2)+
+  geom_ribbon(aes(ymin=Clo_percent_change, ymax=Chi_percent_change), alpha=0.2)+
+  geom_vline(xintercept = 2015, color="black") +
+  geom_vline(xintercept = 2019, linetype="dotted", color="black")+
+  labs(x="Year", y="Percent change", title="Percent Change in Catch 2000-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+```
+
+```{r, echo=FALSE, message=FALSE, fig.height=12, fig.width=8}
+Genus<- DF%>%
+  filter(Adjusted=="MT")
+
+graph1<-ggplot(Genus, aes(x=Year, y=Biomass_est, color=Status))+
+  geom_line(size=1)+
+  geom_vline(xintercept = 2015, color="black") +
+  geom_vline(xintercept = 2019, linetype="dotted", color="black")+
+  labs(x="Year", y="Biomass (MT)", title="Biomass by Genera 2015-2035")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+graph1+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+```
+
