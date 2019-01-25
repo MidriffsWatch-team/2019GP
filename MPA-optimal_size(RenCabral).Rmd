@@ -1,0 +1,33 @@
+---
+title: "Food security"
+author: "Edaysi Bucio"
+date: "21 de enero de 2019"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Model
+
+$$ Ropt|c=0 = (2m-r+sqrt(m^2-mr+r^2))/3m $$
+m = fish mobility
+r = growth rate pf the fish population
+
+```{r Trial_octopus}
+
+m_octopus <- 0.110782
+r_octopus <- 0.565525
+
+Ropt_octpus <- (2*m_octopus - r_octopus + sqrt(m_octopus^2 - (m_octopus*r_octopus) + r_octopus^2))/(3*m_octopus)
+
+print(r_octopus)
+
+
+```
+
+
