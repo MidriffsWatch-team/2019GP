@@ -58,24 +58,24 @@ write.csv(Genus_ts, "Genus_ts.csv")
 
 ```
 
-<<<<<<< HEAD
 
 #Biologial Patch model for 14 Genus projecting 2016-2035
 ```{r}
-Genus_pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
-  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate)
+pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
+  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
 
-data<-Genus_pts[37,]
+price <- read.csv(here::here("raw_data", "MarketPrice.csv"))
 
-MPA.matrix<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
-table(MPA.matrix)
+data<- merge(pts, price, by="Name")
 
-Genus_MPA<-Biological.Model(df=data, years=20, MPA.matrix = MPA.matrix, MPA=1)
+MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
-Genus_NO_MPA<-Biological.Model(df=data, years=20, MPA.matrix = MPA.matrix, MPA=0)
 
-Genus_MPA<- Genus_MPA_mat%>%
-  replace(Genus_MPA_mat < 0, 0)%>%
+Genus_MPA<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=1)
+Genus_NO_MPA<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=5)
+
+Genus_MPA<- Genus_MPA%>%
+  replace(Genus_MPA < 0, 0)%>%
   mutate(Status="MPA")
 
 Genus_NO_MPA<- Genus_NO_MPA%>%

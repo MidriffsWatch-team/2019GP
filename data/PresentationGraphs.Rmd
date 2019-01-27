@@ -22,11 +22,6 @@ library(data.table)
 ```{r, include=FALSE, message=FALSE, echo= FALSE}
 DF<-read.csv((here::here("data", "merged_2D_output.csv")))
 
-cummulative_Octopus<- DF%>%
-  filter(Adjusted=="MT")%>%
-  filter(!(Year=="2000"))%>%
-  filter(Name=="Octopus")
-
 cummulative_MT<- DF%>%
   filter(Adjusted=="MT")%>%
   filter(!(Year=="2000"))%>%
@@ -36,7 +31,10 @@ cummulative_MT<- DF%>%
             Biomass_hi=sum(Biomass_hi), 
             Catch_est=sum(Catch_est),
             Catch_lo=sum(Catch_lo), 
-            Catch_hi=sum(Catch_hi))
+            Catch_hi=sum(Catch_hi))%>%
+  arrange(-desc(Status))
+
+cummulative_MT<-cummulative_MT[-32,]
 
 Genus_patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel.csv"))
 
@@ -76,12 +74,18 @@ percent<- merge(cummulative_MPA, cummulative_No_MPA, by=c("Adjusted","Year"))%>%
 
 ```{r, echo=FALSE, message=FALSE}
 
-ggplot(cummulative_Octopus, aes(x=Year, y=Biomass_est, color=Status))+
-ggplot(cummulative_MT, aes(x=Year, y=Biomass_est, color=Status))+
- geom_line(size=2)+
+max<-cummulative_MT[-(32:51),]
+
+min<-cummulative_MT%>%
+  filter(Status=="No MPA")%>%
+  select(Biomass_est)
+
+biomass<-ggplot(cummulative_MT, aes(x=Year, y=Biomass_est, color=Status))+
+ geom_line(size=1)+
   #tiff('cummulative_biomass.tif', units="in", width=8, height=5, res=300)+
   #geom_ribbon(aes(ymin=Biomass_lo, ymax=Biomass_hi, fill=Status), alpha=0.2)+
   #geom_vline(xintercept = 2015,linetype="dotted", color="black") +
+ geom_ribbon(aes(x= Year(c(2015:2035)), ymin = min, ymax = max, fill = "valence"), alpha = 0.75)+
   labs(x="Year", y="Biomass (metric tons)", title="Biomass from 2000 to 2035")+
   scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
   theme_classic()+
@@ -89,19 +93,22 @@ ggplot(cummulative_MT, aes(x=Year, y=Biomass_est, color=Status))+
   scale_y_continuous(expand=c(0,0))+
   theme(legend.title=element_blank())
 
-
+ggplot(data = df,aes(time,x))+
+    geom_ribbon(aes(x=time, ymax=x.upper, ymin=x.lower), fill="pink", alpha=.5) +
+    geom_line(aes(y = x.upper), colour = 'red') +
+    geom_line(aes(y = x.lower), colour = 'blue')+
+    geom_line()
+ggplotly(biomass)
 ```
 
 
 
 ```{r, echo=FALSE, message=FALSE}
-
-ggplot(cummulative_Octopus, aes(x=Year, y=Catch_est, color=Status))+
 ggplot(cummulative_MT, aes(x=Year, y=Catch_est, color=Status))+
  geom_line(size=2)+
    #tiff('cummulative_catch.tif', units="in", width=8, height=5, res=300)+
   #geom_ribbon(aes(ymin=Catch_lo, ymax=Catch_hi, fill=Status), alpha=0.2)+
-  #geom_vline(xintercept = 2015, color="black") +
+  geom_vline(xintercept = 2015, color="black", linetype="dotted") +
   #geom_vline(xintercept = 2019, linetype="dotted", color="black")+
   labs(x="Year", y="Catch (metric tons)", title="Catch from 2000 to 2035")+
   scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
