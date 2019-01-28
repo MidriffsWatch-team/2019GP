@@ -3,8 +3,8 @@ title: "Presentation Graphs"
 author: "Seleni Cruz"
 date: "January 16, 2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -15,155 +15,136 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(here)
 library(tidyverse)
-library(data.table)
+library(ggplot2)
+library(plotly)
 ```
 
 
-```{r, include=FALSE, message=FALSE, echo= FALSE}
-DF<-read.csv((here::here("data", "merged_2D_output.csv")))
+```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=12}
+Genus_patchmodel <- read.csv(here::here("data", "Genus_2D_patchmodel.csv"))%>%
+  filter(Adjusted=="MT")
 
-cummulative_MT<- DF%>%
-  filter(Adjusted=="MT")%>%
-  filter(!(Year=="2000"))%>%
-  group_by(Year, Status, Adjusted)%>%
+fishing <-ggplot(Genus_patchmodel, aes(x=Year, y=Fishing_est, color=Status))+
+  geom_line()+
+  labs(x="Year", y="Fishing effort", title="Fishing effort")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+fishing<- fishing+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+ggplotly(fishing)
+
+
+Biomass <-ggplot(Genus_patchmodel, aes(x=Year, y=Biomass_est, color= Status))+
+  geom_line()+
+  labs(x="Year", y="Biomass (MT)", title="Biomass")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+Biomass<- Biomass+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+ggplotly(Biomass)
+
+catch <-ggplot(Genus_patchmodel, aes(x=Year, y=Catch_est, color= Status))+
+  geom_line()+
+  labs(x="Year", y="Catch (MT)", title="Catch")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+catch<- catch+
+   facet_wrap(~ Name, scales = "free_y", ncol=2)
+ggplotly(catch)
+
+```
+
+
+
+
+
+
+
+
+
+```{r, include=FALSE, message=FALSE, echo= FALSE}
+cummulative<- Genus_patchmodel%>%
+  group_by(Adjusted, Year, Status)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Biomass_lo=sum(Biomass_lo), 
             Biomass_hi=sum(Biomass_hi), 
             Catch_est=sum(Catch_est),
             Catch_lo=sum(Catch_lo), 
-            Catch_hi=sum(Catch_hi))%>%
-  arrange(-desc(Status))
-
-cummulative_MT<-cummulative_MT[-32,]
-
-Genus_patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel.csv"))
-
-cummulative_MPA<- Genus_patchmodel%>%
-  filter(Status=="MPA")%>%
-  group_by(Adjusted, Year)%>%
-  summarize(Biomass_est_mpa=sum(Biomass_est), 
-            Biomass_lo_mpa=sum(Biomass_lo), 
-            Biomass_hi_mpa=sum(Biomass_hi), 
-            Catch_est_mpa=sum(Catch_est),
-            Catch_lo_mpa=sum(Catch_lo), 
-            Catch_hi_mpa=sum(Catch_hi))%>%
-  arrange(-desc(Adjusted),-desc(Year))
-
-cummulative_No_MPA<- Genus_patchmodel%>%
-  filter(Status=="No MPA")%>%
-  group_by(Adjusted, Year)%>%
-  summarize(Biomass_est_nompa=sum(Biomass_est), 
-            Biomass_lo_nompa=sum(Biomass_lo), 
-            Biomass_hi_nompa=sum(Biomass_hi), 
-            Catch_est_nompa=sum(Catch_est),
-            Catch_lo_nompa=sum(Catch_lo), 
-            Catch_hi_nompa=sum(Catch_hi))%>%
-  arrange(-desc(Adjusted),-desc(Year))
+            Catch_hi=sum(Catch_hi), 
+            Revenue_est = sum(Revenue_est), 
+            Revenue_lo= sum(Revenue_lo), 
+            Revenue_hi= sum(Revenue_hi))
 
 
-
-percent<- merge(cummulative_MPA, cummulative_No_MPA, by=c("Adjusted","Year"))%>%
-  mutate(C_percent = ((Catch_est_mpa-Catch_est_nompa)/Catch_est_nompa)*100,
-         C_lo_percent = ((Catch_lo_mpa-Catch_lo_nompa)/Catch_lo_nompa)*100,
-         C_hi_percent = ((Catch_hi_mpa-Catch_hi_nompa)/Catch_hi_nompa)*100,
-         B_percent = ((Biomass_est_mpa-Biomass_est_nompa)/Biomass_est_nompa)*100,
-         B_lo_percent = ((Biomass_lo_mpa-Biomass_lo_nompa)/Biomass_lo_nompa)*100,
-         B_hi_percent = ((Biomass_hi_mpa-Biomass_hi_nompa)/Biomass_hi_nompa)*100)
+Totals<- cummulative%>%
+  group_by(Adjusted, Status)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Biomass_lo=sum(Biomass_lo), 
+            Biomass_hi=sum(Biomass_hi), 
+            Catch_est=sum(Catch_est),
+            Catch_lo=sum(Catch_lo), 
+            Catch_hi=sum(Catch_hi), 
+            Revenue = sum(Revenue_est), 
+            Revenue_lo= sum(Revenue_lo), 
+            Revenue_hi= sum(Revenue_hi))
          
 ```
 
 ```{r, echo=FALSE, message=FALSE}
 
-max<-cummulative_MT[-(32:51),]
-
-min<-cummulative_MT%>%
-  filter(Status=="No MPA")%>%
-  select(Biomass_est)
-
-biomass<-ggplot(cummulative_MT, aes(x=Year, y=Biomass_est, color=Status))+
- geom_line(size=1)+
-  #tiff('cummulative_biomass.tif', units="in", width=8, height=5, res=300)+
-  #geom_ribbon(aes(ymin=Biomass_lo, ymax=Biomass_hi, fill=Status), alpha=0.2)+
-  #geom_vline(xintercept = 2015,linetype="dotted", color="black") +
- geom_ribbon(aes(x= Year(c(2015:2035)), ymin = min, ymax = max, fill = "valence"), alpha = 0.75)+
-  labs(x="Year", y="Biomass (metric tons)", title="Biomass from 2000 to 2035")+
-  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
-  theme_classic()+
-  scale_x_continuous(expand=c(0,0))+
-  scale_y_continuous(expand=c(0,0))+
-  theme(legend.title=element_blank())
-
-ggplot(data = df,aes(time,x))+
-    geom_ribbon(aes(x=time, ymax=x.upper, ymin=x.lower), fill="pink", alpha=.5) +
-    geom_line(aes(y = x.upper), colour = 'red') +
-    geom_line(aes(y = x.lower), colour = 'blue')+
-    geom_line()
-ggplotly(biomass)
-```
-
-
-
-```{r, echo=FALSE, message=FALSE}
-ggplot(cummulative_MT, aes(x=Year, y=Catch_est, color=Status))+
- geom_line(size=2)+
-   #tiff('cummulative_catch.tif', units="in", width=8, height=5, res=300)+
-  #geom_ribbon(aes(ymin=Catch_lo, ymax=Catch_hi, fill=Status), alpha=0.2)+
-  geom_vline(xintercept = 2015, color="black", linetype="dotted") +
-  #geom_vline(xintercept = 2019, linetype="dotted", color="black")+
-  labs(x="Year", y="Catch (metric tons)", title="Catch from 2000 to 2035")+
-  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
-  theme_classic()+
-  scale_x_continuous(expand=c(0,0))+
-  scale_y_continuous(expand=c(0,0))+
-  theme(legend.title=element_blank())
-
-```
-
-
-
-```{r, echo=FALSE, message=FALSE}
-ggplot(percent, aes(x=Year, y=B_percent_change))+
- geom_line(size=2)+
-  geom_ribbon(aes(ymin=Blo_percent_change, ymax=Bhi_percent_change), alpha=0.2)+
-  geom_vline(xintercept = 2015, color="black") +
-  geom_vline(xintercept = 2019, linetype="dotted", color="black")+
-  labs(x="Year", y="Percent change", title="Percent Change in Biomass 2000-2035")+
-  theme_classic()+
-  scale_x_continuous(expand=c(0,0))+
-  scale_y_continuous(expand=c(0,0))+
-  theme(legend.title=element_blank())
-```
-
-
-
-```{r, echo=FALSE, message=FALSE}
-ggplot(percent, aes(x=Year, y=C_percent_change))+
- geom_line(size=2)+
-  geom_ribbon(aes(ymin=Clo_percent_change, ymax=Chi_percent_change), alpha=0.2)+
-  geom_vline(xintercept = 2015, color="black") +
-  geom_vline(xintercept = 2019, linetype="dotted", color="black")+
-  labs(x="Year", y="Percent change", title="Percent Change in Catch 2000-2035")+
-  theme_classic()+
-  scale_x_continuous(expand=c(0,0))+
-  scale_y_continuous(expand=c(0,0))+
-  theme(legend.title=element_blank())
-```
-
-```{r, echo=FALSE, message=FALSE, fig.height=12, fig.width=8}
-Genus<- DF%>%
-  filter(Adjusted=="MT")
-
-graph1<-ggplot(Genus, aes(x=Year, y=Biomass_est, color=Status))+
+biomass<- ggplot(cummulative, aes(x=Year, y=Biomass_est, color=Status))+
   geom_line(size=1)+
-  geom_vline(xintercept = 2015, color="black") +
-  geom_vline(xintercept = 2019, linetype="dotted", color="black")+
-  labs(x="Year", y="Biomass (MT)", title="Biomass by Genera 2015-2035")+
+  labs(x="Year", y="Biomass (metric tons)", title="Cummulative Biomass")+
+  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
   theme_classic()+
+   theme(axis.title.y = element_text(vjust=3))+
   scale_x_continuous(expand=c(0,0))+
   scale_y_continuous(expand=c(0,0))+
   theme(legend.title=element_blank())
 
-graph1+
-   facet_wrap(~ Name, scales = "free_y", ncol=2)
+biomass<- biomass+
+   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+  
+ggplotly(biomass)
+
+catch<- ggplot(cummulative, aes(x=Year, y=Catch_est, color=Status))+
+  geom_line(size=1)+
+  labs(x="Year", y="Catch (metric tons)", title="Cummulative Catch")+
+  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  theme_classic()+
+   theme(axis.title.y = element_text(vjust=3))+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+catch<- catch+
+   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+  
+ggplotly(catch)
+
+
+revenue<- ggplot(cummulative, aes(x=Year, y=Revenue_est, color=Status))+
+  geom_line(size=1)+
+  labs(x="Year", y="Revenue (USD)", title="Cummulative Revenue (profit-cost)")+
+  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  theme_classic()+
+   theme(axis.title.y = element_text(vjust=3))+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  theme(legend.title=element_blank())
+
+revenue<- revenue+
+   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+  
+ggplotly(revenue)
 ```
+
+
+
 

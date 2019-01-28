@@ -66,24 +66,27 @@ pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
 
 price <- read.csv(here::here("raw_data", "MarketPrice.csv"))
 
-data<- merge(pts, price, by="Name")
+data<- merge(pts, price, by="Name")%>%
+  mutate (c = 0.3 * p * msy / r, 
+          c.lo = 0.3 * p.lo * msy.low / r.low, 
+          c.hi = 0.3 * p.hi * msy.hi / r.hi, 
+          profit.msy = p * msy - (c* r), 
+          profit.msy.lo = p.lo * msy.low - (c.lo * r.low),
+          profit.msy.hi = p.hi * msy.hi - (c.hi * r.hi))
 
 MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
 
-Genus_MPA<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=1)
-Genus_NO_MPA<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=5)
+Genus_MPA<-Biological.Model(df=data, years=50, MPA.mat = MPA.mat, MPA=1)
+Genus_NO_MPA<-Biological.Model(df=data, years=50, MPA.mat = MPA.mat, MPA=0)
 
 Genus_MPA<- Genus_MPA%>%
-  replace(Genus_MPA < 0, 0)%>%
   mutate(Status="MPA")
 
 Genus_NO_MPA<- Genus_NO_MPA%>%
-  replace(Genus_NO_MPA < 0, 0)%>%
   mutate(Status="No MPA")
 
-Genus_patchmodel<- rbind(Genus_MPA, Genus_NO_MPA)%>%
-  select(Name, Adjusted, Year, Biomass_est, Biomass_lo, Biomass_hi, Catch_est, Catch_lo, Catch_hi, Status)
+Genus_patchmodel<- rbind(Genus_MPA, Genus_NO_MPA)
 
 write.csv(Genus_patchmodel, "Genus_2D_patchmodel.csv")
 
@@ -92,6 +95,8 @@ write.csv(Genus_patchmodel, "Genus_2D_patchmodel.csv")
 
 #Merging with Catch and biomass from 2000-2015
 ```{r}
+Genus_patchmodel
+
 genus_ts<-read.csv(here::here("data", "Genus_ts.csv"))%>%
   select(Name, Adjusted, year, catch, b, b_lo, b_hi)%>%
   mutate(Catch_lo=NA, Catch_hi=NA, Status= "No MPA")

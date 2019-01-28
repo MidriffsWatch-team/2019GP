@@ -28,21 +28,21 @@ Genus_pts<- read.csv(here::here("data", "Genus_pts.csv"))%>%
   filter(Adjusted=="MT")
 
 KobePlot<-ggplot(Genus_pts, aes(x= bbmsy, y=ffmsy, size=catch))+
-  #tiff('Kobe.tif', units="in", width=8, height=5, res=500)+
   geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
   geom_rect(xmin = 0, xmax = 1, ymin = 1.0, ymax = 2.1, fill = 'red', alpha = 0.1) +
   geom_rect(xmin = 1, xmax = 1.5, ymin = 0, ymax = 1, fill = 'green', alpha = 0.1) +
-  geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 2.1, fill = 'yellow', alpha = 0.1)+
+  geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 2.1, fill = 'orange', alpha = 0.1)+
   geom_point()+
-  scale_size(range = c(1, 10))+
-  #theme(axis.text.x = element_text(size = 30), axis.text.y = element_text(size = 30))+
+  scale_size(range = c(3, 10))+
   labs(x="B/Bmsy", y="F/Fmsy")+
-  #geom_text(aes(label=Name),size=3, check_overlap=FALSE, hjust = 1, nudge_x = 0.05)+
+  #geom_text_repel(aes(label=Name),size=3, check_overlap=FALSE, hjust = 1, nudge_x = 0.05)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
 KobePlot
-ggsave("kobe.jpg")
+ggsave("kobe.jpg", width=8, height = 5, dpi=300)
+
+?ggsave
 
 ggplotly(KobePlot)
 
@@ -52,15 +52,17 @@ ggplotly(KobePlot)
 
 ```{r, echo=FALSE, include =FALSE}
 fmsy_bmsy<- Genus_pts%>%
-  select (Name, msy, f, bmsy, fmsy)
+  select (Name, msy, bmsy, fmsy)
+
+colnames(Genus)
 
 #will need to keep track of fishing in open access 
-Genus_patchmodel<- read.csv (here::here("data", "Genus_patchmodel.csv"))%>%
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel.csv"))%>%
   filter(Adjusted=="MT")%>%
-  select (Name, Year, Biomass_est, Catch_est, Status)
+  select (Name, Year, Biomass_est, Catch_est, Fishing_est, Status)
 
-kobe_data <- merge (Genus_patchmodel, fmsy_bmsy, by="Name")%>%
-  mutate (bbmsy= Biomass_est/bmsy, ffmsy= f/fmsy)
+kobe_data <- merge (Genus, fmsy_bmsy, by="Name")%>%
+  mutate (bbmsy= Biomass_est/bmsy, ffmsy= Fishing_est/fmsy)
 
 MPA<- kobe_data%>%
   filter(Status=="MPA")
@@ -79,7 +81,7 @@ kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
   exit_fade() +
   shadow_mark()
 
-#animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA.gif"))
+animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA.gif"))
 
 kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   geom_point(aes(color = Year, size = Catch_est)) +
@@ -93,7 +95,7 @@ kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   exit_fade() +
   shadow_mark()
 
-#animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no.gif"))
+animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no.gif"))
 
 
 
