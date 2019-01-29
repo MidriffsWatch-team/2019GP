@@ -5,12 +5,12 @@
 
 fishing.mat<- function (MPA, Fishing, MPA.mat){
   F.mat<-MPA.mat
-  F.mat[F.mat==0]<- Fishing
+  F.mat[F.mat==1]<- Fishing
   
   if (MPA==1){
-    F.mat[F.mat==1]<-0}
+    F.mat[F.mat==0]<-0}
   else {
-    F.mat[F.mat==1]<-Fishing
+    F.mat[F.mat==0]<-Fishing
   }
   return (F.mat)
 }
@@ -31,7 +31,7 @@ fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy
   
   F.mat <- F.mat + 0.1 * (profit/profit.msy)
   
-  F.mat <- F.mat * MSY
+  F.mat <- F.mat * fmsy
   
   return(list(F.mat, profit, revenue))}
 
@@ -41,7 +41,8 @@ fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy
 #
 ######################################################################
 
-MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, fmsy, p, c, profit.msy){
+MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, fmsy, p, c, profit.msy, start.year){
+  #start.year<- as.numeric(start.year)
   patches <- 106
   F.mat <- as.matrix(fishing.mat (MPA=MPA, Fishing=Fishing, MPA.mat=MPA.mat))
   K.mat <- matrix(ncol=patches, nrow=patches, K/11236) #K at t=1 is evently distributed among all patches 
@@ -70,6 +71,9 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
                        Revenue=NA)
   
   for (i in Years){
+    
+    if(i == start.year){F.mat<- F.mat*MPA.mat} else {F.mat<-F.mat}
+    
     F.out <- fishing.effort.OA (p=p, MSY=MSY, r=r, bmsy=bmsy, fmsy=fmsy, F.mat=F.mat, B.mat=B.mat, c=c, profit.msy = profit.msy)
     F.mat<-(F.out[[1]])
     profit<-(F.out[[2]])
@@ -86,6 +90,7 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
 
       }
       } #close nested forloop for calculating arriving
+    
     arriving[arriving < 0] <- 0
     surplus <- r * B.mat *(1 - B.mat/K.mat)
     surplus[surplus < 0] <- 0
@@ -113,7 +118,7 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
 #looping over average, low and high estimates of variables 
 ######################################################################
 
-Scenarios <- function(data, MPA, years, MPA.mat) {
+Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
   out<-data.frame(Name=NA,Adjusted=NA)
 
   growth <- as.numeric(data[,c("r", "r.low", "r.hi")])
@@ -141,7 +146,8 @@ Scenarios <- function(data, MPA, years, MPA.mat) {
     c <- cost[s]/11236
     profit.msy <- Profit_msy/11236
     
-    MPA<-MPA.Model(r=r, K=K, B=B, Fishing=Fishing, MPA=MPA, years=years, MPA.mat=MPA.mat, mrate=mrate, MSY=MSY, bmsy=bmsy, fmsy=fmsy, p=p, c=c, profit.msy=profit.msy )
+    MPA<-MPA.Model(r=r, K=K, B=B, Fishing=Fishing, MPA=MPA, years=years, MPA.mat=MPA.mat, 
+                   mrate=mrate, MSY=MSY, bmsy=bmsy, fmsy=fmsy, p=p, c=c, profit.msy=profit.msy, start.year=start.year)
     
     out<-(cbind(out, MPA))
   }
@@ -186,7 +192,7 @@ Scenarios <- function(data, MPA, years, MPA.mat) {
 #Biological Patch Model Function
 #looping over all Fisheries and inflated catch
 ######################################################################
-Biological.Model<- function(df, years, MPA, MPA.mat) {
+Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
   
   results <- data.frame(matrix(ncol = 27, nrow = 0))
   x <- c("Name",
@@ -222,7 +228,7 @@ Biological.Model<- function(df, years, MPA, MPA.mat) {
     
     data <- df[i,]
 
-    scen <- Scenarios(data=data, years=years, MPA, MPA.mat=MPA.mat)  
+    scen <- Scenarios(data=data, years=years, MPA, MPA.mat=MPA.mat, start.year=start.year)  
     
     results <- rbind(results, scen)
   }

@@ -1,0 +1,52 @@
+---
+title: "Scom"
+author: "Seleni Cruz"
+date: "January 28, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, message=FALSE, include=FALSE}
+
+library(dplyr)
+library(here)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+Genus_patchmodel <- read.csv(here::here("data", "Genus_2D_patchmodel.csv"))%>%
+  filter(Adjusted=="MT" & Name == "Scomberomorus")%>%
+  mutate(catch_biomass = Catch_est/Biomass_est)
+
+
+```
+
+```{r, echo=FALSE, message=FALSE}
+
+scom<- read.csv(here::here("data", "Genus_pts.csv"))%>%
+  filter(Name == "Scomberomorus")
+
+ggplot(Genus_patchmodel, aes(x=Year, y=catch_biomass, color=Status))+
+  geom_line(size=2)+
+  labs(x="Year", y="catch/biomass")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+ggplot(Genus_patchmodel, aes(x=Year, y=Catch_est, color=Status))+
+  geom_line(size=2)+
+  labs(x="Year", y="Catch (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+
+ggplot(Genus_patchmodel, aes(x=Year, y=Biomass_est, color=Status))+
+  geom_line(size=2)+
+  labs(x="Year", y="Biomass (MT)")+
+  theme_classic()+
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))
+```
+

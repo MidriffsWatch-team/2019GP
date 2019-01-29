@@ -21,7 +21,7 @@ library(plotly)
 
 
 ```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=12}
-Genus_patchmodel <- read.csv(here::here("data", "Genus_2D_patchmodel.csv"))%>%
+Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output.csv"))%>%
   filter(Adjusted=="MT")
 
 fishing <-ggplot(Genus_patchmodel, aes(x=Year, y=Fishing_est, color=Status))+
@@ -62,12 +62,6 @@ ggplotly(catch)
 
 
 
-
-
-
-
-
-
 ```{r, include=FALSE, message=FALSE, echo= FALSE}
 cummulative<- Genus_patchmodel%>%
   group_by(Adjusted, Year, Status)%>%
@@ -76,10 +70,10 @@ cummulative<- Genus_patchmodel%>%
             Biomass_hi=sum(Biomass_hi), 
             Catch_est=sum(Catch_est),
             Catch_lo=sum(Catch_lo), 
-            Catch_hi=sum(Catch_hi), 
-            Revenue_est = sum(Revenue_est), 
-            Revenue_lo= sum(Revenue_lo), 
-            Revenue_hi= sum(Revenue_hi))
+            Catch_hi=sum(Catch_hi))
+            #Revenue_est = sum(Revenue_est), 
+            #Revenue_lo= sum(Revenue_lo), 
+            #Revenue_hi= sum(Revenue_hi))
 
 
 Totals<- cummulative%>%
@@ -89,10 +83,10 @@ Totals<- cummulative%>%
             Biomass_hi=sum(Biomass_hi), 
             Catch_est=sum(Catch_est),
             Catch_lo=sum(Catch_lo), 
-            Catch_hi=sum(Catch_hi), 
-            Revenue = sum(Revenue_est), 
-            Revenue_lo= sum(Revenue_lo), 
-            Revenue_hi= sum(Revenue_hi))
+            Catch_hi=sum(Catch_hi)) 
+            #Revenue = sum(Revenue_est), 
+            #Revenue_lo= sum(Revenue_lo), 
+            #Revenue_hi= sum(Revenue_hi))
          
 ```
 
@@ -101,7 +95,7 @@ Totals<- cummulative%>%
 biomass<- ggplot(cummulative, aes(x=Year, y=Biomass_est, color=Status))+
   geom_line(size=1)+
   labs(x="Year", y="Biomass (metric tons)", title="Cummulative Biomass")+
-  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  #scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
   theme_classic()+
    theme(axis.title.y = element_text(vjust=3))+
   scale_x_continuous(expand=c(0,0))+
@@ -116,7 +110,7 @@ ggplotly(biomass)
 catch<- ggplot(cummulative, aes(x=Year, y=Catch_est, color=Status))+
   geom_line(size=1)+
   labs(x="Year", y="Catch (metric tons)", title="Cummulative Catch")+
-  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  #scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
   theme_classic()+
    theme(axis.title.y = element_text(vjust=3))+
   scale_x_continuous(expand=c(0,0))+
@@ -129,20 +123,20 @@ catch<- catch+
 ggplotly(catch)
 
 
-revenue<- ggplot(cummulative, aes(x=Year, y=Revenue_est, color=Status))+
-  geom_line(size=1)+
-  labs(x="Year", y="Revenue (USD)", title="Cummulative Revenue (profit-cost)")+
-  scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
-  theme_classic()+
-   theme(axis.title.y = element_text(vjust=3))+
-  scale_x_continuous(expand=c(0,0))+
-  scale_y_continuous(expand=c(0,0))+
-  theme(legend.title=element_blank())
+#revenue<- ggplot(cummulative, aes(x=Year, y=Revenue_est, color=Status))+
+ # geom_line(size=1)+
+  #labs(x="Year", y="Revenue (USD)", title="Cummulative Revenue (profit-cost)")+
+  #scale_colour_manual(values = c("#40b8d0", "#b2d183")) +
+  #theme_classic()+
+   #theme(axis.title.y = element_text(vjust=3))+
+  #scale_x_continuous(expand=c(0,0))+
+  #scale_y_continuous(expand=c(0,0))+
+  #theme(legend.title=element_blank())
 
-revenue<- revenue+
-   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
+#revenue<- revenue+
+ #  facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
   
-ggplotly(revenue)
+#ggplotly(revenue)
 ```
 
 

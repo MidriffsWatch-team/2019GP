@@ -58,8 +58,6 @@ write.csv(Genus_ts, "Genus_ts.csv")
 
 ```
 
-
-#Biologial Patch model for 14 Genus projecting 2016-2035
 ```{r}
 pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
   select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
@@ -73,47 +71,55 @@ data<- merge(pts, price, by="Name")%>%
           profit.msy = p * msy - (c* r), 
           profit.msy.lo = p.lo * msy.low - (c.lo * r.low),
           profit.msy.hi = p.hi * msy.hi - (c.hi * r.hi))
+#write.csv(data, "input.data.csv")
+```
+
+
+
+#Biologial Patch model for 14 Genus projecting 2016-2035
+```{r}
+data<- read.csv(here::here("data", "input.data.csv"))
 
 MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
+MPA<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=1, start.year=0)
+No_MPA<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
 
-Genus_MPA<-Biological.Model(df=data, years=50, MPA.mat = MPA.mat, MPA=1)
-Genus_NO_MPA<-Biological.Model(df=data, years=50, MPA.mat = MPA.mat, MPA=0)
+MPA_2019<-Biological.Model(df=data, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2019) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
 
-Genus_MPA<- Genus_MPA%>%
-  mutate(Status="MPA")
+MPA_2015<- MPA%>%
+  mutate(Status="MPA 2015")
 
-Genus_NO_MPA<- Genus_NO_MPA%>%
+MPA_2019<- MPA_2019%>%
+  mutate(Status="MPA 2019")
+
+NO_MPA<- No_MPA%>%
   mutate(Status="No MPA")
 
-Genus_patchmodel<- rbind(Genus_MPA, Genus_NO_MPA)
+patchmodel<- rbind(MPA_2015, MPA_2019, NO_MPA)
 
-write.csv(Genus_patchmodel, "Genus_2D_patchmodel.csv")
+write.csv(patchmodel, "Genus_2D_patchmodel.csv")
 
 
 ```
 
+
 #Merging with Catch and biomass from 2000-2015
 ```{r}
-Genus_patchmodel
+patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel.csv"))%>%
+  select("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", "Biomass_hi", "Catch_est", "Catch_lo", "Catch_hi", "Status", "Fishing_est")
 
 genus_ts<-read.csv(here::here("data", "Genus_ts.csv"))%>%
-  select(Name, Adjusted, year, catch, b, b_lo, b_hi)%>%
-  mutate(Catch_lo=NA, Catch_hi=NA, Status= "No MPA")
+  select(Name, Adjusted, year, catch, b, b_lo, b_hi, f)%>%
+  mutate(Catch_lo=NA, Catch_hi=NA, Status = "No MPA")
 
-colnames(genus_ts)
-names(genus_ts)[3:10] <- c("Year", "Catch_est", "Biomass_est", "Biomass_lo", "Biomass_hi","Catch_lo", "Catch_hi", "Status")
+names(genus_ts)[3:8] <- c("Year", "Catch_est", "Biomass_est", "Biomass_lo", "Biomass_hi", "Fishing_est")
 
-yearly_catch2<-genus_ts%>%
-  group_by(Year, Adjusted)%>%
-  summarize(Catch=sum(Catch_est))
+genus_ts <- genus_ts[c("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", "Biomass_hi", "Catch_est", "Catch_lo", "Catch_hi", "Status", "Fishing_est")]
 
-#Biomass (est, hi and lo from CMSY2) and Catch (CONAPESCA)  from 2000-2015 
-genus_ts <- genus_ts[c("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", "Biomass_hi", "Catch_est", "Catch_lo", "Catch_hi", "Status")]
+patch_2000_2035<- rbind(genus_ts, patchmodel)
 
-Genus_catch_biomass<- rbind(genus_ts, Genus_patchmodel)
-
-write.csv(Genus_catch_biomass, "merged_2D_output.csv")
+write.csv(patch_2000_2035, "merged_2D_output.csv")
 
 ```
 
