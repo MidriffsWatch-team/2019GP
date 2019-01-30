@@ -20,20 +20,19 @@ fishing.mat<- function (MPA, Fishing, MPA.mat){
 #Distribution of Fishing effort (profit and cost)
 ######################################################################
 
-fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy){
-
+fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy, t){
   F.mat <- F.mat/fmsy 
   b <- B.mat/bmsy
   MSY <- MSY/11236 #MSY evenly distributed among all patches
   
   profit <- p * F.mat * b * MSY - (c * r * F.mat)
-  revenue <- profit - c
+  
+  PV <- profit/(1 + 0.1)^t
   
   F.mat <- F.mat + 0.05 * (profit/profit.msy)
-  
   F.mat <- F.mat * fmsy
   
-  return(list(F.mat, profit, revenue))}
+  return(list(F.mat, profit, PV))}
 
 
 ######################################################################
@@ -68,16 +67,19 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
                        Biomass=NA, 
                        Profit=NA,
                        Fishing=NA,
-                       Revenue=NA)
+                       PV=NA)
   
   for (i in Years){
     
     if(i == start.year){F.mat<- F.mat*MPA.mat} else {F.mat<-F.mat}
     
-    F.out <- fishing.effort.OA (p=p, MSY=MSY, r=r, bmsy=bmsy, fmsy=fmsy, F.mat=F.mat, B.mat=B.mat, c=c, profit.msy = profit.msy)
+    t <- i - 1
+    
+    F.out <- fishing.effort.OA (t=t, p=p, MSY=MSY, r=r, bmsy=bmsy, fmsy=fmsy, 
+                                F.mat=F.mat, B.mat=B.mat, c=c, profit.msy = profit.msy)
     F.mat<-(F.out[[1]])
     profit<-(F.out[[2]])
-    revenue<-(F.out[[3]])
+    PV <-(F.out[[3]])
     
     leaving <- mrate*B.mat 
     leaving[leaving < 0] <- 0
@@ -107,7 +109,7 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
                          Biomass = sum(B.mat),
                          Profit = sum (profit),
                          Fishing = mean (F.mat), 
-                         Revenue = sum(revenue))                      
+                         PV = sum(PV))                      
     summary <- rbind (summary, output)
   }
   return(summary[-1,])
@@ -167,7 +169,7 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
                   "Biomass_est",
                   "Profit_est",
                   "Fishing_est",
-                  "Revenue_est",
+                  "PV_est",
                   "Leave_lo",
                   "Arrive_lo", 
                   "Surplus_lo",
@@ -175,7 +177,7 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
                   "Biomass_lo", 
                   "Profit_lo",
                   "Fishing_lo",
-                  "Revenue_lo",
+                  "PV_lo",
                   "Leave_hi",
                   "Arrive_hi", 
                   "Surplus_hi",
@@ -183,7 +185,7 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
                   "Biomass_hi",
                   "Profit_hi",
                   "Fishing_hi",
-                  "Revenue_hi")
+                  "PV_hi")
   return(out)
 }
 
@@ -205,7 +207,7 @@ Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
          "Biomass_est",
          "Profit_est",
          "Fishing_est",
-         "Revenue_est",
+         "PV_est",
          "Leave_lo",
          "Arrive_lo", 
          "Surplus_lo",
@@ -213,7 +215,7 @@ Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
          "Biomass_lo", 
          "Profit_lo",
          "Fishing_lo",
-         "Revenue_lo",
+         "PV_lo",
          "Leave_hi",
          "Arrive_hi", 
          "Surplus_hi",
@@ -221,7 +223,7 @@ Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
          "Biomass_hi",
          "Profit_hi",
          "Fishing_hi",
-         "Revenue_hi")
+         "PV_hi")
   colnames(results) <- x
 
   for(i in 1:nrow(df)) {
