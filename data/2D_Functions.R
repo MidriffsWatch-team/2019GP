@@ -25,11 +25,11 @@ fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy
   F.mat <- F.mat/fmsy 
   b <- B.mat/bmsy
   MSY <- MSY/11236 #MSY evenly distributed among all patches
- 
+  
   profit <- p * F.mat * b * MSY - (c * r * F.mat)
   revenue <- profit - c
   
-  F.mat <- F.mat + 0.1 * (profit/profit.msy)
+  F.mat <- F.mat + 0.05 * (profit/profit.msy)
   
   F.mat <- F.mat * fmsy
   

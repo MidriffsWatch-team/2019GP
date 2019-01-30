@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, include=FALSE, message=FALSE}
 library(ggplot2)
 library(here)
 library(plotly)
@@ -17,15 +17,13 @@ library(tidyverse)
 library(gganimate)
 library(ggrepel)
 library(ggridges)
-
 ```
 
 #Kobe plots for 14 filtered Geners 
 
 ```{r, echo=FALSE}
 
-Genus_pts<- read.csv(here::here("data", "Genus_pts.csv"))%>%
-  filter(Adjusted=="MT")
+Genus_pts<- read.csv(here::here("data", "Genus_pts.csv"))
 
 KobePlot<-ggplot(Genus_pts, aes(x= bbmsy, y=ffmsy, size=catch))+
   geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
@@ -39,10 +37,10 @@ KobePlot<-ggplot(Genus_pts, aes(x= bbmsy, y=ffmsy, size=catch))+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
-KobePlot
-ggsave("kobe.jpg", width=8, height = 5, dpi=300)
+KobePlot<- KobePlot+
+   facet_wrap(~ Adjusted, scales = "free_y", ncol=2)
 
-?ggsave
+#ggsave("kobe.jpg", width=8, height = 5, dpi=300)
 
 ggplotly(KobePlot)
 
@@ -54,10 +52,7 @@ ggplotly(KobePlot)
 fmsy_bmsy<- Genus_pts%>%
   select (Name, msy, bmsy, fmsy)
 
-colnames(Genus)
-
-#will need to keep track of fishing in open access 
-Genus<- read.csv (here::here("data", "Genus_2D_patchmodel.csv"))%>%
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.1.csv"))%>%
   filter(Adjusted=="MT")%>%
   select (Name, Year, Biomass_est, Catch_est, Fishing_est, Status)
 
@@ -65,32 +60,37 @@ kobe_data <- merge (Genus, fmsy_bmsy, by="Name")%>%
   mutate (bbmsy= Biomass_est/bmsy, ffmsy= Fishing_est/fmsy)
 
 MPA<- kobe_data%>%
-  filter(Status=="MPA")
+  filter(Status=="MPA 2015")
+MPA2019<- kobe_data%>%
+  filter(Status=="MPA 2019")
 NoMPA<-kobe_data%>%
   filter(Status=="No MPA")
 
 kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
   geom_point(aes(color = Year, size = Catch_est)) +
-  labs(title = "Fishery Status with Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
+  labs(title = "Fishery Status with Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.10 B/BMSY") +
   theme_classic()+
   scale_color_gradientn(colors = c("yellow","orange","purple","black")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   transition_states(Year, transition_length = 1, state_length = 2) +
+  theme_classic(base_size = 20)+
   enter_fade()+
   exit_fade() +
   shadow_mark()
+
 
 animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA.gif"))
 
 kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   geom_point(aes(color = Year, size = Catch_est)) +
-  labs(title = "Fishery Status without Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
+  labs(title = "Fishery Status without Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.10 B/BMSY") +
   theme_classic()+
   scale_color_gradientn(colors = c("yellow","orange","purple","black")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   transition_states(Year, transition_length = 1, state_length = 2) +
+  theme_classic(base_size = 20)+
   enter_fade()+
   exit_fade() +
   shadow_mark()
@@ -101,7 +101,109 @@ animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no.gif"))
 
 ```
 
+```{r}
+fmsy_bmsy<- Genus_pts%>%
+  select (Name, msy, bmsy, fmsy)
 
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.csv"))%>%
+  filter(Adjusted=="MT")%>%
+  select (Name, Year, Biomass_est, Catch_est, Fishing_est, Status)
+
+kobe_data <- merge (Genus, fmsy_bmsy, by="Name")%>%
+  mutate (bbmsy= Biomass_est/bmsy, ffmsy= Fishing_est/fmsy)
+
+MPA<- kobe_data%>%
+  filter(Status=="MPA 2015")
+MPA2019<- kobe_data%>%
+  filter(Status=="MPA 2019")
+NoMPA<-kobe_data%>%
+  filter(Status=="No MPA")
+
+kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
+  geom_point(aes(color = Year, size = Catch_est)) +
+  labs(title = "Fishery Status with Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.00 B/BMSY") +
+  theme_classic()+
+  scale_color_gradientn(colors = c("yellow","orange","purple","black")) +
+  geom_vline(xintercept = 1, linetype="dotted", color="black") +
+  geom_hline(yintercept = 1, linetype="dotted", color="black") +
+  transition_states(Year, transition_length = 1, state_length = 2) +
+  theme_classic(base_size = 20)+
+  enter_fade()+
+  exit_fade() +
+  shadow_mark()
+
+kobe_MPA
+
+animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA0.0.gif"))
+
+kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
+  geom_point(aes(color = Year, size = Catch_est)) +
+  labs(title = "Fishery Status without Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.00 B/BMSY") +
+  theme_classic()+
+  scale_color_gradientn(colors = c("yellow","orange","purple","black")) +
+  geom_vline(xintercept = 1, linetype="dotted", color="black") +
+  geom_hline(yintercept = 1, linetype="dotted", color="black") +
+  transition_states(Year, transition_length = 1, state_length = 2) +
+  theme_classic(base_size = 20)+
+  enter_fade()+
+  exit_fade() +
+  shadow_mark()
+
+animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no0.0.gif"))
+
+```
+
+```{r}
+fmsy_bmsy<- Genus_pts%>%
+  select (Name, msy, bmsy, fmsy)
+
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel.csv"))%>%
+  filter(Adjusted=="MT")%>%
+  select (Name, Year, Biomass_est, Catch_est, Fishing_est, Status)
+
+kobe_data <- merge (Genus, fmsy_bmsy, by="Name")%>%
+  mutate (bbmsy= Biomass_est/bmsy, ffmsy= Fishing_est/fmsy)
+
+MPA<- kobe_data%>%
+  filter(Status=="MPA 2015")
+MPA2019<- kobe_data%>%
+  filter(Status=="MPA 2019")
+NoMPA<-kobe_data%>%
+  filter(Status=="No MPA")
+
+kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
+  geom_point(aes(color = Year, size = Catch_est)) +
+  labs(title = "Fishery Status with Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.30 B/BMSY") +
+  theme_classic()+
+  scale_color_gradientn(colors = c("yellow","orange","purple","black")) +
+  geom_vline(xintercept = 1, linetype="dotted", color="black") +
+  geom_hline(yintercept = 1, linetype="dotted", color="black") +
+  transition_states(Year, transition_length = 1, state_length = 2) +
+  theme_classic(base_size = 20)+
+  enter_fade()+
+  exit_fade() +
+  shadow_mark()
+
+kobe_MPA
+
+animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA0.3.gif"))
+
+kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
+  geom_point(aes(color = Year, size = Catch_est)) +
+  labs(title = "Fishery Status without Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.30 B/BMSY") +
+  theme_classic()+
+  scale_color_gradientn(colors = c("yellow","orange","purple","black")) +
+  geom_vline(xintercept = 1, linetype="dotted", color="black") +
+  geom_hline(yintercept = 1, linetype="dotted", color="black") +
+  transition_states(Year, transition_length = 1, state_length = 2) +
+  theme_classic(base_size = 20)+
+  enter_fade()+
+  exit_fade() +
+  shadow_mark()
+
+animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no0.3.gif"))
+
+```
 
 #Historical fishing effort 
 ```{r, echo=FALSE, fig.height= 10, fig.width=7}

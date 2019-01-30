@@ -63,8 +63,10 @@ ggplotly(catch)
 
 
 ```{r, include=FALSE, message=FALSE, echo= FALSE}
+Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output0.1.csv"))
+#Genus_patchmodel[is.na(Genus_patchmodel)] <- 0
 cummulative<- Genus_patchmodel%>%
-  group_by(Adjusted, Year, Status)%>%
+  group_by(Status, Adjusted, Year)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Biomass_lo=sum(Biomass_lo), 
             Biomass_hi=sum(Biomass_hi), 
@@ -75,9 +77,11 @@ cummulative<- Genus_patchmodel%>%
             #Revenue_lo= sum(Revenue_lo), 
             #Revenue_hi= sum(Revenue_hi))
 
+cummulative<-cummulative[-c(13:14, 87:88, 161:162, 235:236),]
 
-Totals<- cummulative%>%
-  group_by(Adjusted, Status)%>%
+
+Totals<- Genus_patchmodel%>%
+  group_by(Status, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Biomass_lo=sum(Biomass_lo), 
             Biomass_hi=sum(Biomass_hi), 

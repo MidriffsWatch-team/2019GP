@@ -1,0 +1,207 @@
+---
+title: "Catch and Profit"
+author: "Seleni Cruz"
+date: "January 29, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.1.csv"))
+
+MPA_2015<- Genus%>%
+  filter(Status=="MPA 2015")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2015")
+
+MPA_2020<- Genus%>%
+  filter(Status=="MPA 2020")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2020")
+
+MPA_2025<- Genus%>%
+  filter(Status=="MPA 2025")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2025")
+  
+NO_MPA<- Genus%>%
+  filter(Status=="No MPA")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "None")
+
+
+all0.1<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
+
+
+
+```
+
+```{r}
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel.csv"))
+
+MPA_2015<- Genus%>%
+  filter(Status=="MPA 2015")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2015")
+
+MPA_2020<- Genus%>%
+  filter(Status=="MPA 2020")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2020")
+
+MPA_2025<- Genus%>%
+  filter(Status=="MPA 2025")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2025")
+  
+NO_MPA<- Genus%>%
+  filter(Status=="No MPA")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "None")
+
+
+all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
+
+```
+
+```{r}
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.csv"))
+
+MPA_2015<- Genus%>%
+  filter(Status=="MPA 2015")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2015")
+
+MPA_2020<- Genus%>%
+  filter(Status=="MPA 2020")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2020")
+
+MPA_2025<- Genus%>%
+  filter(Status=="MPA 2025")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "2025")
+  
+NO_MPA<- Genus%>%
+  filter(Status=="No MPA")%>%
+  group_by(Adjusted)%>%
+  summarize( Biomass_est=sum(Biomass_est), 
+          Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi), 
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+          Revenue_est=sum(Revenue_est),
+          Revenue_lo=sum(Revenue_lo), 
+          Revenue_hi=sum(Revenue_hi))%>%
+  mutate(MPA.Date= "None")
+
+
+all0.0<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
+
+```
+
