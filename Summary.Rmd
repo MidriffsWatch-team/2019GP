@@ -13,7 +13,6 @@ library(tidyverse)
 
 ```{r}
 Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.1.csv"))
-
 MPA_2015<- Genus%>%
   filter(Status=="MPA 2015")%>%
   group_by(Adjusted)%>%
@@ -23,9 +22,9 @@ MPA_2015<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+          PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2015")
 
 MPA_2020<- Genus%>%
@@ -37,9 +36,9 @@ MPA_2020<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+           PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2020")
 
 MPA_2025<- Genus%>%
@@ -51,9 +50,9 @@ MPA_2025<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+        PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2025")
   
 NO_MPA<- Genus%>%
@@ -65,9 +64,9 @@ NO_MPA<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+         PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "None")
 
 
@@ -78,7 +77,7 @@ all0.1<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
 ```
 
 ```{r}
-Genus<- read.csv (here::here("data", "Genus_2D_patchmodel.csv"))
+Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.3.csv"))
 
 MPA_2015<- Genus%>%
   filter(Status=="MPA 2015")%>%
@@ -89,9 +88,9 @@ MPA_2015<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+           PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2015")
 
 MPA_2020<- Genus%>%
@@ -103,9 +102,9 @@ MPA_2020<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+         PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2020")
 
 MPA_2025<- Genus%>%
@@ -117,9 +116,9 @@ MPA_2025<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+         PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2025")
   
 NO_MPA<- Genus%>%
@@ -131,9 +130,9 @@ NO_MPA<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+         PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "None")
 
 
@@ -153,9 +152,9 @@ MPA_2015<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+          PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2015")
 
 MPA_2020<- Genus%>%
@@ -167,9 +166,9 @@ MPA_2020<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+          PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2020")
 
 MPA_2025<- Genus%>%
@@ -181,9 +180,9 @@ MPA_2025<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+           PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2025")
   
 NO_MPA<- Genus%>%
@@ -195,9 +194,9 @@ NO_MPA<- Genus%>%
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
-          Revenue_est=sum(Revenue_est),
-          Revenue_lo=sum(Revenue_lo), 
-          Revenue_hi=sum(Revenue_hi))%>%
+           PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "None")
 
 

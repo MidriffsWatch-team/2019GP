@@ -62,7 +62,8 @@ pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
   select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
 
 #2018 prices
-price <- read.csv(here::here("raw_data", "MarketPrice.csv"))
+price <- read.csv(here::here("raw_data", "MarketPrice.csv"))%>%
+  filter(!(Name=="Caranx"))
 
 #open access equilibrium at 30%
 data.0.3<- merge(pts, price, by="Name")%>%
@@ -82,7 +83,7 @@ data.0.1<- merge(pts, price, by="Name")%>%
           profit.msy.lo = p.lo * msy.low - (c.lo * r.low),
           profit.msy.hi = p.hi * msy.hi - (c.hi * r.hi))
 
-#open access equilibrium at 10%
+#open access equilibrium at 0%
 data.0<- merge(pts, price, by="Name")%>%
   mutate (c = 0 * p * msy / r, 
           c.lo = 0 * p.lo * msy.low / r.low, 
@@ -98,24 +99,27 @@ write.csv(data.0, "input.data.0.csv")
 
 
 
-#Biologial Patch model for 14 Genus projecting 2016-2035
+#Biologial Patch model for 13 Genus with OA equilibrium at 0% B/BMSY
 ```{r}
 data.0.3<- read.csv(here::here("data", "input.data.0.3.csv"))
 
 data.0.1 <- read.csv(here::here("data", "input.data.0.1.csv"))
 
 data.0 <- read.csv(here::here("data", "input.data.0.csv"))
+```
+
+
+```{r}
+data.0 <- read.csv(here::here("data", "input.data.0.csv"))
 
 MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
-MPA<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=1, start.year=0)
+MPA_2015<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=1, start.year=0)
 No_MPA<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
-
 MPA_2020<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
-
 MPA_2025<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
 
-MPA_2015<- MPA%>%
+MPA_2015<- MPA_2015%>%
   mutate(Status="MPA 2015")
 
 MPA_2020<- MPA_2020%>%
@@ -130,9 +134,64 @@ NO_MPA<- No_MPA%>%
 patchmodel<- rbind(MPA_2015, MPA_2020, MPA_2025, NO_MPA)
 
 write.csv(patchmodel, "Genus_2D_patchmodel0.csv")
-
-
 ```
+
+#Biologial Patch model for 13 Genus with OA equilibrium at 10% B/BMSY
+```{r}
+data.0.1 <- read.csv(here::here("data", "input.data.0.1.csv"))
+
+MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
+
+MPA_2015<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=1, start.year=0)
+No_MPA<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
+MPA_2020<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
+MPA_2025<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
+
+MPA_2015<- MPA_2015%>%
+  mutate(Status="MPA 2015")
+
+MPA_2020<- MPA_2020%>%
+  mutate(Status="MPA 2020")
+
+MPA_2025<- MPA_2025%>%
+  mutate(Status="MPA 2025")
+
+NO_MPA<- No_MPA%>%
+  mutate(Status="No MPA")
+
+patchmodel<- rbind(MPA_2015, MPA_2020, MPA_2025, NO_MPA)
+
+write.csv(patchmodel, "Genus_2D_patchmodel0.1.csv")
+```
+
+#Biologial Patch model for 13 Genus with OA equilibrium at 30% B/BMSY
+```{r}
+data.0.3 <- read.csv(here::here("data", "input.data.0.3.csv"))
+
+MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
+
+MPA_2015<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=1, start.year=0)
+No_MPA<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
+MPA_2020<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
+MPA_2025<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
+
+MPA_2015<- MPA_2015%>%
+  mutate(Status="MPA 2015")
+
+MPA_2020<- MPA_2020%>%
+  mutate(Status="MPA 2020")
+
+MPA_2025<- MPA_2025%>%
+  mutate(Status="MPA 2025")
+
+NO_MPA<- No_MPA%>%
+  mutate(Status="No MPA")
+
+patchmodel<- rbind(MPA_2015, MPA_2020, MPA_2025, NO_MPA)
+
+write.csv(patchmodel, "Genus_2D_patchmodel0.3.csv")
+```
+
 
 
 #Merging with Catch and biomass from 2000-2015
@@ -141,7 +200,8 @@ patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel0.1.csv"))%>%
   select("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", "Biomass_hi", "Catch_est", "Catch_lo", "Catch_hi", "Status", "Fishing_est")
 
 genus_ts<-read.csv(here::here("data", "Genus_ts.csv"))%>%
-  select(Name, Adjusted, year, catch, b, b_lo, b_hi, f)%>%
+  filter(!(year==2015|year==2000))%>%
+ select(Name, Adjusted, year, catch, b, b_lo, b_hi, f)%>%
   mutate(Catch_lo=NA, Catch_hi=NA, Status = "No MPA")
 
 names(genus_ts)[3:8] <- c("Year", "Catch_est", "Biomass_est", "Biomass_lo", "Biomass_hi", "Fishing_est")
@@ -150,7 +210,7 @@ genus_ts <- genus_ts[c("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", 
 
 patch_2000_2035<- rbind(genus_ts, patchmodel)
 
-write.csv(patch_2000_2035, "merged_2D_output0.0.csv")
+write.csv(patch_2000_2035, "merged_2D_output0.1.csv")
 
 ```
 

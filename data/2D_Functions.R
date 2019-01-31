@@ -48,7 +48,6 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
   B.mat <- matrix(ncol=patches, nrow=patches, B/11236) #Biomass at t=1 is evenly distributed among all patches 
   arriving <- matrix(nrow=nrow(MPA.mat), ncol= ncol(MPA.mat), 0) 
   Years<- as.vector(2015:(2015+ years))
- 
   
   l.patch <- c(patches, 1: (patches-1))
   left.patch<-as.matrix(do.call(rbind, replicate(patches, l.patch, simplify=FALSE)))
@@ -73,7 +72,7 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
     
     if(i == start.year){F.mat<- F.mat*MPA.mat} else {F.mat<-F.mat}
     
-    t <- i - 1
+    t <- i - 2015
     
     F.out <- fishing.effort.OA (t=t, p=p, MSY=MSY, r=r, bmsy=bmsy, fmsy=fmsy, 
                                 F.mat=F.mat, B.mat=B.mat, c=c, profit.msy = profit.msy)
@@ -83,6 +82,7 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
     
     leaving <- mrate*B.mat 
     leaving[leaving < 0] <- 0
+    
     for(row in 1:nrow(arriving)) {
       for(col in 1:ncol(arriving)) {
         arriving [row, col] <- 0.25*leaving[left.patch[row, col]]+ 
@@ -145,7 +145,7 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
     bmsy <- Bmsy[s]
     fmsy <- Fmsy [s]
     p <- price[s]
-    c <- cost[s]/11236
+    c <- cost[s]/11236 
     profit.msy <- Profit_msy/11236
     
     MPA<-MPA.Model(r=r, K=K, B=B, Fishing=Fishing, MPA=MPA, years=years, MPA.mat=MPA.mat, 
