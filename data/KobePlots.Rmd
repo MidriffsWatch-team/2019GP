@@ -24,7 +24,8 @@ library(ggridges)
 ```{r, echo=FALSE}
 
 Genus_pts<- read.csv(here::here("data", "Genus_pts.csv"))%>%
-  filter(!(Name== "Caranx"))
+  filter(!(Name== "Caranx"))%>%
+  filter(Adjusted=="MT")
 
 KobePlot<-ggplot(Genus_pts, aes(x= bbmsy, y=ffmsy, size=catch))+
   geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
@@ -34,7 +35,7 @@ KobePlot<-ggplot(Genus_pts, aes(x= bbmsy, y=ffmsy, size=catch))+
   geom_point()+
   scale_size(range = c(3, 10))+
   labs(x="B/Bmsy", y="F/Fmsy")+
-  #geom_text_repel(aes(label=Name),size=3, check_overlap=FALSE, hjust = 1, nudge_x = 0.05)+
+  geom_text_repel(aes(label=Name),size=3, check_overlap=FALSE, hjust = 1, nudge_x = 0.05)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
@@ -48,7 +49,7 @@ ggplotly(KobePlot)
 ```
 
 #How does this change over projected time in MPA and No MPA scenario 
-
+Scenaio where OA eq is at 10% of b/bmsy
 ```{r, echo=FALSE, include =FALSE}
 fmsy_bmsy<- Genus_pts%>%
   filter(Adjusted=="MT")%>%
@@ -67,24 +68,24 @@ NoMPA<-kobe_data%>%
   filter(Status=="No MPA")
 
 kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
-  geom_point(aes(color = Year, size=3)) +
-  labs(title = "Fishery Status with Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.10 B/BMSY") +
-  theme_classic()+
-   scale_color_gradientn(colors = c("black","purple","orange","yellow")) +
+  geom_point(aes(color = Year), size = 3, show.legend=FALSE) +
+  labs(title = "Year: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
+  scale_color_gradientn(colors = c("chocolate","darkblue")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  transition_states(Year, transition_length = 2, state_length = 2) +
+  transition_states(Year, transition_length = 30, state_length = 10) +
   theme_classic(base_size = 20)+
   enter_fade()+
   exit_fade() +
   shadow_mark()
 
 
-animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA.gif"))
+animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA0.1.gif"))
+?animate
 
 kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   geom_point(aes(color = Year, size=3)) +
-  labs(title = "Fishery Status without Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.10 B/BMSY") +
+  labs(title = "Fishery Status: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.10 B/BMSY") +
   theme_classic()+
   scale_color_gradientn(colors = c("black","purple","orange","yellow")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
@@ -95,7 +96,7 @@ kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   exit_fade() +
   shadow_mark()
 
-animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no.gif"))
+animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no0.1.gif"))
 
 
 
@@ -160,32 +161,32 @@ NoMPA<-kobe_data%>%
   filter(Status=="No MPA")
 
 kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
-  geom_point(aes(color = Year, size = 3)) +
-  labs(title = "Fishery Status with Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.30 B/BMSY") +
-  theme_classic()+
-  scale_color_gradientn(colors = c("black","purple","orange", "blue")) +
+  geom_point(aes(color = Year), size = 3, show.legend=FALSE) +
+  labs(title = "Year: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
+  scale_color_gradientn(colors = c("chocolate","darkblue")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  transition_states(Year, transition_length = 2, state_length = 2) +
+  transition_states(Year, transition_length = 30, state_length = 10) +
   theme_classic(base_size = 20)+
   enter_fade()+
   exit_fade() +
   shadow_mark()
+
 
 animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA0.3.gif"))
 
 kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
-  geom_point(aes(color = Year, size = 3)) +
-  labs(title = "Fishery Status without Reserves: {closest_state} ", x = "B/BMSY", y= "F/FMSY", subtitle = "Open access eq at 0.30 B/BMSY") +
-  theme_classic()+
-   scale_color_gradientn(colors = c("black","purple","orange","yellow")) +
+  geom_point(aes(color = Year), size = 3, show.legend=FALSE) +
+  labs(title = "Year: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
+  scale_color_gradientn(colors = c("chocolate","darkblue")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  transition_states(Year, transition_length = 2, state_length = 2) +
+  transition_states(Year, transition_length = 30, state_length = 10) +
   theme_classic(base_size = 20)+
   enter_fade()+
   exit_fade() +
   shadow_mark()
+
 
 animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no0.3.gif"))
 

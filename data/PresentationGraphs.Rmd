@@ -63,7 +63,7 @@ ggplotly(catch)
 
 
 ```{r, include=FALSE, message=FALSE, echo= FALSE}
-Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output0.1.csv"))%>%
+Genus_patchmodel <- read.csv(here::here("data", "Genus_2D_patchmodel0.3.csv"))%>%
   filter(Adjusted=="MT")
 #Genus_patchmodel[is.na(Genus_patchmodel)] <- 0
 cummulative<- Genus_patchmodel%>%
@@ -73,10 +73,7 @@ cummulative<- Genus_patchmodel%>%
             Biomass_hi=sum(Biomass_hi), 
             Catch_est=sum(Catch_est),
             Catch_lo=sum(Catch_lo), 
-            Catch_hi=sum(Catch_hi),
-            PV_est = sum(PV_est), 
-            PV_lo= sum(PV_lo), 
-            PV_hi= sum(PV_hi))
+            Catch_hi=sum(Catch_hi))
 
 
 Totals<- Genus_patchmodel%>%
@@ -86,10 +83,7 @@ Totals<- Genus_patchmodel%>%
             Biomass_hi=sum(Biomass_hi), 
             Catch_est=sum(Catch_est),
             Catch_lo=sum(Catch_lo), 
-            Catch_hi=sum(Catch_hi),
-            PV_est = sum(PV_est), 
-            PV_lo= sum(PV_lo), 
-            PV_hi= sum(PV_hi))
+            Catch_hi=sum(Catch_hi))
          
 ```
 

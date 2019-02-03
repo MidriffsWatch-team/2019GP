@@ -1,21 +1,4 @@
 ######################################################################
-#Fishing Matrix
-#Defining fishing effort in and outside MPA at t=1
-######################################################################
-
-fishing.mat<- function (MPA, Fishing, MPA.mat){
-  F.mat<-MPA.mat
-  F.mat[F.mat==1]<- Fishing
-  
-  if (MPA==1){
-    F.mat[F.mat==0]<-0}
-  else {
-    F.mat[F.mat==0]<-Fishing
-  }
-  return (F.mat)
-}
-
-######################################################################
 #Open Access Fishing Effort dynamic over time 
 #Distribution of Fishing effort (profit and cost)
 ######################################################################
@@ -24,12 +7,14 @@ fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy
   F.mat <- F.mat/fmsy 
   b <- B.mat/bmsy
   MSY <- MSY/11236 #MSY evenly distributed among all patches
+  c <- c/11236 
+  profit.msy <- profit.msy/11236 
   
   profit <- p * F.mat * b * MSY - (c * r * F.mat)
   
-  PV <- profit/(1 + 0.1)^t
+  PV <- profit/((1 + 0.1)^t)
   
-  F.mat <- F.mat + 0.05 * (profit/profit.msy)
+  F.mat <- F.mat + (0.05 * (profit/profit.msy))
   F.mat <- F.mat * fmsy
   
   return(list(F.mat, profit, PV))}
@@ -43,7 +28,7 @@ fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy
 MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, fmsy, p, c, profit.msy, start.year){
   #start.year<- as.numeric(start.year)
   patches <- 106
-  F.mat <- as.matrix(fishing.mat (MPA=MPA, Fishing=Fishing, MPA.mat=MPA.mat))
+  F.mat <- matrix(ncol=patches, nrow=patches, Fishing)
   K.mat <- matrix(ncol=patches, nrow=patches, K/11236) #K at t=1 is evently distributed among all patches 
   B.mat <- matrix(ncol=patches, nrow=patches, B/11236) #Biomass at t=1 is evenly distributed among all patches 
   arriving <- matrix(nrow=nrow(MPA.mat), ncol= ncol(MPA.mat), 0) 
@@ -145,8 +130,8 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
     bmsy <- Bmsy[s]
     fmsy <- Fmsy [s]
     p <- price[s]
-    c <- cost[s]/11236 
-    profit.msy <- Profit_msy/11236
+    c <- cost[s] 
+    profit.msy <- Profit_msy[s]
     
     MPA<-MPA.Model(r=r, K=K, B=B, Fishing=Fishing, MPA=MPA, years=years, MPA.mat=MPA.mat, 
                    mrate=mrate, MSY=MSY, bmsy=bmsy, fmsy=fmsy, p=p, c=c, profit.msy=profit.msy, start.year=start.year)
