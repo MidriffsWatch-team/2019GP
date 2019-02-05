@@ -12,8 +12,8 @@ library(tidyverse)
 ```
 
 ```{r}
-Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.1.csv"))
-MPA_2015<- Genus%>%
+Genus0.1<- read.csv (here::here("data", "Genus_2D_patchmodel0.1.csv"))
+MPA_2015<- Genus0.1%>%
   filter(Status=="MPA 2015")%>%
   group_by(Adjusted)%>%
   summarize( Biomass_est=sum(Biomass_est), 
@@ -27,7 +27,7 @@ MPA_2015<- Genus%>%
           PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2015")
 
-MPA_2020<- Genus%>%
+MPA_2020<- Genus0.1%>%
   filter(Status=="MPA 2020")%>%
   group_by(Adjusted)%>%
   summarize( Biomass_est=sum(Biomass_est), 
@@ -41,7 +41,7 @@ MPA_2020<- Genus%>%
           PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2020")
 
-MPA_2025<- Genus%>%
+MPA_2025<- Genus0.1%>%
   filter(Status=="MPA 2025")%>%
   group_by(Adjusted)%>%
   summarize( Biomass_est=sum(Biomass_est), 
@@ -55,7 +55,7 @@ MPA_2025<- Genus%>%
           PV_hi=sum(PV_hi))%>%
   mutate(MPA.Date= "2025")
   
-NO_MPA<- Genus%>%
+NO_MPA<- Genus0.1%>%
   filter(Status=="No MPA")%>%
   group_by(Adjusted)%>%
   summarize( Biomass_est=sum(Biomass_est), 
@@ -82,57 +82,57 @@ Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.3.csv"))
 MPA_2015<- Genus%>%
   filter(Status=="MPA 2015")%>%
   group_by(Adjusted)%>%
-  summarize(Biomass_est=sum(Biomass_est), 
-          Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi),
-          Catch_est=sum(Catch_est),
-          Catch_lo=sum(Catch_lo), 
-          Catch_hi=sum(Catch_hi), 
-           PV_est=sum(PV_est),
-          PV_lo=sum(PV_lo), 
-          PV_hi=sum(PV_hi))%>%
+  summarize(Biomass_est=sum(Biomass_est)/1000, 
+          Biomass_lo=sum(Biomass_lo)/1000, 
+          Biomass_hi=sum(Biomass_hi)/1000,
+          Catch_est=sum(Catch_est)/1000,
+          Catch_lo=sum(Catch_lo)/1000, 
+          Catch_hi=sum(Catch_hi)/1000, 
+           PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)%>%
   mutate(MPA.Date= "2015")
 
 MPA_2020<- Genus%>%
   filter(Status=="MPA 2020")%>%
   group_by(Adjusted)%>%
-  summarize(Biomass_est=sum(Biomass_est), 
-          Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi),
-          Catch_est=sum(Catch_est),
-          Catch_lo=sum(Catch_lo), 
-          Catch_hi=sum(Catch_hi), 
-         PV_est=sum(PV_est),
-          PV_lo=sum(PV_lo), 
-          PV_hi=sum(PV_hi))%>%
+  summarize(Biomass_est=sum(Biomass_est)/1000, 
+          Biomass_lo=sum(Biomass_lo)/1000, 
+          Biomass_hi=sum(Biomass_hi)/1000,
+          Catch_est=sum(Catch_est)/1000,
+          Catch_lo=sum(Catch_lo)/1000, 
+          Catch_hi=sum(Catch_hi)/1000, 
+         PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)%>%
   mutate(MPA.Date= "2020")
 
 MPA_2025<- Genus%>%
   filter(Status=="MPA 2025")%>%
   group_by(Adjusted)%>%
-  summarize(Biomass_est=sum(Biomass_est), 
-          Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi),
-          Catch_est=sum(Catch_est),
-          Catch_lo=sum(Catch_lo), 
-          Catch_hi=sum(Catch_hi), 
-         PV_est=sum(PV_est),
-          PV_lo=sum(PV_lo), 
-          PV_hi=sum(PV_hi))%>%
+  summarize(Biomass_est=sum(Biomass_est)/1000, 
+          Biomass_lo=sum(Biomass_lo)/1000, 
+          Biomass_hi=sum(Biomass_hi)/1000,
+          Catch_est=sum(Catch_est)/1000,
+          Catch_lo=sum(Catch_lo)/1000, 
+          Catch_hi=sum(Catch_hi)/1000, 
+         PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)%>%
   mutate(MPA.Date= "2025")
   
 NO_MPA<- Genus%>%
   filter(Status=="No MPA")%>%
   group_by(Adjusted)%>%
-  summarize( Biomass_est=sum(Biomass_est), 
-          Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi), 
-          Catch_est=sum(Catch_est),
-          Catch_lo=sum(Catch_lo), 
-          Catch_hi=sum(Catch_hi), 
-         PV_est=sum(PV_est),
-          PV_lo=sum(PV_lo), 
-          PV_hi=sum(PV_hi))%>%
+  summarize( Biomass_est=sum(Biomass_est)/1000, 
+          Biomass_lo=sum(Biomass_lo)/1000, 
+          Biomass_hi=sum(Biomass_hi)/1000,
+          Catch_est=sum(Catch_est)/1000,
+          Catch_lo=sum(Catch_lo)/1000, 
+          Catch_hi=sum(Catch_hi)/1000, 
+         PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)%>%
   mutate(MPA.Date= "None")
 
 
@@ -140,14 +140,33 @@ all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
 
 
 
-ggplot(all0.3, aes(x=MPA.Date, y=Biomass_est))+
-  geom_bar(stat = "identity")+
-  theme_classic()
+810379.1
 
-ggplot(all0.3, aes(x=MPA.Date, y=Catch_est))+
-  geom_bar(stat = "identity")+
-  theme_classic()
+Biomass<- ggplot(all0.3, aes(x=MPA.Date, y=Biomass_est))+
+  geom_bar(stat = "identity", fill="#2d7498")+
+  coord_cartesian(ylim = c(780,1340)) +
+  labs(x = "Reserves network implementation date", y = "Biomass (1000s metric tons)") +
+  theme_classic(base_size = 20)
+Biomass<- Biomass+
+   facet_wrap(~ Adjusted,ncol=2)
+Biomass
+#ggsave("Biomass.jpg", width=8, height = 5, dpi=300)
 
+Catch<- ggplot(all0.3, aes(x=MPA.Date, y=Catch_est))+
+  geom_bar(stat = "identity", fill="#2d7498")+
+  coord_cartesian(ylim = c(170,185)) +
+  labs(x = "Reserves network implementation date", y = "Catch (1000s metric tons)") +
+  theme_classic(base_size = 20)
+
+#ggsave("Catch.jpg", width=8, height = 5, dpi=300)
+
+PV<- ggplot(all0.3, aes(x=MPA.Date, y=PV_est))+
+  geom_bar(stat = "identity", fill="#2d7498")+
+  coord_cartesian(ylim = c(390,415)) +
+  labs(x = "Reserves network implementation date", y = "Profit (millions USD)") +
+  theme_classic(base_size = 20)
+PV
+#ggsave("PV.jpg", width=8, height = 5, dpi=300)
 ```
 
 ```{r}
