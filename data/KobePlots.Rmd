@@ -51,7 +51,9 @@ ggplotly(KobePlot)
 #How does this change over projected time in MPA and No MPA scenario 
 Scenaio where OA eq is at 10% of b/bmsy
 ```{r, echo=FALSE, include =FALSE}
-fmsy_bmsy<- Genus_pts%>%
+
+fmsy_bmsy<- read.csv(here::here("data", "Genus_pts.csv"))%>%
+  filter(!(Name== "Caranx"))%>%
   filter(Adjusted=="MT")%>%
   select (Name, msy, bmsy, fmsy)
 
@@ -152,6 +154,11 @@ Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.3.csv"))%>%
   filter(Adjusted=="MT")%>%
   select (Name, Year, Biomass_est, Catch_est, Fishing_est, Status)
 
+fmsy_bmsy<- read.csv(here::here("data", "Genus_pts.csv"))%>%
+  filter(!(Name== "Caranx"))%>%
+  filter(Adjusted=="MT")%>%
+  select (Name, msy, bmsy, fmsy)
+
 kobe_data <- merge (Genus, fmsy_bmsy, by="Name")%>%
   mutate (bbmsy= Biomass_est/bmsy, ffmsy= Fishing_est/fmsy)
 
@@ -161,19 +168,22 @@ NoMPA<-kobe_data%>%
   filter(Status=="No MPA")
 
 kobe_MPA<-ggplot(MPA, aes(x = bbmsy, y = ffmsy)) +
+  geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
+  geom_rect(xmin = 0, xmax = 1, ymin = 1.0, ymax = 2.1, fill = 'red', alpha = 0.1) +
+  geom_rect(xmin = 1, xmax = 2.1, ymin = 0, ymax = 1, fill = 'green', alpha = 0.1) +
+  geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 2.1, fill = 'orange', alpha = 0.1)+
   geom_point(aes(color = Year), size = 3, show.legend=FALSE) +
-  labs(title = "Year: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
-  scale_color_gradientn(colors = c("chocolate","darkblue")) +
+  labs(title = "Marine Reserve Network Scenario: {closest_state} ", x = "B/BMSY", y= "F/FMSY") +
+  scale_color_gradientn(colors = c("black","black")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  transition_states(Year, transition_length = 30, state_length = 10) +
   theme_classic(base_size = 20)+
-  enter_fade()+
+  transition_states(Year, transition_length = 30, state_length =1, wrap=FALSE) +
+  enter_fade() +
   exit_fade() +
   shadow_mark()
 
-
-animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA0.3.gif"))
+animate(kobe_MPA, nframes = 100, renderer = gifski_renderer("kobe_MPA0.3.gif", loop=FALSE))
 
 kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   geom_point(aes(color = Year), size = 3, show.legend=FALSE) +
@@ -181,14 +191,14 @@ kobe_no<-ggplot(NoMPA, aes(x = bbmsy, y = ffmsy)) +
   scale_color_gradientn(colors = c("chocolate","darkblue")) +
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  transition_states(Year, transition_length = 30, state_length = 10) +
+  transition_states(Year, transition_length = 30, state_length = 1,  wrap=FALSE) +
   theme_classic(base_size = 20)+
   enter_fade()+
   exit_fade() +
   shadow_mark()
 
 
-animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no0.3.gif"))
+animate(kobe_no, nframes = 100, renderer = gifski_renderer("kobe_no0.3.gif", loop=FALSE))
 
 ```
 

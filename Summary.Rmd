@@ -82,9 +82,9 @@ Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.3.csv"))
 MPA_2015<- Genus%>%
   filter(Status=="MPA 2015")%>%
   group_by(Adjusted)%>%
-  summarize( Biomass_est=sum(Biomass_est), 
+  summarize(Biomass_est=sum(Biomass_est), 
           Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi), 
+          Biomass_hi=sum(Biomass_hi),
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
@@ -96,9 +96,9 @@ MPA_2015<- Genus%>%
 MPA_2020<- Genus%>%
   filter(Status=="MPA 2020")%>%
   group_by(Adjusted)%>%
-  summarize( Biomass_est=sum(Biomass_est), 
+  summarize(Biomass_est=sum(Biomass_est), 
           Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi), 
+          Biomass_hi=sum(Biomass_hi),
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
@@ -110,9 +110,9 @@ MPA_2020<- Genus%>%
 MPA_2025<- Genus%>%
   filter(Status=="MPA 2025")%>%
   group_by(Adjusted)%>%
-  summarize( Biomass_est=sum(Biomass_est), 
+  summarize(Biomass_est=sum(Biomass_est), 
           Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi), 
+          Biomass_hi=sum(Biomass_hi),
           Catch_est=sum(Catch_est),
           Catch_lo=sum(Catch_lo), 
           Catch_hi=sum(Catch_hi), 
@@ -138,6 +138,15 @@ NO_MPA<- Genus%>%
 
 all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)%>%
   filter(Adjusted=="MT")
+
+
+ggplot(all0.3, aes(x=MPA.Date, y=Biomass_est))+
+  geom_bar(stat = "identity")+
+  theme_classic()
+
+ggplot(all0.3, aes(x=MPA.Date, y=Catch_est))+
+  geom_bar(stat = "identity")+
+  theme_classic()
 
 ```
 

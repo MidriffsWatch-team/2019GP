@@ -17,11 +17,12 @@ library(here)
 library(tidyverse)
 library(ggplot2)
 library(plotly)
+library(RColorBrewer)
 ```
 
 
 ```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=12}
-Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output.csv"))%>%
+Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output0.3.csv"))%>%
   filter(Adjusted=="MT")
 
 fishing <-ggplot(Genus_patchmodel, aes(x=Year, y=Fishing_est, color=Status))+
@@ -63,7 +64,7 @@ ggplotly(catch)
 
 
 ```{r, include=FALSE, message=FALSE, echo= FALSE}
-Genus_patchmodel <- read.csv(here::here("data", "Genus_2D_patchmodel0.3.csv"))%>%
+Genus_patchmodel <- read.csv(here::here("data", "merged_2D_output0.3.csv"))%>%
   filter(Adjusted=="MT")
 #Genus_patchmodel[is.na(Genus_patchmodel)] <- 0
 cummulative<- Genus_patchmodel%>%
@@ -136,6 +137,42 @@ ggplotly(catch)
 #ggplotly(revenue)
 ```
 
+
+Catch Series Over Time 
+
+```{r}
+
+genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%>%
+   filter(Genus== "Atrina"
+        |Genus=="Octopus"
+        |Genus=="Callinectes"
+        |Genus=="Scomberomorus"
+        |Genus=="Epinephelus"
+        |Genus=="Mugil"
+        |Genus=="Panulirus"
+        |Genus=="Cephalopholis"
+        |Genus=="Dasyatis"
+        |Genus=="Micropogonias"
+        |Genus=="Lutjanus"
+        |Genus=="Squatina"
+        |Genus=="Sphoeroides")%>%
+  filter(!(Ano==2000))
+
+colourCount = length(unique(genus_catch$Genus))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+
+ggplot(genus_catch, aes(x=Ano, y=MT, fill=Genus))+
+  geom_area(position = 'stack')+
+  labs(title = "Historical landings 2015-2015", x = "Year", y= "Landings (metric tons)") +
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
+  scale_fill_manual(values = getPalette(colourCount))+
+  theme_classic()
+
+#ggsave("historicalcatch.jpg", width=8, height = 5, dpi=300)
+
+
+```
 
 
 

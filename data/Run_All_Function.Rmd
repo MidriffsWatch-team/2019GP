@@ -67,31 +67,33 @@ price <- read.csv(here::here("raw_data", "MarketPrice.csv"))%>%
 
 #open access equilibrium at 30%
 data.0.3<- merge(pts, price, by="Name")%>%
-  mutate (c = (0.3 * p * msy) / r, 
-          c.lo = (0.3 * p.lo * msy.low) / r.low, 
-          c.hi = (0.3 * p.hi * msy.hi) / r.hi, 
-          profit.msy = p * msy - (c* r), 
-          profit.msy.lo = p.lo * msy.low - (c.lo * r.low),
-          profit.msy.hi = p.hi * msy.hi - (c.hi * r.hi))
+  mutate (f_bar = 2 * (1- 0.3/2),
+          c = (p * f_bar * 0.3 *msy)/(fmsy * f_bar), 
+          c.lo = (p.lo * f_bar * 0.3 *msy.low)/(fmsy_lo * f_bar), 
+          c.hi = (p.hi * f_bar * 0.3 *msy.hi)/(fmsy_hi * f_bar), 
+          profit.msy = p * msy - (c* fmsy), 
+          profit.msy.lo = p.lo * msy.low - (c.lo * fmsy_lo),
+          profit.msy.hi = p.hi * msy.hi - (c.hi * fmsy_hi))
 
 #open access equilibrium at 10%
 data.0.1<- merge(pts, price, by="Name")%>%
-  mutate (c = (0.1 * p * msy) / r, 
-          c.lo = (0.1 * p.lo * msy.low) / r.low, 
-          c.hi = (0.1 * p.hi * msy.hi )/ r.hi, 
-          profit.msy = p * msy - (c* r), 
-          profit.msy.lo = p.lo * msy.low - (c.lo * r.low),
-          profit.msy.hi = p.hi * msy.hi - (c.hi * r.hi))
+  mutate (f_bar = 2 * (1- 0.1/2),
+          c = (p * f_bar * 0.3 *msy)/(fmsy * f_bar), 
+          c.lo = (p.lo * f_bar * 0.3 *msy.low)/(fmsy_lo * f_bar), 
+          c.hi = (p.hi * f_bar * 0.3 *msy.hi)/(fmsy_hi * f_bar), 
+          profit.msy = p * msy - (c* fmsy), 
+          profit.msy.lo = p.lo * msy.low - (c.lo * fmsy_lo),
+          profit.msy.hi = p.hi * msy.hi - (c.hi * fmsy_hi))
 
 #open access equilibrium at 0%
 data.0<- merge(pts, price, by="Name")%>%
-  mutate (c = (0 * p * msy) / r, 
-          c.lo =( 0 * p.lo * msy.low) / r.low, 
-          c.hi = (0 * p.hi * msy.hi) / r.hi, 
-          profit.msy = p * msy - (c* r), 
-          profit.msy.lo = p.lo * msy.low - (c.lo * r.low),
-          profit.msy.hi = p.hi * msy.hi - (c.hi * r.hi))
-
+  mutate (f_bar = 2 * (1/2),
+          c = (p * f_bar * 0.3 *msy)/(fmsy * f_bar), 
+          c.lo = (p.lo * f_bar * 0.3 *msy.low)/(fmsy_lo * f_bar), 
+          c.hi = (p.hi * f_bar * 0.3 *msy.hi)/(fmsy_hi * f_bar), 
+          profit.msy = p * msy - (c* fmsy), 
+          profit.msy.lo = p.lo * msy.low - (c.lo * fmsy_lo),
+          profit.msy.hi = p.hi * msy.hi - (c.hi * fmsy_hi))
 write.csv(data.0.1, "input.data.0.1.csv") 
 write.csv(data.0.3, "input.data.0.3.csv")
 write.csv(data.0, "input.data.0.csv")
@@ -165,7 +167,7 @@ MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
 MPA_2015<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2015)
 No_MPA<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
-MPA_2020<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
+MPA_2020<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) 
 MPA_2025<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
 
 MPA_2015<- MPA_2015%>%
@@ -189,7 +191,7 @@ write.csv(patchmodel, "Genus_2D_patchmodel0.3.csv")
 
 #Merging with Catch and biomass from 2000-2015
 ```{r}
-patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel0.1.csv"))%>%
+patchmodel<-read.csv(here::here("data", "Genus_2D_patchmodel0.3.csv"))%>%
   select("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", "Biomass_hi", "Catch_est", "Catch_lo", "Catch_hi", "Status", "Fishing_est")
 
 genus_ts<-read.csv(here::here("data", "Genus_ts.csv"))%>%
@@ -203,7 +205,7 @@ genus_ts <- genus_ts[c("Name", "Adjusted", "Year", "Biomass_est", "Biomass_lo", 
 
 patch_2000_2035<- rbind(genus_ts, patchmodel)
 
-write.csv(patch_2000_2035, "merged_2D_output0.1.csv")
+write.csv(patch_2000_2035, "merged_2D_output0.3.csv")
 
 ```
 
