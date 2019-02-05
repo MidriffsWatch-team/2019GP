@@ -142,6 +142,23 @@ Catch Series Over Time
 
 ```{r}
 
+
+CommonName<-read.csv(here::here("raw_data", "CommonName.csv"))%>%
+ filter(Genus== "Atrina"
+        |Genus=="Octopus"
+        |Genus=="Callinectes"
+        |Genus=="Scomberomorus"
+        |Genus=="Epinephelus"
+        |Genus=="Mugil"
+        |Genus=="Panulirus"
+        |Genus=="Cephalopholis"
+        |Genus=="Dasyatis"
+        |Genus=="Micropogonias"
+        |Genus=="Lutjanus"
+        |Genus=="Squatina"
+        |Genus=="Sphoeroides")%>%
+  select(Genus, CommonName)
+
 genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%>%
    filter(Genus== "Atrina"
         |Genus=="Octopus"
@@ -156,22 +173,26 @@ genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%
         |Genus=="Lutjanus"
         |Genus=="Squatina"
         |Genus=="Sphoeroides")%>%
-  filter(!(Ano==2000))
+  filter(!(Ano==2000))%>%
+  merge( CommonName, by="Genus")
 
-colourCount = length(unique(genus_catch$Genus))
+
+
+
+colourCount = length(unique(genus_catch$CommonName))
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
-ggplot(genus_catch, aes(x=Ano, y=MT, fill=Genus))+
+ggplot(genus_catch, aes(x=Ano, y=MT, fill=CommonName))+
   geom_area(position = 'stack')+
   labs(title = "Historical landings 2015-2015", x = "Year", y= "Landings (metric tons)") +
-  scale_x_continuous(expand=c(0,0))+
+  scale_x_continuous(expand=c(0,0), labels=c(2005, 2007, 2010, 2012, 2015))+
   scale_y_continuous(expand=c(0,0))+
   scale_fill_manual(values = getPalette(colourCount))+
   theme_classic()
 
-#ggsave("historicalcatch.jpg", width=8, height = 5, dpi=300)
+ggsave("historicalcatch.jpg", width=8, height = 5, dpi=300)
 
-
+?scale_x_continuous
 ```
 
 

@@ -136,8 +136,8 @@ NO_MPA<- Genus%>%
   mutate(MPA.Date= "None")
 
 
-all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)%>%
-  filter(Adjusted=="MT")
+all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
+
 
 
 ggplot(all0.3, aes(x=MPA.Date, y=Biomass_est))+

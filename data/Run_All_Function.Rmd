@@ -111,7 +111,7 @@ MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
 MPA_2015<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2015)
 No_MPA<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
-MPA_2020<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
+MPA_2020<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020)
 MPA_2025<-Biological.Model(df=data.0, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
 
 MPA_2015<- MPA_2015%>%
@@ -139,7 +139,7 @@ MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
 MPA_2015<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2015)
 No_MPA<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
-MPA_2020<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) #set MPA to 0, when it hits 2019 it will turn MPA areas to 0 fishing mortality 
+MPA_2020<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) 
 MPA_2025<-Biological.Model(df=data.0.1, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
 
 MPA_2015<- MPA_2015%>%
