@@ -4,13 +4,13 @@
 ######################################################################
 
 fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy, t){
+  #F.mat[,] <- fmsy
   f.mat <- F.mat/fmsy 
   b.mat <- B.mat/bmsy
-  MSY <- MSY/11236 #MSY evenly distributed among all patches
+  MSY <- MSY/11236 
   c <- c/11236 
   profit.msy <- profit.msy/11236 
   
-  #revenue <- p * F.mat * b.mat * MSY
   revenue <- p* F.mat * B.mat
   profit <-  revenue - (c * fmsy * f.mat)
   
@@ -21,20 +21,16 @@ fishing.effort.OA<- function (p, MSY, r, bmsy, fmsy, F.mat, B.mat, c, profit.msy
   
   return(list(F.mat, profit, PV, revenue))}
 
-#cost parameter is the marginal cost of an increase in fishing effort not for a particular tonnage of fish
-
-
 ######################################################################
 #Biological 2-D Patch Model Function
 #
 ######################################################################
 
-MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, fmsy, p, c, profit.msy, start.year){
-  #start.year<- as.numeric(start.year)
+MPA.Model <- function(r, K, Fishing, B, years, MPA.mat, mrate, MSY, bmsy, fmsy, p, c, profit.msy, start.year){
   patches <- 106
-  F.mat <- matrix(ncol=patches, nrow=patches, Fishing)
-  K.mat <- matrix(ncol=patches, nrow=patches, K/11236) #K at t=1 is evently distributed among all patches 
-  B.mat <- matrix(ncol=patches, nrow=patches, B/11236) #Biomass at t=1 is evenly distributed among all patches 
+  F.mat <- matrix(ncol=patches, nrow=patches, Fishing) #Change back to Fishing
+  K.mat <- matrix(ncol=patches, nrow=patches, K/11236)  
+  B.mat <- matrix(ncol=patches, nrow=patches, B/11236)  
   arriving <- matrix(nrow=nrow(MPA.mat), ncol= ncol(MPA.mat), 0) 
   Years<- as.vector(2015:(2015+ years))
   
@@ -56,7 +52,9 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
                        Profit=NA,
                        Fishing=NA,
                        PV=NA, 
-                       Revenue=NA)
+                       Revenue=NA,
+                       bbmsy=NA,
+                       ffmsy=NA)
   
   for (i in Years){
     
@@ -101,7 +99,9 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
                          Profit = sum (profit),
                          Fishing = mean (F.mat), 
                          PV = sum(PV), 
-                         Revenue= sum(revenue))                      
+                         Revenue= sum(revenue),
+                         bbmsy = sum(B.mat)/bmsy,
+                         ffmsy = mean (F.mat)/fmsy)
     summary <- rbind (summary, output)
   }
   return(summary[-1,])
@@ -112,7 +112,7 @@ MPA.Model <- function(r, K, Fishing, B, MPA, years, MPA.mat, mrate, MSY, bmsy, f
 #looping over average, low and high estimates of variables 
 ######################################################################
 
-Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
+Scenarios <- function(data, years, MPA.mat, start.year) {
   out<-data.frame(Name=NA,Adjusted=NA)
 
   growth <- as.numeric(data[,c("r", "r.low", "r.hi")])
@@ -140,12 +140,12 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
     c <- cost[s] 
     profit.msy <- Profit_msy[s]
     
-    MPA<-MPA.Model(r=r, K=K, B=B, Fishing=Fishing, MPA=MPA, years=years, MPA.mat=MPA.mat, 
+    MPA<-MPA.Model(r=r, K=K, B=B, Fishing=Fishing, years=years, MPA.mat=MPA.mat, 
                    mrate=mrate, MSY=MSY, bmsy=bmsy, fmsy=fmsy, p=p, c=c, profit.msy=profit.msy, start.year=start.year)
     
     out<-(cbind(out, MPA))
   }
-  out<- out[,-c(13,22)]
+  out<- out[,-c(15,27)]
   
   out<-out %>%
     mutate(Name=data$Name,
@@ -163,6 +163,8 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
                   "Fishing_est",
                   "PV_est",
                   "Revenue_est",
+                  "bbmsy", 
+                  "ffmsy",
                   "Leave_lo",
                   "Arrive_lo", 
                   "Surplus_lo",
@@ -172,6 +174,8 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
                   "Fishing_lo",
                   "PV_lo",
                   "Revenue_lo",
+                  "bbmsy_lo",
+                  "ffmsy_lo",
                   "Leave_hi",
                   "Arrive_hi", 
                   "Surplus_hi",
@@ -180,7 +184,9 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
                   "Profit_hi",
                   "Fishing_hi",
                   "PV_hi", 
-                  "Revenue_hi")
+                  "Revenue_hi", 
+                  "bbmsy_hi",
+                  "ffmsy_hi")
   return(out)
 }
 
@@ -189,9 +195,9 @@ Scenarios <- function(data, MPA, years, MPA.mat, start.year) {
 #Biological Patch Model Function
 #looping over all Fisheries and inflated catch
 ######################################################################
-Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
+Biological.Model<- function(df, years, MPA.mat, start.year) {
   
-  results <- data.frame(matrix(ncol = 30, nrow = 0))
+  results <- data.frame(matrix(ncol = 36, nrow = 0))
   x <- c("Name",
          "Adjusted", 
          "Year",
@@ -204,6 +210,8 @@ Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
          "Fishing_est",
          "PV_est",
          "Revenue_est",
+         "bbmsy", 
+         "ffmsy",
          "Leave_lo",
          "Arrive_lo", 
          "Surplus_lo",
@@ -213,6 +221,8 @@ Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
          "Fishing_lo",
          "PV_lo",
          "Revenue_lo",
+         "bbmsy_lo", 
+         "ffmsy_lo",
          "Leave_hi",
          "Arrive_hi", 
          "Surplus_hi",
@@ -221,17 +231,20 @@ Biological.Model<- function(df, years, MPA, MPA.mat, start.year) {
          "Profit_hi",
          "Fishing_hi",
          "PV_hi", 
-         "Revenue_hi")
+         "Revenue_hi",
+         "bbmsy_hi", 
+         "ffmsy_hi")
   colnames(results) <- x
 
   for(i in 1:nrow(df)) {
     
     data <- df[i,]
 
-    scen <- Scenarios(data=data, years=years, MPA, MPA.mat=MPA.mat, start.year=start.year)  
+    scen <- Scenarios(data=data, years=years, MPA.mat=MPA.mat, start.year=start.year)  
     
     results <- rbind(results, scen)
   }
-  
+  results<-results%>%
+    mutate(Status = start.year)
   return(results)
 }

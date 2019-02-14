@@ -1,0 +1,104 @@
+---
+title: "Scenario Runs"
+author: "Seleni Cruz"
+date: "February 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, include=FALSE}
+library(tidyverse)
+library(dplyr)
+```
+
+
+```{r}
+data.0.3 <- read.csv(here::here("data", "input.data.0.3.csv"))
+MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
+
+No_MPA<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=0)
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2030)
+
+five_percent<- rbind(No_MPA, MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "5%")
+
+#write.csv(five_percent, "PatchModel_size.csv")
+```
+
+```{r}
+MPA<- matrix(ncol=106, nrow=106, 1)
+MPA[sample(106*106, (106*106*0.1))] <- 0
+
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+
+ten_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "10%")
+
+```
+
+```{r}
+MPA<- matrix(ncol=106, nrow=106, 1)
+MPA[sample(106*106, (106*106*0.2))] <- 0
+
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+
+twenty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "20%")
+```
+
+```{r}
+MPA<- matrix(ncol=106, nrow=106, 1)
+MPA[sample(106*106, (106*106*0.3))] <- 0
+
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+
+thirty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "30%")
+```
+
+```{r}
+MPA<- matrix(ncol=106, nrow=106, 1)
+MPA[sample(106*106, (106*106*0.4))] <- 0
+
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+
+forty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "40%")
+```
+
+```{r}
+MPA<- matrix(ncol=106, nrow=106, 1)
+MPA[sample(106*106, (106*106*0.5))] <- 0
+
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+
+fifty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "50%")
+```
+
+```{r}
+MPA_size <- rbind(five_percent, ten_percent, twenty_percent, thirty_percent, forty_percent, fifty_percent)%>%
+write.csv("PatchModel_size.csv")
+```
+

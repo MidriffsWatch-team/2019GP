@@ -102,8 +102,6 @@ write.csv(data.0, "input.data.0.csv")
 
 
 #Biologial Patch model for 13 Genus with OA equilibrium at 0% B/BMSY
-
-
 ```{r}
 data.0 <- read.csv(here::here("data", "input.data.0.csv"))
 
@@ -162,27 +160,26 @@ write.csv(patchmodel, "Genus_2D_patchmodel0.1.csv")
 #Biologial Patch model for 13 Genus with OA equilibrium at 30% B/BMSY
 ```{r}
 data.0.3 <- read.csv(here::here("data", "input.data.0.3.csv"))
-
 MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
-MPA_2015<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2015)
-No_MPA<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=0)
-MPA_2020<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2020) 
-MPA_2025<-Biological.Model(df=data.0.3, years=20, MPA.mat = MPA.mat, MPA=0, start.year=2025)
-
-MPA_2015<- MPA_2015%>%
-  mutate(Status="MPA 2015")
-
-MPA_2020<- MPA_2020%>%
-  mutate(Status="MPA 2020")
-
-MPA_2025<- MPA_2025%>%
-  mutate(Status="MPA 2025")
+No_MPA<-Biological.Model(df=data.0.3, years=30, MPA.mat = MPA.mat, start.year=0)
+MPA_2015<-Biological.Model(df=data.0.3, years=30, MPA.mat = MPA.mat, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=30, MPA.mat = MPA.mat, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=30, MPA.mat = MPA.mat, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=30, MPA.mat = MPA.mat, start.year=2030)
 
 NO_MPA<- No_MPA%>%
   mutate(Status="No MPA")
+MPA_2015<- MPA_2015%>%
+  mutate(Status="MPA 2015")
+MPA_2020<- MPA_2020%>%
+  mutate(Status="MPA 2020")
+MPA_2025<- MPA_2025%>%
+  mutate(Status="MPA 2025")
+MPA_2030<- MPA_2025%>%
+  mutate(Status="MPA 2025")
 
-patchmodel<- rbind(MPA_2015, MPA_2020, MPA_2025, NO_MPA)
+patchmodel<- rbind(NO_MPA, MPA_2015, MPA_2020, MPA_2025, MPA_2030)
 
 write.csv(patchmodel, "Genus_2D_patchmodel0.3.csv")
 ```

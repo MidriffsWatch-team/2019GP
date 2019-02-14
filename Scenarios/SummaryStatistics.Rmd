@@ -1,0 +1,27 @@
+---
+title: "Summary Scenarios"
+author: "Seleni Cruz"
+date: "February 13, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
+  filter(Year <= 2050)%>%
+  group_by(Adjusted, Status, Total_Area)%>%
+  summarize(Biomass_est=sum(Biomass_est)/1000, 
+          Biomass_lo=sum(Biomass_lo)/1000, 
+          Biomass_hi=sum(Biomass_hi)/1000,
+          Catch_est=sum(Catch_est)/1000,
+          Catch_lo=sum(Catch_lo)/1000, 
+          Catch_hi=sum(Catch_hi)/1000, 
+           PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)
+
+```
+

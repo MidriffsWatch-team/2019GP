@@ -1,0 +1,60 @@
+---
+title: "Scenario Runs"
+author: "Seleni Cruz"
+date: "February 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, include=FALSE}
+library(ggplot2)
+library(here)
+library(plotly)
+library(tidyverse)
+library(gganimate)
+library(ggrepel)
+library(ggridges)
+```
+
+```{r}
+pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
+  select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
+
+price <- read.csv(here::here("raw_data", "MarketPrice.csv"))%>%
+  filter(!(Name=="Caranx"))
+
+data <- merge(pts, price, by="Name")%>%
+  mutate (f_bar = 2 * (1- 1/2),
+          c = (p * f_bar * 1 *msy)/(fmsy * f_bar), 
+          c.lo = (p.lo * f_bar * 1 *msy.low)/(fmsy_lo * f_bar), 
+          c.hi = (p.hi * f_bar * 1 *msy.hi)/(fmsy_hi * f_bar), 
+          profit.msy = p * msy - (c* fmsy), 
+          profit.msy.lo = p.lo * msy.low - (c.lo * fmsy_lo),
+          profit.msy.hi = p.hi * msy.hi - (c.hi * fmsy_hi))
+```
+
+
+```{r}
+MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
+
+No_MPA<-Biological.Model(df=data, years=100, MPA.mat = MPA.mat, start.year=0)
+MPA_2015<-Biological.Model(df=data, years=100, MPA.mat = MPA.mat, start.year=2015)
+MPA_2020<-Biological.Model(df=data, years=100, MPA.mat = MPA.mat, start.year=2020) 
+MPA_2025<-Biological.Model(df=data, years=100, MPA.mat = MPA.mat, start.year=2025)
+MPA_2030<-Biological.Model(df=data, years=100, MPA.mat = MPA.mat, start.year=2030)
+
+five_percent<- rbind(No_MPA, MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+  mutate(Total_Area = "5%")
+
+write.csv(five_percent, "PatchModel_FMSY.csv")
+```
+
+
+
+```
+
+
+

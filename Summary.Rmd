@@ -79,6 +79,12 @@ all0.1<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
 ```{r}
 Genus<- read.csv (here::here("data", "Genus_2D_patchmodel0.3.csv"))
 
+G<- Genus%>%
+  group_by(Year, Adjusted, Status)%>%
+  summarize(PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)
+
 MPA_2015<- Genus%>%
   filter(Status=="MPA 2015")%>%
   group_by(Adjusted)%>%
@@ -136,37 +142,43 @@ NO_MPA<- Genus%>%
   mutate(MPA.Date= "None")
 
 
-all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)
+all0.3<- rbind(NO_MPA, MPA_2025, MPA_2020, MPA_2015)%>%
+  filter(Adjusted=="MT")
 
 
-
-810379.1
+Biomass_Sensitivity<- ggplot(all0.3, aes(x=MPA.Date, y=Biomass_est))+
+  geom_bar(stat = "identity", fill="#2d7498")+
+  coord_cartesian(ylim = c(780,1340)) +
+  #geom_errorbar(aes(ymin=Biomass_lo, ymax=Biomass_hi), width= 0.2)+
+  labs(x = "Reserves network implementation date", y = "Biomass (1000s metric tons)") +
+  theme_classic(base_size = 20)
+Biomass_Sensitivity<- Biomass_Sensitivity+
+   facet_wrap(~ Adjusted,ncol=2)
+Biomass_Sensitivity
+#ggsave("Biomass_Sensitivity.jpg", width=8, height = 5, dpi=300)
 
 Biomass<- ggplot(all0.3, aes(x=MPA.Date, y=Biomass_est))+
   geom_bar(stat = "identity", fill="#2d7498")+
-  coord_cartesian(ylim = c(780,1340)) +
-  labs(x = "Reserves network implementation date", y = "Biomass (1000s metric tons)") +
+  coord_cartesian(ylim = c(780,810)) +
+  labs(x = "Reserve network implementation date", y = "Biomass (1000s metric tons)") +
   theme_classic(base_size = 20)
-Biomass<- Biomass+
-   facet_wrap(~ Adjusted,ncol=2)
 Biomass
-#ggsave("Biomass.jpg", width=8, height = 5, dpi=300)
-
+ggsave("Biomass.jpg", width=8, height = 5, dpi=300)
 Catch<- ggplot(all0.3, aes(x=MPA.Date, y=Catch_est))+
-  geom_bar(stat = "identity", fill="#2d7498")+
+  geom_bar(stat = "identity", fill="#031840")+
   coord_cartesian(ylim = c(170,185)) +
-  labs(x = "Reserves network implementation date", y = "Catch (1000s metric tons)") +
+  labs(x = "Reserve network implementation date", y = "Catch (1000s metric tons)") +
   theme_classic(base_size = 20)
-
-#ggsave("Catch.jpg", width=8, height = 5, dpi=300)
+Catch
+ggsave("Catch.jpg", width=8, height = 5, dpi=300)
 
 PV<- ggplot(all0.3, aes(x=MPA.Date, y=PV_est))+
-  geom_bar(stat = "identity", fill="#2d7498")+
+  geom_bar(stat = "identity", fill="#200A60")+
   coord_cartesian(ylim = c(390,415)) +
-  labs(x = "Reserves network implementation date", y = "Profit (millions USD)") +
+  labs(x = "Reserve network implementation date", y = "Profit (millions USD)") +
   theme_classic(base_size = 20)
 PV
-#ggsave("PV.jpg", width=8, height = 5, dpi=300)
+ggsave("PV.jpg", width=8, height = 5, dpi=300)
 ```
 
 ```{r}
