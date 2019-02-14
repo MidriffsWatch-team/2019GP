@@ -17,6 +17,9 @@ library(tidyverse)
 library(gganimate)
 library(ggrepel)
 library(ggridges)
+library(ggpubr)
+library(gridExtra)
+library(grid)
 ```
 
 #importing the dataset only looking at 2015-2050
@@ -28,6 +31,7 @@ fmsy <- expression(paste(F/F[MSY]))
 
 ```
 
+1. Kobe of Initial Status 
 ```{r}
 initial <- res%>%
   filter(Year == 2015 & Status == 0 & Total_Area=="5%")%>%
@@ -49,8 +53,7 @@ ggsave("initial.jpg", width=8, height=5, dpi=300)
 ```
 
 
-#1. Kobe plot in Open Access B/Bmsy 0.3
-
+#2. Kobe plot in Open Access B/Bmsy 0.3 and various implementtion dates 
 ```{r}
 initial <- res%>%
   filter(Year == 2015 & Status == 0)%>%
@@ -121,6 +124,7 @@ FMSY
 ggsave("KobeFMSY_byGenus.jpg", width=10, height=12, dpi=300)
 ```
 
+#Kobe plot with implementation dates and different reserve sizes 
 ```{r}
 plot<-res%>%
   filter(Year== 2050)%>%
@@ -154,4 +158,80 @@ ggsave("Kobe3.jpg", width=10, height=12, dpi=300)
 
 
 ```
+
+#Some fun line graphs 
+```{r}
+res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
+  filter(Year <= 2050)%>%
+  group_by(Adjusted, Status, Total_Area, Year)%>%
+  summarize(Biomass_est=sum(Biomass_est)/1000, 
+          Biomass_lo=sum(Biomass_lo)/1000, 
+          Biomass_hi=sum(Biomass_hi)/1000,
+          Catch_est=sum(Catch_est)/1000,
+          Catch_lo=sum(Catch_lo)/1000, 
+          Catch_hi=sum(Catch_hi)/1000, 
+           PV_est=sum(PV_est)/1000000,
+          PV_lo=sum(PV_lo)/1000000, 
+          PV_hi=sum(PV_hi)/1000000)
+
+```
+
+
+#Reserves at 5% of total area with different implemntation dates; I think this is what COBI wants to see 
+
+```{r}
+plot1<- res%>%
+  filter(Adjusted=="MT", Total_Area=="5%")
+plot1$Status<- as.factor(plot1$Status)
+
+B<-ggplot(plot1, aes(x=Year, y=Biomass_est, group=Status, color=Status))+
+  geom_line(size=1.5)+
+  labs(title= "Marine Reserves 5%", subtitle= "Biomass", y="1000s MT")+
+  theme_classic(base_size = 24)
+
+C<-ggplot(plot1, aes(x=Year, y=Catch_est, group=Status, color=Status))+
+  geom_line(size=1.5)+
+  labs(subtitle= "Catch", y="1000s MT")+
+  theme_classic(base_size = 24)
+
+P<-ggplot(plot1, aes(x=Year, y=PV_est, group=Status, color=Status))+
+  geom_line(size=1.5)+
+  labs(subtitle= "Profit", y= "MUSD")+
+  theme_classic(base_size = 24)
+
+
+Line1<-ggarrange(B, C, P, nrow=3, common.legend = TRUE, legend="bottom")
+ggsave("Line1.jpg", width=10, height=12, dpi=300)
+```
+
+
+#Same plot with different reserve sizes 
+```{r}
+plot2<- res%>%
+  filter(Adjusted=="MT", Status =="2015")
+plot1$Status<- as.factor(plot1$Status)
+
+B<-ggplot(plot1, aes(x=Year, y=Biomass_est, group=Total_Area, color=Total_Area))+
+  geom_line(size=1.5)+
+  labs(title= "Marine Reserves Sizes", subtitle= "Biomass", y="1000s MT")+
+  theme_classic(base_size = 24)
+B
+
+C<-ggplot(plot1, aes(x=Year, y=Catch_est, group=Total_Area, color=Total_Area))+
+  geom_line(size=1.5)+
+  labs(subtitle= "Catch", y="1000s MT")+
+  theme_classic(base_size = 24)
+
+P<-ggplot(plot1, aes(x=Year, y=PV_est, group=Total_Area, color=Total_Area))+
+  geom_line(size=1.5)+
+  labs(subtitle= "Profit", y= "MUSD")+
+  theme_classic(base_size = 24)
+
+
+Line2<-ggarrange(B, C, P, nrow=3, common.legend = TRUE, legend="bottom")
+Line2
+ggsave("Line2.jpg", width=10, height=12, dpi=300)
+```
+
+
 

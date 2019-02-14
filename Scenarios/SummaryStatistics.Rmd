@@ -10,9 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+library(tidyselect)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(gridExtra)
+library(grid)
+
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
   filter(Year <= 2050)%>%
-  group_by(Adjusted, Status, Total_Area)%>%
+  group_by(Adjusted, Status, Total_Area, Year)%>%
   summarize(Biomass_est=sum(Biomass_est)/1000, 
           Biomass_lo=sum(Biomass_lo)/1000, 
           Biomass_hi=sum(Biomass_hi)/1000,
