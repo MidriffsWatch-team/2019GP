@@ -1,0 +1,84 @@
+---
+title: "report_figures_juliette"
+author: "Juliette Verstaen"
+date: "2/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, include=FALSE, message=FALSE}
+library(ggplot2)
+library(here)
+library(plotly)
+library(tidyverse)
+library(gganimate)
+library(ggrepel)
+library(ggridges)
+library(ggpubr)
+library(gridExtra)
+library(grid)
+```
+
+#importing the dataset only looking at 2015-2050
+```{r}
+res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
+  filter(Year <= 2050 & Adjusted== "MT")
+bmsy<- expression(paste(B/B[MSY]))
+fmsy <- expression(paste(F/F[MSY]))
+
+```
+
+Summing up cummulative biomass and pv of all genuses 
+```{r}
+
+bio_pv<- res%>%
+  filter(Total_Area == "5%")
+  group_by(Status, Adjusted)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est))
+bio_pv$Status<- as.factor(bio_pv$Status)
+
+bio_pv_2035 <- res%>%
+  filter(Total_Area == "5%")%>%
+    filter(Year <= "2035")%>%
+  group_by(Status, Adjusted)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est))
+bio_pv_2035$Status<- as.factor(bio_pv_2035$Status)
+
+
+```
+
+
+
+```{r}
+
+bio_pv_graph <- ggplot(bio_pv, aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Status)) +
+  geom_point()
+
+bio_pv_graph
+
+
+bio_pv_graph_2035 <- ggplot(bio_pv_2035, aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Status)) +
+  geom_point()
+
+bio_pv_graph_2035
+
+```
+
+
+```{r}
+bio_pv_graph <- ggplot(bio_pv, aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Status)) +
+  geom_point()
+
+bio_pv_graph
+
+```
+
+
