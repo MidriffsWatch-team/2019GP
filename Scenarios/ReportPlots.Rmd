@@ -68,7 +68,7 @@ plot$Status<- as.factor(plot$Status)
 KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=3, aes(color= Status, shape=Status))+
   #scale_shape_manual(values=c(16, 17, ))+
-  labs(title= "Fishery Status with Reserve Implementation at each Scenario",subtitle = "5% of Total Area" , x=bmsy, y=fmsy)+
+  labs(title= "Fishery Status with Reserve Implementation at each Scenario",subtitle = "5% of Total Area" , x="bmsy", y="fmsy")+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 12)
@@ -112,7 +112,7 @@ plot<-fmsy%>%
 FMSY<-ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=3, aes(shape=Status, color=Status))+
   #scale_shape_manual(values=c(16, 17))+
-  labs(title= "Fishery Status when F=Fmsy", subtitle = "2015-2050: 5% Total Area", x=bmsy, y=fmsy)+
+  labs(title= "Fishery Status when F=Fmsy", subtitle = "2015-2050: 5% Total Area", x="bmsy", y="fmsy")+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
