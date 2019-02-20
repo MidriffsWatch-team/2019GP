@@ -68,10 +68,10 @@ plot$Status<- as.factor(plot$Status)
 KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=3, aes(color= Status, shape=Status))+
   #scale_shape_manual(values=c(16, 17, ))+
-  labs(title= "Fishery Status with Reserve Implementation at each Scenario",subtitle = "5% of Total Area" , x=bmsy, y=fmsy)+
+  labs(title= "Fishery Status 2050", x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 20)
 KobeOA
 ggsave("KobeOA.jpg", width=8, height=5, dpi=300)
 
@@ -186,7 +186,7 @@ plot1$Status<- as.factor(plot1$Status)
 
 B<-ggplot(plot1, aes(x=Year, y=Biomass_est, group=Status, color=Status))+
   geom_line(size=1.5)+
-  labs(title= "Marine Reserves 5%", subtitle= "Biomass", y="1000s MT")+
+  labs(subtitle= "Biomass", y="1000s MT")+
   theme_classic(base_size = 24)
 
 C<-ggplot(plot1, aes(x=Year, y=Catch_est, group=Status, color=Status))+
@@ -208,21 +208,19 @@ ggsave("Line1.jpg", width=10, height=12, dpi=300)
 #Same plot with different reserve sizes 
 ```{r}
 plot2<- res%>%
-  filter(Adjusted=="MT", Status =="2015")
-plot1$Status<- as.factor(plot1$Status)
+  filter(Adjusted=="MT", Status =="2015", Total_Area=="40%")
 
-B<-ggplot(plot1, aes(x=Year, y=Biomass_est, group=Total_Area, color=Total_Area))+
+B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Total_Area, color=Total_Area))+
   geom_line(size=1.5)+
   labs(title= "Marine Reserves Sizes", subtitle= "Biomass", y="1000s MT")+
   theme_classic(base_size = 24)
-B
 
-C<-ggplot(plot1, aes(x=Year, y=Catch_est, group=Total_Area, color=Total_Area))+
+C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Total_Area, color=Total_Area))+
   geom_line(size=1.5)+
   labs(subtitle= "Catch", y="1000s MT")+
   theme_classic(base_size = 24)
 
-P<-ggplot(plot1, aes(x=Year, y=PV_est, group=Total_Area, color=Total_Area))+
+P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Total_Area, color=Total_Area))+
   geom_line(size=1.5)+
   labs(subtitle= "Profit", y= "MUSD")+
   theme_classic(base_size = 24)

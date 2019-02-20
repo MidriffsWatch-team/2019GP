@@ -18,7 +18,6 @@ library(gridExtra)
 library(grid)
 
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
-  filter(Year <= 2050)%>%
   group_by(Adjusted, Status, Total_Area, Year)%>%
   summarize(Biomass_est=sum(Biomass_est)/1000, 
           Biomass_lo=sum(Biomass_lo)/1000, 
@@ -29,6 +28,43 @@ res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
            PV_est=sum(PV_est)/1000000,
           PV_lo=sum(PV_lo)/1000000, 
           PV_hi=sum(PV_hi)/1000000)
+
+
+sum<- res%>%
+  filter(Total_Area=="5%" & Adjusted =="MT")%>%
+  group_by(Status)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Biomass_lo=sum(Biomass_lo), 
+          Biomass_hi=sum(Biomass_hi),
+          Catch_est=sum(Catch_est),
+          Catch_lo=sum(Catch_lo), 
+          Catch_hi=sum(Catch_hi), 
+           PV_est=sum(PV_est),
+          PV_lo=sum(PV_lo), 
+          PV_hi=sum(PV_hi))
+
+
+BAU<-res%>%
+  filter(Status==0)%>%
+  as.matrix()
+
+Scen2<-res%>%
+  filter(Status==2015 & Total_Area=="5%")%>%
+  as.matrix()
+
+Scen3<-res%>%
+  filter(Status==2020 & Total_Area=="5%")%>%
+  as.matrix()
+
+Scen4<-res%>%
+  filter(Status==2025 & Total_Area=="5%")%>%
+  as.matrix()
+
+Scen5<-res%>%
+  filter(Status==2030 & Total_Area=="5%")%>%
+  as.matrix()
+
+Scen2_prop<-(Scen2[,5:13]%-% BAU[,5:13])%/% BAU[,5:13]
 
 ```
 
