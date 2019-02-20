@@ -29,7 +29,7 @@ Biomass<-read.csv(here::here("data", "Genus_ts.csv"))%>%
   filter(Adjusted=="MT")
 
 
-catch<- readRDS (here::here("data", "Species_ts.rds"))
+catch<- readRDS(here::here("data", "Species_ts.rds"))
 
 Genus<-read.csv(here::here("data", "Genus_patchmodel.csv"))%>%
   filter(Adjusted=="MT")
