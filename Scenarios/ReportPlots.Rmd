@@ -179,6 +179,11 @@ linedf<-res%>%
            PV_est=sum(PV_est)/1000000,
           PV_lo=sum(PV_lo)/1000000, 
           PV_hi=sum(PV_hi)/1000000)
+#code for looking at when lines cross
+#%>%
+#  filter(Size== "BAU" | Size== "20%") %>%
+#  filter(Scenario == "2015" | Scenario =="0") %>%
+#  filter(Adjusted == "MT")
 
 ```
 
