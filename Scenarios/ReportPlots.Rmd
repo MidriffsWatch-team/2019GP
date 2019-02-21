@@ -25,8 +25,10 @@ library(grid)
 #importing the dataset only looking at 2015-2050
 ```{r}
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
-  filter(Year <= 2065 & Adjusted== "MT")%>%
-  rename(Scenario=Status)
+  filter(Year <= 2065)%>%
+  filter(Total_Area=="BAU" |Total_Area=="5%" | Total_Area=="20%" | Total_Area=="40%" | Total_Area=="50%")%>%
+  rename(Scenario=Status, Size=Total_Area)
+
 bmsy<- expression(paste(B/B[MSY]))
 fmsy <- expression(paste(F/F[MSY]))
 
@@ -35,8 +37,8 @@ fmsy <- expression(paste(F/F[MSY]))
 1. Kobe of Initial Status 
 ```{r}
 initial <- res%>%
-  filter(Year == 2015 & Status == 0 & Total_Area=="5%")%>%
-  mutate(Status = "initial")
+  filter(Year == 2015 & Adjusted == "MT" & Size=="BAU")%>%
+  mutate(Scenario = "Initial")
 
 initial <- ggplot(initial, aes(x= bbmsy, y=ffmsy, size=Catch_est))+
   geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
@@ -61,7 +63,7 @@ initial <- res%>%
   mutate(Scenario = "initial")
 
 plot<-res%>%
-  filter(Year== 2065 & Total_Area == "5%")%>%
+  filter(Year== 2065 & Size == "5%")%>%
   rbind(initial)
 
 plot$Scenario<- as.factor(plot$Scenario)
@@ -74,15 +76,19 @@ KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 20)
 KobeOA
+KobeOA_inflated<- KobeOA+
+   facet_wrap(~ Adjusted, ncol=2)
+KobeOA_inflated
+ggsave("KobeOA_inflated.jpg", width=12, height=10, dpi=300)
 ggsave("KobeOA.jpg", width=8, height=5, dpi=300)
 
 OA <-res%>%
-  filter(Status=="2015")
-OA$Status<- as.factor(OA$Status)
+  filter(Scenario=="2015")
+OA$Scenario<- as.factor(OA$Scenario)
 OA$Name<- as.factor(OA$Name)
 
 KobeOA_size<-ggplot(OA, aes(x= bbmsy, y=ffmsy, group=Name))+
-  geom_point(size=2, aes(color=Year, shape=Total_Area))+
+  geom_point(size=2, aes(color=Year, shape=Size))+
   #scale_shape_manual(values=c(16, 17))+
   labs(title= "Fishery Status at various MPA Sizes", subtitle = "2015-2050", x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
@@ -99,19 +105,19 @@ ggsave("KobeOA_byMRSize.jpg", width=20, height=15, dpi=300)
 #FMSY Kobe Plot
 
 ```{r}
-fmsy<- read.csv(here::here("Scenarios", "PatchModel_FMSY.csv"))%>%
+fmsy<- res%>%
   filter(Adjusted=="MT")
 
 initial <- res%>%
-  filter(Year == 2015 & Status == 0 & Total_Area=="5%")%>%
-  mutate(Status = "initial")
+  filter(Year == 2015 & Scenario == 0 & Size=="5%")%>%
+  mutate(Scenario = "initial")
 
 plot<-fmsy%>%
-  filter(Year== 2050 & Total_Area == "5%")%>%
+  filter(Year== 2050 &  Size == "5%")%>%
   rbind(initial)
 
-FMSY<-ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
-  geom_point(size=3, aes(shape=Status, color=Status))+
+FMSY<-ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Scenario))+
+  geom_point(size=3, aes(shape=Scenario, color=Scenario))+
   #scale_shape_manual(values=c(16, 17))+
   labs(title= "Fishery Status when F=Fmsy", subtitle = "2015-2050: 5% Total Area", x="bmsy", y="fmsy")+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
@@ -128,21 +134,21 @@ ggsave("KobeFMSY_byGenus.jpg", width=10, height=12, dpi=300)
 #Kobe plot with implementation dates and different reserve sizes 
 ```{r}
 plot<-res%>%
-  filter(Year== 2050)%>%
-  rbind(initial)
+  filter(Year== 2065, Adjusted== "MT")
+plot$Scenario<- as.factor(plot$Scenario)
 
-kobe2<- ggplot(plot, aes(x= bbmsy, y=ffmsy, group= Name))+
-  geom_point(size=3, aes(color=Name, shape = Status))+
+kobe2<- ggplot(plot, aes(x= bbmsy, y=ffmsy))+
+  geom_point(size=3, aes(color=Scenario, shape = Scenario))+
   #scale_shape_manual(values=c(16, 17, ))+
-  labs(title= "Fishery Status with Reserve Implementation", x=bmsy, y=fmsy)+
+  labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
 kobe2<- kobe2 +
-    facet_wrap(~ Total_Area, ncol=2)
+    facet_wrap(~ Size, ncol=2)
 kobe2
 
-ggsave("Kobe2.jpg", width=10, height=12, dpi=300)
+ggsave("Kobe2.jpg", width=8, height=5, dpi=300)
 
 kobe3<- ggplot(plot, aes(x= bbmsy, y=ffmsy, group= Name))+
   geom_point(size=3, aes(color=Name, shape = Total_Area))+
@@ -162,9 +168,8 @@ ggsave("Kobe3.jpg", width=10, height=12, dpi=300)
 
 #Some fun line graphs 
 ```{r}
-res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
-  filter(Year <= 2050)%>%
-  group_by(Adjusted, Status, Total_Area, Year)%>%
+linedf<-res%>%
+  group_by(Adjusted, Scenario, Size, Year)%>%
   summarize(Biomass_est=sum(Biomass_est)/1000, 
           Biomass_lo=sum(Biomass_lo)/1000, 
           Biomass_hi=sum(Biomass_hi)/1000,
@@ -207,21 +212,25 @@ ggsave("Line1.jpg", width=10, height=12, dpi=300)
 
 
 #Same plot with different reserve sizes 
-```{r}
-plot2<- res%>%
-  filter(Adjusted=="MT", Status =="2015", Total_Area=="40%")
+```{r,  fig.height=10, fig.width=10}
+plot2<- linedf%>%
+  filter(Adjusted=="MT")%>%
+  filter (Scenario =="2015"|Scenario == "0")%>%
+  filter(!(Size=="50%"))
 
-B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Total_Area, color=Total_Area))+
+plot2$Size <- factor(plot2$Size, levels = c("BAU", "5%", "20%", "40%"))
+
+B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Size, color=Size))+
   geom_line(size=1.5)+
-  labs(title= "Marine Reserves Sizes", subtitle= "Biomass", y="1000s MT")+
+  labs(subtitle= "Biomass", y="1000s MT")+
   theme_classic(base_size = 24)
 
-C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Total_Area, color=Total_Area))+
+C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Size, color=Size))+
   geom_line(size=1.5)+
   labs(subtitle= "Catch", y="1000s MT")+
   theme_classic(base_size = 24)
 
-P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Total_Area, color=Total_Area))+
+P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Size, color=Size))+
   geom_line(size=1.5)+
   labs(subtitle= "Profit", y= "MUSD")+
   theme_classic(base_size = 24)
@@ -229,6 +238,8 @@ P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Total_Area, color=Total_Area))+
 
 Line2<-ggarrange(B, C, P, nrow=3, common.legend = TRUE, legend="bottom")
 Line2
+
+ggplotly(Line2)
 ggsave("Line2.jpg", width=10, height=12, dpi=300)
 ```
 
