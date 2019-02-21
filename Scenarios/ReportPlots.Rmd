@@ -25,7 +25,8 @@ library(grid)
 #importing the dataset only looking at 2015-2050
 ```{r}
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
-  filter(Year <= 2050 & Adjusted== "MT")
+  filter(Year <= 2065 & Adjusted== "MT")%>%
+  rename(Scenario=Status)
 bmsy<- expression(paste(B/B[MSY]))
 fmsy <- expression(paste(F/F[MSY]))
 
@@ -56,19 +57,19 @@ ggsave("initial.jpg", width=8, height=5, dpi=300)
 #2. Kobe plot in Open Access B/Bmsy 0.3 and various implementtion dates 
 ```{r}
 initial <- res%>%
-  filter(Year == 2015 & Status == 0)%>%
-  mutate(Status = "initial")
+  filter(Year == 2015 & Scenario == 0)%>%
+  mutate(Scenario = "initial")
 
 plot<-res%>%
-  filter(Year== 2050 & Total_Area == "5%")%>%
+  filter(Year== 2065 & Total_Area == "5%")%>%
   rbind(initial)
 
-plot$Status<- as.factor(plot$Status)
+plot$Scenario<- as.factor(plot$Scenario)
 
 KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
-  geom_point(size=3, aes(color= Status, shape=Status))+
+  geom_point(size=3, aes(color= Scenario, shape=Scenario))+
   #scale_shape_manual(values=c(16, 17, ))+
-  labs(title= "Fishery Status 2050", x=bmsy, y=fmsy)+
+  labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 20)

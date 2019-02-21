@@ -20,15 +20,17 @@ data.0.3 <- read.csv(here::here("data", "input.data.0.3.csv"))
 MPA.mat<-as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
 No_MPA<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=0)
+No_MPA<- No_MPA%>%
+  mutate(Total_Area = "BAU")
+
 MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2015)
 MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2020) 
 MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2025)
 MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA.mat, start.year=2030)
 
-five_percent<- rbind(No_MPA, MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
+five_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
   mutate(Total_Area = "5%")
 
-#write.csv(five_percent, "PatchModel_size.csv")
 ```
 
 ```{r}
@@ -98,7 +100,7 @@ fifty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
 ```
 
 ```{r}
-MPA_size <- rbind(five_percent, ten_percent, twenty_percent, thirty_percent, forty_percent, fifty_percent)%>%
+MPA_size <- rbind(No_MPA, five_percent, ten_percent, twenty_percent, thirty_percent, forty_percent, fifty_percent)%>%
 write.csv("PatchModel_size.csv")
 ```
 

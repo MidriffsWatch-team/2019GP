@@ -31,7 +31,7 @@ res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
 
 
 sum<- res%>%
-  filter(Total_Area=="5%" & Adjusted =="MT")%>%
+  filter(Total_Area=="5%")%>%
   group_by(Status)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Biomass_lo=sum(Biomass_lo), 
