@@ -23,10 +23,10 @@ library(gridExtra)
 library(grid)
 ```
 
-#importing the dataset only looking at 2015-2050
+#importing the dataset only looking at 2015-2065
 ```{r}
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
-  filter(Year <= 2050 & Adjusted== "MT")
+  filter(Year <= 2065 & Adjusted== "MT")
 bmsy<- expression(paste(B/B[MSY]))
 fmsy <- expression(paste(F/F[MSY]))
 
@@ -36,11 +36,13 @@ Summing up cummulative biomass and pv of all genuses OA
 ```{r}
 
 circle<- res%>%
-  filter(Total_Area == "5%") %>%
+  filter(Total_Area == "5%" | Total_Area== "BAU") %>%
   group_by(Status, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
-            PV_est=sum(PV_est))
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)%>%
+  mutate(PV_est=PV_est/1000000)
 circle$Status<- as.factor(circle$Status)
 
 #bio_pv_2035 <- res%>%
@@ -59,22 +61,24 @@ circle$Status<- as.factor(circle$Status)
 ```{r}
 
 circle_graph <- ggplot(circle) +
-  geom_point(aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Status), shape = 21)+
-  scale_size_continuous(range = c(11, 25)) +
-  annotate(geom="text", x=997231.5, y=401138707, label="260K MT",
+  geom_point(aes(x= Biomass_est, y= PV_est,size=Catch_est, color = Status), shape = 21)+
+  guides(size= "none")+
+  scale_size_continuous(range = c(15, 30)) +
+  annotate(geom="text", x=1256.866, y=361.405921, label="318K MT",
               color="black") +
-  annotate(geom="text", x=1042283.9, y=383680819, label="250K MT",
+  annotate(geom="text", x=1253.392, y=364.691491, label="319K MT",
               color="black")+
-  annotate(geom="text", x=1038810.0, y=386966389, label="252K MT",
+  annotate(geom="text", x=1247.927, y=369.812271, label="321K MT",
               color="black")+
-  annotate(geom="text", x=1033346.3, y=392087169, label="254K MT",
+  annotate(geom="text", x=1240.207, y=375.365648, label="324K MT",
               color="black")+
-  annotate(geom="text", x=1025636.3, y=397640546, label="256K MT",
+  annotate(geom="text", x=1188.948, y=377.850277, label="332K MT",
               color="black")+
-  xlim(990000, 1045000)+
-  ylim(383000000, 404000000)+
+  xlim(1170, 1270)+
+  ylim(360, 380)+
   theme_classic()+
-  ggtitle("Aggregate Regional Affects")
+  xlab("Biomass (1000 MT)") +
+  ylab("Profits (Millions US$)")
   
 
 circle_graph
@@ -171,15 +175,16 @@ OA
 library(dplyr)
 
 linepoint <- res %>%
-    filter(Total_Area == "5%") %>%
+    filter(Total_Area == "5%" | Total_Area == "BAU") %>%
   group_by(Year, Status, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
-            PV_est=sum(PV_est))
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)
 linepoint$Status<- as.factor(linepoint$Status)
   
 
-Genus_ts <- read_csv("data/Genus_ts.csv")
+#Genus_ts <- read_csv("data/Genus_ts.csv")
 
 historic <- Genus_ts %>%
   filter(Adjusted == "MT") %>%
@@ -187,7 +192,8 @@ historic <- Genus_ts %>%
   filter(year != "2015") %>%
   group_by(year) %>%
   summarize(catch=sum(catch),
-            b=sum(b))
+            b=sum(b))%>%
+  mutate(b=b/1000)
 
 colnames(historic) <- c("Year", "Catch_est", "Biomass_est")
 
@@ -207,27 +213,37 @@ fourth <- full_join(historic, fourth, by=c("Year", "Biomass_est", "Catch_est"))
 fifth <- filter(linepoint, Status == "2030")
 fifth <- full_join(historic, fifth, by=c("Year", "Biomass_est", "Catch_est"))
 
-initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est, show.legend= FALSE))+
   geom_point()+
-  ggtitle("BAU")
+  ggtitle("BAU")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
-second_graph <- ggplot(second,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+second_graph <- ggplot(second,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est, show.legend= FALSE))+
   geom_point()+
-  ggtitle("Implement 2015")
+  ggtitle("2015")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
-third_graph <- ggplot(third,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+third_graph <- ggplot(third,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est, show.legend= FALSE))+
   geom_point()+
-  ggtitle("Implement 2020")
+  ggtitle("2020")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
-fourth_graph <- ggplot(fourth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+fourth_graph <- ggplot(fourth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est, show.legend= FALSE))+
   geom_point()+
-  ggtitle("Implement 2025")
+  ggtitle("2025")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
-fifth_graph <- ggplot(fifth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+fifth_graph <- ggplot(fifth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est, show.legend= FALSE))+
   geom_point()+
-  ggtitle("Implement 2030")
+  ggtitle("2030")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
-all<-ggarrange(initial_graph, second_graph, third_graph, fourth_graph, fifth_graph, nrow=3, ncol=2, common.legend = TRUE, legend="bottom")
+all<-ggarrange(initial_graph, second_graph, third_graph, fourth_graph, fifth_graph, nrow=3, ncol=2, common.legend = TRUE, legend=FALSE)
 all
 ggsave("biomass_time.jpg", width=10, height=12, dpi=300)
 ```
