@@ -42,7 +42,7 @@ circle<- res%>%
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est)) %>%
   mutate(Biomass_est=Biomass_est/1000)%>%
-  mutate(PV_est=PV_est/1000)
+  mutate(PV_est=PV_est/1000000)
 circle$Status<- as.factor(circle$Status)
 
 #bio_pv_2035 <- res%>%
@@ -64,21 +64,21 @@ circle_graph <- ggplot(circle) +
   geom_point(aes(x= Biomass_est, y= PV_est,size=Catch_est, color = Status), shape = 21)+
   guides(size= "none")+
   scale_size_continuous(range = c(15, 30)) +
-  annotate(geom="text", x=1256.866, y=361405.921, label="318K MT",
+  annotate(geom="text", x=1256.866, y=361.405921, label="318K MT",
               color="black") +
-  annotate(geom="text", x=1253.392, y=364691.491, label="319K MT",
+  annotate(geom="text", x=1253.392, y=364.691491, label="319K MT",
               color="black")+
-  annotate(geom="text", x=1247.927, y=369812.271, label="321K MT",
+  annotate(geom="text", x=1247.927, y=369.812271, label="321K MT",
               color="black")+
-  annotate(geom="text", x=1240.207, y=375365.648, label="324K MT",
+  annotate(geom="text", x=1240.207, y=375.365648, label="324K MT",
               color="black")+
-  annotate(geom="text", x=1188.948, y=377850.277, label="332K MT",
+  annotate(geom="text", x=1188.948, y=377.850277, label="332K MT",
               color="black")+
   xlim(1170, 1270)+
-  ylim(360000, 380000)+
+  ylim(360, 380)+
   theme_classic()+
-  xlab("Biomass 1000 (MT)") +
-  ylab("Profits 1000 (US$)")
+  xlab("Biomass (1000 MT)") +
+  ylab("Profits (Millions US$)")
   
 
 circle_graph
