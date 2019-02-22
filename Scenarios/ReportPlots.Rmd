@@ -26,7 +26,7 @@ library(grid)
 ```{r}
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
   filter(Year <= 2065)%>%
-  filter(Total_Area=="BAU" |Total_Area=="5%" | Total_Area=="20%" | Total_Area=="40%" | Total_Area=="50%")%>%
+  filter(Total_Area=="BAU" |Total_Area=="5%" | Total_Area=="20%" | Total_Area=="40%")%>%
   rename(Scenario=Status, Size=Total_Area)
 
 bmsy<- expression(paste(B/B[MSY]))
@@ -40,23 +40,51 @@ initial <- res%>%
   filter(Year == 2015 & Adjusted == "MT" & Size=="BAU")%>%
   mutate(Scenario = "Initial")
 
-initial <- ggplot(initial, aes(x= bbmsy, y=ffmsy, size=Catch_est))+
+plot <- ggplot(initial, aes(x= bbmsy, y=ffmsy, size=Catch_est))+
   geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
   geom_rect(xmin = 0, xmax = 1, ymin = 1.0, ymax = 2.1, fill = 'red', alpha = 0.1) +
   geom_rect(xmin = 1, xmax = 1.5, ymin = 0, ymax = 1, fill = 'green', alpha = 0.1) +
   geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 2.1, fill = 'orange', alpha = 0.1)+
   geom_point()+
   scale_size(range = c(3, 10))+
-  labs(x=bmsy, y=fmsy, title = "Initial Fisheries Status: 2015")+
+  geom_text_repel(aes(label = Name, size=12), nudge_x=0.2, direction="y", hjust=0, segment.size=0.2)+
+  labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  theme_classic(base_size = 18)
-initial
-ggsave("initial.jpg", width=8, height=5, dpi=300)
+  theme_classic(base_size = 16)
+
+plot
+ggsave("KobeIntial_label.jpg", width=8, height=6, dpi=300)
 ```
 
 
 #2. Kobe plot in Open Access B/Bmsy 0.3 and various implementtion dates 
+
+```{r}
+initial <- res%>%
+  filter(Year == 2015 & Scenario == 0 & Adjusted=="MT")%>%
+  mutate(Scenario = "initial")
+
+plot<-res%>%
+  filter(Year== 2065 & Adjusted=="MT")%>%
+  filter(Size == "5%" | Size =="BAU")%>%
+  rbind(initial)
+
+KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
+  geom_point(size=3, aes(color= Scenario, shape=Scenario))+
+  #scale_shape_manual(values=c(16, 17, ))+
+  labs(x=bmsy, y=fmsy)+
+  geom_vline(xintercept = 1, linetype="dotted", color="black") +
+  geom_hline(yintercept = 1, linetype="dotted", color="black") +
+  theme_classic(base_size = 16)
+KobeOA
+ggsave("KobeOA.jpg", width=8, height=6, dpi=300)
+```
+
+
+
+
+
 ```{r}
 initial <- res%>%
   filter(Year == 2015 & Scenario == 0)%>%
@@ -74,13 +102,16 @@ KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  theme_classic(base_size = 20)
-KobeOA
+  theme_classic(base_size = 16)
+
+plot$Adjusted[plot$Adjusted=="MT"] = "IUU 0%"
+
 KobeOA_inflated<- KobeOA+
-   facet_wrap(~ Adjusted, ncol=2)
+   facet_wrap(~ Adjusted, ncol=2, labeller=label_parsed)
 KobeOA_inflated
-ggsave("KobeOA_inflated.jpg", width=12, height=10, dpi=300)
-ggsave("KobeOA.jpg", width=8, height=5, dpi=300)
+ggsave("KobeOA_inflated.jpg", width=8, height=6, dpi=300)
+
+
 
 OA <-res%>%
   filter(Scenario=="2015")
@@ -105,30 +136,27 @@ ggsave("KobeOA_byMRSize.jpg", width=20, height=15, dpi=300)
 #FMSY Kobe Plot
 
 ```{r}
-fmsy<- res%>%
-  filter(Adjusted=="MT")
+ffmsy<- read.csv(here::here("Scenarios", "PatchModel_FMSY.csv"))%>%
+  filter(Adjusted=="MT" & Year == 2065)%>%
+  filter(Total_Area=="5%")%>%
+  rename(Scenario=Status, Size=Total_Area)
 
 initial <- res%>%
-  filter(Year == 2015 & Scenario == 0 & Size=="5%")%>%
+  filter(Year == 2015 & Scenario == 0 & Adjusted=="MT")%>%
   mutate(Scenario = "initial")
 
-plot<-fmsy%>%
-  filter(Year== 2050 &  Size == "5%")%>%
+plot<-ffmsy%>%
   rbind(initial)
 
 FMSY<-ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Scenario))+
   geom_point(size=3, aes(shape=Scenario, color=Scenario))+
-  #scale_shape_manual(values=c(16, 17))+
-  labs(title= "Fishery Status when F=Fmsy", subtitle = "2015-2050: 5% Total Area", x="bmsy", y="fmsy")+
+  labs( x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 16)
 FMSY
-ggsave("KobeFMSY.jpg", width=8, height=5, dpi=300)
-FMSY<- FMSY+
-   facet_wrap(~ Name, ncol=3)
-FMSY
-ggsave("KobeFMSY_byGenus.jpg", width=10, height=12, dpi=300)
+ggsave("KobeFMSY.jpg", width=8, height=6, dpi=300)
+
 ```
 
 #Kobe plot with implementation dates and different reserve sizes 
@@ -136,6 +164,7 @@ ggsave("KobeFMSY_byGenus.jpg", width=10, height=12, dpi=300)
 plot<-res%>%
   filter(Year== 2065, Adjusted== "MT")
 plot$Scenario<- as.factor(plot$Scenario)
+plot$Size <- factor(plot$Size, levels = c("BAU", "5%", "20%", "40%"))
 
 kobe2<- ggplot(plot, aes(x= bbmsy, y=ffmsy))+
   geom_point(size=3, aes(color=Scenario, shape = Scenario))+
@@ -143,12 +172,13 @@ kobe2<- ggplot(plot, aes(x= bbmsy, y=ffmsy))+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
-  theme_classic(base_size = 18)
+  theme_classic(base_size = 16)
 kobe2<- kobe2 +
     facet_wrap(~ Size, ncol=2)
 kobe2
 
-ggsave("Kobe2.jpg", width=8, height=5, dpi=300)
+ggsave("Kobe2.jpg", width=8, height=6, dpi=300)
+
 
 kobe3<- ggplot(plot, aes(x= bbmsy, y=ffmsy, group= Name))+
   geom_point(size=3, aes(color=Name, shape = Total_Area))+
