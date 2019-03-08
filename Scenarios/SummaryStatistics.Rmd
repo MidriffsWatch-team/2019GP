@@ -19,7 +19,7 @@ library(grid)
 
 res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
   filter(Year <=2065)%>%
-  group_by(Adjusted, Status, Total_Area, Year)%>%
+  group_by(Status, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est)/1000, 
           Biomass_lo=sum(Biomass_lo)/1000, 
           Biomass_hi=sum(Biomass_hi)/1000,
@@ -31,17 +31,7 @@ res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
           PV_hi=sum(PV_hi)/1000000)
 
 sum<- res%>%
-  filter(Total_Area=="5%" | Total_Area=="BAU")%>%
-  group_by(Status, Adjusted)%>%
-  summarize(Biomass_est=sum(Biomass_est), 
-            Biomass_lo=sum(Biomass_lo), 
-          Biomass_hi=sum(Biomass_hi),
-          Catch_est=sum(Catch_est),
-          Catch_lo=sum(Catch_lo), 
-          Catch_hi=sum(Catch_hi), 
-           PV_est=sum(PV_est),
-          PV_lo=sum(PV_lo), 
-          PV_hi=sum(PV_hi))
+  filter(Year==2015)
 
 
 BAU<-res%>%

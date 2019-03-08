@@ -1,34 +1,13 @@
-Common Name ,Genus,Resilience,r_lo,r_hi,mrate
-Atlantic Spanish mackerel,Scomberomorus,Medium,,,0.2
-Crab,Callinectes,High,,,0.2
-octopus,Octopus,Medium,,,0.815243285
-Mollusc,Atrina,Low,,,0.2
-White mullet,Mugil,Medium,,,0.2
-Graysby,Cephalopholis,Medium,,,0.2
-Diamond Stingray,Dasyatis,Low,,,0.388389894
-Rooster Hind,Epinephelus,Very low,,,0.2
-Gulf weakfish,Micropogonias,Medium,,,0.2
-Yellowtail amberjack,Caranx,Low,,,0.2
-Pacific angelshark,Squatina,Very low,,,0.2
-Finescale triggerfish,Balistes,Low,,,0.2
-Ocean whitefish,Caulolatilus,Low,,,0.2
-Shovelnose guitarfish,Rhinobatos,Low,,,0.2
-Yellow snapper,Lutjanus,Low,,,0.2
-Bullseye puffer,Sphoeroides,Medium,,,0.2
-Chocolate clam,Megapitaria,Low,,,0.2
-lobster,Panulirus,Low,,,0.2
-Gulf Grouper,Mycteroperca,Very low,,,0.2
-Pacific barracuda,Sphyraena,Medium,,,0.2
-Bared sand bass,Paralabrax,Medium,,,0.2
-Mexican hogfish,Bodianus,Low,,,0.2
-Snubnose pompano,Trachinotus,Medium,,,0.2
-Queen conch,Strombus,High,,,0.2
-Burrito Grunt ,Anisotremus,Low,,,0.2
-Wavyline Grunt,Microlepidotus,Medium,,,0.2
-Blacktip shark,Carcharhinus,Low,,,0.2
-North Pacific Hake,Merluccius,Medium,,,0.2
-"Pacific Spotted Scorpionfish, Stone Scorpionfish",Scorpaena,Low,,,0.2
-Scalloped hammerhead,Sphyrna,Very low,,,0.2
-Spanish Grunt,Haemulon,Medium,,,0.2
-Bumphead parrotfish,Scarus,Medium,,,0.2
-Roosterfish,Nematistius,Low,,,0.2
+Common Name ,Genus,Resilience,r_lo,r_hi,stb.low,stb.hi,endb.low,endb.high
+Mollusc,Atrina,Low,,,0.1,0.3,0.01,0.3
+Crab,Callinectes,High,,,0.3,0.5,0.3,0.6
+Graysby,Cephalopholis,Medium,0.285832886,0.528904219,0.1,0.3,0.01,0.4
+Diamond Stingray,Dasyatis,Low,0.192211459,1.217550718,0.3,0.5,0.3,0.6
+Rooster Hind,Epinephelus,Very low,0.055192539,0.493487429,0.1,0.3,0.01,0.4
+Yellow snapper,Lutjanus,Low,0.197250204,0.471264023,0.1,0.3,0.1,0.3
+Gulf weakfish,Micropogonias,Medium,0.204079217,1.249405569,0.1,0.3,0.1,0.4
+White mullet,Mugil,Medium,0.411020895,0.648424835,0.1,0.3,0.1,0.3
+octopus,Octopus,Medium,,,0.1,0.3,0.01,0.4
+lobster,Panulirus,Low,,,0.3,0.5,0.3,0.6
+Atlantic Spanish mackerel,Scomberomorus,Medium,0.230716185,1.37766748,0.3,0.5,0.3,0.5
+Pacific angelshark,Squatina,Very low,0.042006591,0.125674629,0.1,0.3,0.1,0.4

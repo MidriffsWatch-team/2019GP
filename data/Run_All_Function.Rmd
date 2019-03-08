@@ -18,34 +18,20 @@ library(tidyverse)
 #Run CMSY2 for 13 Genus 
 ```{r}
 genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%>%
-   filter(Genus== "Atrina"
-        |Genus=="Octopus"
-        |Genus=="Callinectes"
-        |Genus=="Scomberomorus"
-        |Genus=="Epinephelus"
-        |Genus=="Mugil"
-        |Genus=="Panulirus"
-        |Genus=="Cephalopholis"
-        |Genus=="Dasyatis"
-        |Genus=="Micropogonias"
-        |Genus=="Lutjanus"
-        |Genus=="Squatina"
-        |Genus=="Sphoeroides")
+   filter(Genus == "Atrina"
+        |Genus == "Callinectes"
+        |Genus == "Cephalopholis"
+        |Genus == "Dasyatis"
+        |Genus == "Epinephelus"
+        |Genus == "Lutjanus"
+        |Genus == "Micropogonias"
+        |Genus == "Mugil"
+        |Genus == "Octopus"
+        |Genus == "Panulirus"
+        |Genus == "Scomberomorus"
+        |Genus == "Squatina")
 
-genus_priors<-read.csv(here::here("data", "function_inputs", "Genus_priors.csv"))%>%
-   filter(Genus== "Atrina"
-        |Genus=="Octopus"
-        |Genus=="Callinectes"
-        |Genus=="Scomberomorus"
-        |Genus=="Epinephelus"
-        |Genus=="Mugil"
-        |Genus=="Panulirus"
-        |Genus=="Cephalopholis"
-        |Genus=="Dasyatis"
-        |Genus=="Micropogonias"
-        |Genus=="Lutjanus"
-        |Genus=="Squatina"
-        |Genus=="Sphoeroides")
+genus_priors<-read.csv(here::here("data", "function_inputs", "Genus_priors.csv"))
 
 Genus<-Species_CMSY2(data=genus_catch, priors=genus_priors)
 Genus_pts <- Genus[1]
@@ -62,8 +48,7 @@ pts<-read.csv(here::here("data", "Genus_pts.csv"))%>%
   select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
 
 #2018 prices
-price <- read.csv(here::here("raw_data", "MarketPrice.csv"))%>%
-  filter(!(Name=="Caranx"))
+price <- read.csv(here::here("raw_data", "MarketPrice.csv"))
 
 #open access equilibrium at 30%
 data.0.3<- merge(pts, price, by="Name")%>%
@@ -98,8 +83,6 @@ write.csv(data.0.1, "input.data.0.1.csv")
 write.csv(data.0.3, "input.data.0.3.csv")
 write.csv(data.0, "input.data.0.csv")
 ```
-
-
 
 #Biologial Patch model for 13 Genus with OA equilibrium at 0% B/BMSY
 ```{r}
