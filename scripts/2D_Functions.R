@@ -93,17 +93,20 @@ Species_CMSY2<-function(data, priors){
                                   endb.low=endb.low, endb.hi=endb.hi)
       output<- cmsy$ref_ts
       
-      output<- output%>%
-        mutate(Name = s, 
-               Adjusted = c(adjusted))
       Name <- s
       Adjusted <- adjusted
+      
+      output<- output%>%
+        mutate(Name = Name, 
+               Adjusted = Adjusted)
+      
       R <- cmsy$ref_pts[1,2:4]
       K <- cmsy$ref_pts[2,2:4]
       MSY <- cmsy$ref_pts[3,2:4]
       BMSY <- cmsy$ref_pts[5,2:4]
-      tail <- cmsy$ref_ts[tail(nrow(cmsy$ref_pts)),]
+      tail <- tail(cmsy$ref_ts, 1)
       out <- cbind(Name, Adjusted, R, K, MSY, BMSY, tail)
+      
       names(out)[1:14] <- c("Name", "Adjusted",
                             "r", "r.low", "r.hi", 
                             "k", "k.low", "k.hi",

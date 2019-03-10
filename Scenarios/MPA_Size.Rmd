@@ -18,6 +18,7 @@ library(datalimited2)
 #Run CMSY2 for 12 Genus 
 ```{r}
 genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%>%
+  filter(!(Ano==2000))%>%
    filter(Genus == "Atrina"
         |Genus == "Callinectes"
         |Genus == "Octopus"
@@ -31,7 +32,6 @@ genus_catch<-read.csv(here::here("data", "function_inputs", "catch_Genus.csv"))%
         |Genus == "Scomberomorus"
         |Genus == "Squatina"
         )
-
 genus_priors<-read.csv(here::here("data", "function_inputs", "Genus_priors.csv"))
 
 Genus<-Species_CMSY2(data=genus_catch, priors=genus_priors)
@@ -42,9 +42,16 @@ write.csv(Genus_pts, "Genus_pts.csv")
 write.csv(Genus_ts, "Genus_ts.csv")
 ```
 
+
+
+
 ```{r}
+#mrate 
+mrate <- read.csv(here::here("raw_data", "mrate.csv"))
+
 #variables from CMSY2
 pts <- read.csv(here::here("Scenarios", "Genus_pts.csv"))%>%
+  merge(mrate, by="Name")%>%
   select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
 
 #2018 prices
@@ -69,7 +76,8 @@ MPA <- as.matrix(read.csv(here::here("data", "MPA.matrix.csv")))
 
 BAU <-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=0)
 BAU <- BAU%>%
-  mutate(Reserve_size = "BAU")
+  mutate(Reserve_size = "BAU")%>%
+  filter(!(Adjusted == "IUU_20_legal" | Adjusted == "IUU_40_legal" | Adjusted == "IUU_60_legal"))
 
 MPA_2015 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
 MPA_2020 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020)
@@ -82,26 +90,32 @@ five_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
 ```
 
 ```{r}
-MPA <- matrix(ncol=106, nrow=106, 1)
-MPA[sample(106*106, (106*106*0.2))] <- 0
+MPA20<- matrix(ncol=106, nrow=106, 1)
+MPA20[sample(106*106, (106*106*0.2))] <- 0
 
-MPA_2015 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
-MPA_2020 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020)
-MPA_2025 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
-MPA_2030 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+write.csv(MPA20, "MPA20.mat.csv")
+
+MPA_2015 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA20, start.year=2015)
+MPA_2020 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA20, start.year=2020)
+MPA_2025 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA20, start.year=2025)
+MPA_2030 <- Biological.Model(df=data.0.3, years=100, MPA.mat = MPA20, start.year=2030)
 
 twenty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
   mutate(Reserve_size = "20%")
 ```
 
 ```{r}
-MPA<- matrix(ncol=106, nrow=106, 1)
-MPA[sample(106*106, (106*106*0.4))] <- 0
+MPA40<- MPA20
+MPA40[sample(106*106, (106*106*0.25))] <- 0
 
-MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2015)
-MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2020) 
-MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2025)
-MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA, start.year=2030)
+table(MPA40)
+
+write.csv(MPA40, "MPA40.mat.csv")
+
+MPA_2015<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA40, start.year=2015)
+MPA_2020<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA40, start.year=2020) 
+MPA_2025<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA40, start.year=2025)
+MPA_2030<-Biological.Model(df=data.0.3, years=100, MPA.mat = MPA40, start.year=2030)
 
 forty_percent<- rbind(MPA_2015, MPA_2020, MPA_2025, MPA_2030)%>%
   mutate(Reserve_size = "40%")

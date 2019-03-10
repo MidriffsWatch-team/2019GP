@@ -20,6 +20,7 @@ library(ggridges)
 library(ggpubr)
 library(gridExtra)
 library(grid)
+library(jcolors)
 ```
 
 #importing the dataset only looking at 2015-2050
@@ -48,7 +49,7 @@ plot <- ggplot(initial, aes(x= bbmsy, y=ffmsy))+
   geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 2.1, fill = 'orange', alpha = 0.1)+
   geom_point(aes(size=Catch_est), show.legend = FALSE)+
   scale_size(range = c(3, 10))+
-  #geom_text_repel(aes(label = Name, size =10), direction="y", nudge_x=0.05, show.legend=FALSE)+
+  geom_text_repel(aes(label = Name, size =10), direction="y", nudge_x=0.05, show.legend=FALSE)+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
@@ -75,14 +76,15 @@ plot<-res%>%
 KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=4, aes(color= Implementation_year, shape=Implementation_year))+
   scale_shape_manual(values=c(16, 17, 15, 18, 25, 20))+
-  scale_colour_brewer(palette = "Spectral")+
+  scale_colour_jcolors(palette = "pal8")+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   #scale_colour_discrete(name="Implementation year")+
   theme_classic(base_size = 10)
+
 KobeOA
-#ggsave("KobeOA.jpg", width=5, height=4, dpi=300)
+ggsave("KobeOA.jpg", width=5, height=4, dpi=300)
 ```
 
 
@@ -101,7 +103,7 @@ plot<-res%>%
 KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=3, aes(color= Implementation_year, shape=Implementation_year))+
   scale_shape_manual(values=c(16, 17, 15, 18, 25, 20))+
-  scale_colour_brewer(palette = "Spectral")+
+  scale_colour_brewer(palette = "pal6")+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
@@ -220,21 +222,20 @@ linedf<-res%>%
 #Reserves at 5% of total area with different implemntation dates; I think this is what COBI wants to see 
 
 ```{r}
-plot1<- res%>%
-  filter(Adjusted=="MT", Total_Area=="5%")
-plot1$Status<- as.factor(plot1$Status)
+plot1<- linedf%>%
+  filter(Adjusted == "IUU_0", Reserve_size=="5%")
 
-B<-ggplot(plot1, aes(x=Year, y=Biomass_est, group=Status, color=Status))+
+B<-ggplot(plot1, aes(x=Year, y=Biomass_est, group=Implementation_year, color=Implementation_year))+
   geom_line(size=1.5)+
   labs(subtitle= "Biomass", y="1000s MT")+
   theme_classic(base_size = 24)
 
-C<-ggplot(plot1, aes(x=Year, y=Catch_est, group=Status, color=Status))+
+C<-ggplot(plot1, aes(x=Year, y=Catch_est, group=Implementation_year, color=Implementation_year))+
   geom_line(size=1.5)+
   labs(subtitle= "Catch", y="1000s MT")+
   theme_classic(base_size = 24)
 
-P<-ggplot(plot1, aes(x=Year, y=PV_est, group=Status, color=Status))+
+P<-ggplot(plot1, aes(x=Year, y=PV_est, group=Implementation_year, color=Implementation_year))+
   geom_line(size=1.5)+
   labs(subtitle= "Profit", y= "MUSD")+
   theme_classic(base_size = 24)
@@ -251,19 +252,19 @@ plot2<- linedf%>%
   filter(Adjusted=="IUU_0")%>%
   filter (Implementation_year =="2015"|Implementation_year == "BAU")
 
-plot2$Implementation_year <- factor(plot2$Size, levels = c("BAU", "5%", "20%", "40%"))
+#plot2$Implementation_year <- factor(plot2$Size, levels = c("BAU", "5%", "20%", "40%"))
 
-B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Size, color=Size))+
+B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Reserve_size, color=Reserve_size))+
   geom_line(size=1.5)+
   labs(subtitle= "Biomass", y="1000s MT")+
   theme_classic(base_size = 24)
 
-C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Size, color=Size))+
+C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Reserve_size, color=Reserve_size))+
   geom_line(size=1.5)+
   labs(subtitle= "Catch", y="1000s MT")+
   theme_classic(base_size = 24)
 
-P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Size, color=Size))+
+P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Reserve_size, color=Reserve_size))+
   geom_line(size=1.5)+
   labs(subtitle= "Profit", y= "MUSD")+
   theme_classic(base_size = 24)
@@ -273,7 +274,7 @@ Line2<-ggarrange(B, C, P, nrow=3, common.legend = TRUE, legend="bottom")
 Line2
 
 ggplotly(Line2)
-ggsave("Line2.jpg", width=10, height=12, dpi=300)
+#ggsave("Line2.jpg", width=10, height=12, dpi=300)
 ```
 
 
