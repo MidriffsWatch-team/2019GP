@@ -91,6 +91,9 @@ Species_CMSY2<-function(data, priors){
                                   r.low=r.low, r.hi=r.hi,
                                   stb.low =stb.low, stb.hi=stb.hi,
                                   endb.low=endb.low, endb.hi=endb.hi)
+      
+      
+      
       output<- cmsy$ref_ts
       
       Name <- s

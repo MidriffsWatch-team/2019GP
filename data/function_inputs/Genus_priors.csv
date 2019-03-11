@@ -1,13 +1,13 @@
 Common Name ,Genus,Resilience,r_lo,r_hi,stb.low,stb.hi,endb.low,endb.high
-Mollusc,Atrina,Low,,,0.1,0.3,0.01,0.3
-Crab,Callinectes,High,,,0.3,0.5,0.3,0.6
+Mollusc,Atrina,Low,,0.9,0.1,0.3,0.01,0.3
+Crab,Callinectes,High,,0.9,0.3,0.5,0.3,0.6
 Graysby,Cephalopholis,Medium,0.285832886,0.528904219,0.1,0.3,0.01,0.4
-Diamond Stingray,Dasyatis,Low,0.192211459,1.217550718,0.3,0.5,0.3,0.6
+Diamond Stingray,Dasyatis,Low,0.192211459,0.9,0.3,0.5,0.3,0.6
 Rooster Hind,Epinephelus,Very low,0.055192539,0.493487429,0.1,0.3,0.01,0.4
 Yellow snapper,Lutjanus,Low,0.197250204,0.471264023,0.1,0.3,0.1,0.3
-Gulf weakfish,Micropogonias,Medium,0.204079217,1.249405569,0.1,0.3,0.1,0.4
+Gulf weakfish,Micropogonias,Medium,0.204079217,0.9,0.1,0.3,0.1,0.4
 White mullet,Mugil,Medium,0.411020895,0.648424835,0.1,0.3,0.1,0.3
-octopus,Octopus,Medium,,,0.1,0.3,0.01,0.4
-lobster,Panulirus,Low,,,0.3,0.5,0.3,0.6
-Atlantic Spanish mackerel,Scomberomorus,Medium,0.230716185,1.37766748,0.3,0.5,0.3,0.5
+octopus,Octopus,Medium,,0.9,0.1,0.3,0.01,0.4
+lobster,Panulirus,Low,,0.9,0.3,0.5,0.3,0.6
+Atlantic Spanish mackerel,Scomberomorus,Medium,0.230716185,0.9,0.3,0.5,0.3,0.5
 Pacific angelshark,Squatina,Very low,0.042006591,0.125674629,0.1,0.3,0.1,0.4

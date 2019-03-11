@@ -25,11 +25,12 @@ library(jcolors)
 
 #importing the dataset only looking at 2015-2050
 ```{r}
-res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
+res<-read.csv(here::here("PatchModel_size.csv"))%>%
   filter(Year <= 2065)
 
 res$Implementation_year [res$Implementation_year== "0"] <- "BAU"
 res$Implementation_year <- factor(res$Implementation_year, levels = c("Initial", "BAU", "2015", "2020", "2025", "2030"))
+res$Reserve_size <- factor(res$Reserve_size, levels = c("BAU", "5%", "20%", "30%", "40%", "50%"))
   
 bmsy<- expression(paste(B/B[MSY]))
 fmsy <- expression(paste(F/F[MSY]))
@@ -38,42 +39,45 @@ fmsy <- expression(paste(F/F[MSY]))
 
 1. Kobe of Initial Status 
 ```{r}
-initial <- res%>%
-  filter(Year == 2015 & Adjusted == "IUU_0" & Reserve_size=="BAU")%>%
-  mutate(Implementation_year = "Initial")
+initial <- read.csv(here::here("Genus_pts.csv"))%>%
+  filter(Adjusted=="IUU_0")
 
-plot <- ggplot(initial, aes(x= bbmsy, y=ffmsy))+
+K_plot <- ggplot(initial, aes(x= bbmsy, y=ffmsy))+
   geom_rect(xmin = 0.0, xmax = 1.0, ymin = 0.0, ymax = 1, fill = 'yellow', alpha = 0.1) +
-  geom_rect(xmin = 0, xmax = 1, ymin = 1.0, ymax = 2.1, fill = 'red', alpha = 0.1) +
+  geom_rect(xmin = 0, xmax = 1, ymin = 1.0, ymax = 7.1, fill = 'red', alpha = 0.1) +
   geom_rect(xmin = 1, xmax = 1.5, ymin = 0, ymax = 1, fill = 'green', alpha = 0.1) +
-  geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 2.1, fill = 'orange', alpha = 0.1)+
-  geom_point(aes(size=Catch_est), show.legend = FALSE)+
+  geom_rect(xmin = 1, xmax = 2.1, ymin = 1, ymax = 7.1, fill = 'orange', alpha = 0.1)+
+  geom_point(aes(size=catch), show.legend = FALSE)+
   scale_size(range = c(3, 10))+
-  geom_text_repel(aes(label = Name, size =10), direction="y", nudge_x=0.05, show.legend=FALSE)+
+  #geom_text_repel(aes(label = Name, size =10), direction="y", nudge_x=0.05, show.legend=FALSE)+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
+  scale_x_continuous(expand=c(0,0))+
+  scale_y_continuous(expand=c(0,0))+
   theme_classic(base_size = 10)
 
-plot
+K_plot
 #ggsave("KobeIntial_label.jpg", width=5, height=3, dpi=300)
-#ggsave("KobeIntial.jpg", width=5, height=3, dpi=300)
+ggsave("KobeIntial.jpg", width=5, height=3, dpi=300)
 ```
 
 
 #2. Kobe plot in Open Access B/Bmsy 0.3 and various implementtion dates 
 
 ```{r}
-initial <- res%>%
-  filter(Year == 2015 & Implementation_year == "BAU" & Adjusted=="IUU_0")%>%
-  mutate(Implementation_year = "Initial")
+initial <- read.csv(here::here("Genus_pts.csv"))%>%
+  filter(Adjusted=="IUU_0")%>%
+  mutate(Implementation_year = "Initial", Reserve_size = "BAU")%>%
+  select(Name, Adjusted, Year, bbmsy, ffmsy, Implementation_year, Reserve_size)
 
-plot<-res%>%
+OA_plot<-res%>%
   filter(Year== 2065 & Adjusted=="IUU_0")%>%
   filter(Reserve_size == "5%" | Reserve_size =="BAU")%>%
+  select(Name, Adjusted, Year, bbmsy, ffmsy, Implementation_year, Reserve_size)%>%
   rbind(initial)
 
-KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
+KobeOA <- ggplot(OA_plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=4, aes(color= Implementation_year, shape=Implementation_year))+
   scale_shape_manual(values=c(16, 17, 15, 18, 25, 20))+
   scale_colour_jcolors(palette = "pal8")+
@@ -84,53 +88,54 @@ KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
   theme_classic(base_size = 10)
 
 KobeOA
-ggsave("KobeOA.jpg", width=5, height=4, dpi=300)
+#ggsave("KobeOA.jpg", width=5, height=4, dpi=300)
 ```
 
 
 
 ```{r}
-initial <- res%>%
-  filter(Year == 2015 & Implementation_year == "BAU")%>%
-  filter(Adjusted == "IUU_0" | Adjusted == "IUU_20" |Adjusted == "IUU_40" |Adjusted == "IUU_60")%>%
-  mutate(Implementation_year = "Initial")
+initial <- read.csv(here::here("Genus_pts.csv"))%>%
+  mutate(Implementation_year = "Initial", Reserve_size = "BAU")%>%
+  filter(!(Adjusted=="IUU_0"))%>%
+  select(Name, Adjusted, Year, bbmsy, ffmsy, Implementation_year, Reserve_size)
 
-plot<-res%>%
+OA_plot2 <-res%>%
   filter(Year== 2065 & Reserve_size == "5%")%>%
-  filter(Adjusted == "IUU_0" | Adjusted == "IUU_20" |Adjusted == "IUU_40" |Adjusted == "IUU_60")%>%
+  filter(!(Adjusted=="IUU_0"))%>%
+  select(Name, Adjusted, Year, bbmsy, ffmsy, Implementation_year, Reserve_size)%>%
   rbind(initial)
 
-KobeOA <- ggplot(plot, aes(x= bbmsy, y=ffmsy, group=Name))+
+KobeOA <- ggplot(OA_plot2, aes(x= bbmsy, y=ffmsy, group=Name))+
   geom_point(size=3, aes(color= Implementation_year, shape=Implementation_year))+
   scale_shape_manual(values=c(16, 17, 15, 18, 25, 20))+
-  scale_colour_brewer(palette = "pal6")+
+  scale_colour_jcolors(palette = "pal8")+
   labs(x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   #scale_colour_discrete(name="Implementation year")+
   theme_classic(base_size = 10)
-
+KobeOA
 KobeOA_inflated<- KobeOA+
    facet_wrap(~ Adjusted, ncol=2, labeller=label_parsed)
 KobeOA_inflated
-#ggsave("KobeOA_inflated.jpg", width=8, height=6, dpi=300)
+#ggsave("Kobe_inflated_0.05.jpg", width=8, height=6, dpi=300)
 
 OA <-res%>%
-  filter(Implementation_year=="2015")
+  filter(Implementation_year=="2015", Year=="2065")
 
 KobeOA_size<-ggplot(OA, aes(x= bbmsy, y=ffmsy, group=Name))+
-  geom_point(size=2, aes(color=Year, shape=Reserve_size))+
+  geom_point(size=2, aes(color=Name))+
   #scale_shape_manual(values=c(16, 17))+
-  labs(title= "Fishery Status at various MPA Sizes", subtitle = "2015-2050", x=bmsy, y=fmsy)+
+  labs(title= "Fishery Status at various reserve network Sizes", x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
 
 KobeOA_size
 KobeOA_size<- KobeOA_size+
-   facet_wrap(~ Name, ncol=4)
+   facet_wrap(~ Reserve_size, ncol=2)
 KobeOA_size
-ggsave("KobeOA_byMRSize.jpg", width=20, height=15, dpi=300)
+ggsave("Kobe_byMRSize.jpg", width=10, height=8, dpi=300)
 
 ```
 
@@ -162,12 +167,10 @@ ggsave("KobeFMSY.jpg", width=8, height=6, dpi=300)
 
 #Kobe plot with implementation dates and different reserve sizes 
 ```{r}
-plot<-res%>%
+plot2<-res%>%
   filter(Year== 2065, Adjusted== "IUU_0")
-plot$Implementation_year<- as.factor(plot$Implementation_year)
-plot$Size <- factor(plot$Size, levels = c("BAU", "5%", "20%", "40%"))
 
-kobe2<- ggplot(plot, aes(x= bbmsy, y=ffmsy))+
+kobe2<- ggplot(plot2, aes(x= bbmsy, y=ffmsy))+
   geom_point(size=3, aes(color=Implementation_year, shape = Implementation_year))+
   #scale_shape_manual(values=c(16, 17, ))+
   labs(x=bmsy, y=fmsy)+
@@ -175,24 +178,24 @@ kobe2<- ggplot(plot, aes(x= bbmsy, y=ffmsy))+
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 16)
 kobe2<- kobe2 +
-    facet_wrap(~ Size, ncol=2)
+    facet_wrap(~ Reserve_size, ncol=2)
 kobe2
 
 ggsave("Kobe2.jpg", width=8, height=6, dpi=300)
 
 
-kobe3<- ggplot(plot, aes(x= bbmsy, y=ffmsy, group= Name))+
-  geom_point(size=3, aes(color=Name, shape = Total_Area))+
+kobe3<- ggplot(plot2, aes(x= bbmsy, y=ffmsy, group= Name))+
+  geom_point(size=3, aes(color=Name, shape = Reserve_size))+
   #scale_shape_manual(values=c(16, 17, ))+
   labs(title= "Fishery Status with Reserve Implementation" , x=bmsy, y=fmsy)+
   geom_vline(xintercept = 1, linetype="dotted", color="black") +
   geom_hline(yintercept = 1, linetype="dotted", color="black") +
   theme_classic(base_size = 18)
 kobe3<- kobe3 +
-    facet_wrap(~ Status, ncol=2)
+    facet_wrap(~ Implementation_year, ncol=2)
 kobe3
 
-ggsave("Kobe3.jpg", width=10, height=12, dpi=300)
+#ggsave("Kobe3.jpg", width=10, height=12, dpi=300)
 
 
 ```
@@ -200,6 +203,7 @@ ggsave("Kobe3.jpg", width=10, height=12, dpi=300)
 #Some fun line graphs 
 ```{r}
 linedf<-res%>%
+  filter(!(Name == "Scomberomorus"))%>%
   group_by(Adjusted, Implementation_year, Reserve_size, Year)%>%
   summarize(Biomass_est=sum(Biomass_est)/1000, 
           Biomass_lo=sum(Biomass_lo)/1000, 
@@ -242,7 +246,8 @@ P<-ggplot(plot1, aes(x=Year, y=PV_est, group=Implementation_year, color=Implemen
 
 
 Line1<-ggarrange(B, C, P, nrow=3, common.legend = TRUE, legend="bottom")
-ggsave("Line1.jpg", width=10, height=12, dpi=300)
+Line1
+ggsave("Line1.jpg", width=6, height=8, dpi=300)
 ```
 
 
@@ -252,29 +257,28 @@ plot2<- linedf%>%
   filter(Adjusted=="IUU_0")%>%
   filter (Implementation_year =="2015"|Implementation_year == "BAU")
 
-#plot2$Implementation_year <- factor(plot2$Size, levels = c("BAU", "5%", "20%", "40%"))
 
 B<-ggplot(plot2, aes(x=Year, y=Biomass_est, group=Reserve_size, color=Reserve_size))+
   geom_line(size=1.5)+
   labs(subtitle= "Biomass", y="1000s MT")+
-  theme_classic(base_size = 24)
+  theme_classic(base_size = 12)
 
 C<-ggplot(plot2, aes(x=Year, y=Catch_est, group=Reserve_size, color=Reserve_size))+
   geom_line(size=1.5)+
   labs(subtitle= "Catch", y="1000s MT")+
-  theme_classic(base_size = 24)
+  theme_classic(base_size = 12)
 
 P<-ggplot(plot2, aes(x=Year, y=PV_est, group=Reserve_size, color=Reserve_size))+
   geom_line(size=1.5)+
   labs(subtitle= "Profit", y= "MUSD")+
-  theme_classic(base_size = 24)
+  theme_classic(base_size = 12)
 
 
 Line2<-ggarrange(B, C, P, nrow=3, common.legend = TRUE, legend="bottom")
 Line2
 
-ggplotly(Line2)
-#ggsave("Line2.jpg", width=10, height=12, dpi=300)
+#ggplotly(Line2)
+ggsave("Line2.jpg", width=6, height=8, dpi=300)
 ```
 
 
