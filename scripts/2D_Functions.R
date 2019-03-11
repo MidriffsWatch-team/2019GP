@@ -88,11 +88,10 @@ Species_CMSY2<-function(data, priors){
       adjusted <- colnames(catches[i])
       
       cmsy <- datalimited2::cmsy2(year=year, catch=catch, resilience = resilience, 
-                                  r.low=r.low, r.hi=r.hi,
-                                  stb.low =stb.low, stb.hi=stb.hi,
-                                  endb.low=endb.low, endb.hi=endb.hi)
+                                  r.low=r.low, r.hi=r.hi)
       
-      
+      #stb.low =stb.low, stb.hi=stb.hi,
+      #endb.low=endb.low, endb.hi=endb.hi
       
       output<- cmsy$ref_ts
       
