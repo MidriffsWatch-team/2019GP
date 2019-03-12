@@ -1,5 +1,7 @@
+res<-read.csv(here::here( "Priors_r_0.9","PatchModel_size_priors.csv"))%>%
+  filter(Year <= 2065)
+
 Data <-res%>%
-  #filter((Name == "Scomberomorus"))%>%
   group_by(Name, Adjusted, Implementation_year, Reserve_size, Year)%>%
   mutate(Biomass_est=sum(Biomass_est)/1000, 
             Biomass_lo=sum(Biomass_lo)/1000, 
@@ -13,7 +15,8 @@ Data <-res%>%
             )
 
 Fisheries <- Data%>%
-  filter(Adjusted == "IUU_0", Reserve_size=="30%")
+  filter(!(Name=="Scomberomorus"))%>%
+  filter(Adjusted == "IUU_0", Reserve_size=="30%", Implementation_year==2015)
 
 B<-ggplot(Fisheries, aes(x=Year, y=Biomass_est, group= Name, color =Name))+
   geom_line(size=1.5)+
@@ -21,9 +24,9 @@ B<-ggplot(Fisheries, aes(x=Year, y=Biomass_est, group= Name, color =Name))+
   theme_classic(base_size = 12)
 B
 B<- B +
-  facet_wrap(~ Implementation_year, ncol=2)
+  facet_wrap(~ Name, ncol=2)
 B
-ggsave("Biomass_Fishery.jpg", width=6, height=5, dpi=300)
+#ggsave("Biomass_Fishery_priors.jpg", width=6, height=5, dpi=300)
 
 C<-ggplot(Fisheries, aes(x=Year, y=Catch_est, group= Name, color =Name))+
   geom_line(size=1.5)+
@@ -32,7 +35,7 @@ C<-ggplot(Fisheries, aes(x=Year, y=Catch_est, group= Name, color =Name))+
 C<- C +
   facet_wrap(~ Implementation_year, ncol=2)
 C
-ggsave("Catch_Fishery.jpg", width=6, height=5, dpi=300)
+ggsave("Catch_Fishery_priors.jpg", width=6, height=5, dpi=300)
 
 Fishing <-ggplot(Fisheries, aes(x=Year, y=Fishing_est, group= Name, color =Name))+
   geom_line(size=1.5)+
@@ -41,6 +44,8 @@ Fishing <-ggplot(Fisheries, aes(x=Year, y=Fishing_est, group= Name, color =Name)
 Fishing<- Fishing +
   facet_wrap(~ Implementation_year, ncol=2)
 Fishing
+
+ggsave("F_Fishery_priors.jpg", width=6, height=5, dpi=300)
 
 # Summary of all scenarios over 50 years 
 summary <-res%>%
