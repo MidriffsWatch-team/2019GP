@@ -16,6 +16,7 @@ nopriors <- read.csv(here::here("NoPriors", "Genus_pts_nopriors.csv"))%>%
   merge(mrate, by="Name")%>%
   select(Name, Adjusted, r, r.low, r.hi, k, k.low, k.hi, f, f_lo, f_hi, b, b_lo, b_hi, m.rate, 
          msy, msy.low, msy.hi, bmsy, bmsy.low, bmsy.hi, fmsy, fmsy_lo, fmsy_hi)
+unique(nopriors$Name)
 
 #open access equilibrium at 30%
 data.nopriors <- merge(nopriors, price, by="Name")%>%
@@ -28,6 +29,7 @@ data.nopriors <- merge(nopriors, price, by="Name")%>%
           profit.msy.hi = p.hi * msy.hi - (c.hi * fmsy_hi))
 
 write.csv(data.nopriors, "input.data.nopriors.csv")
+unique(priors$Name)
 
 #variables from CMSY2 run with priors 
 priors <- read.csv(here::here("Priors_r_0.9", "Genus_pts_0.9.csv"))%>%
