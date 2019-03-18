@@ -25,35 +25,237 @@ library(grid)
 
 #importing the dataset only looking at 2015-2065
 ```{r}
-res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
-  filter(Year <= 2065 & Adjusted== "MT")
-bmsy<- expression(paste(B/B[MSY]))
-fmsy <- expression(paste(F/F[MSY]))
+#res<-read.csv(here::here("Scenarios", "PatchModel_size.csv"))%>%
+ # filter(Year <= 2065 & Adjusted== "IUU_0")
+
+#bmsy<- expression(paste(B/B[MSY]))
+#fmsy <- expression(paste(F/F[MSY]))
 
 ```
 
+```{r}
+
+res<- read_csv("/GitHub/2019GP/Juliette/PatchModel_size.csv")%>%
+  filter(Year <= 2065)
+
+res$Implementation_year [res$Implementation_year== "0"] <- "BAU"
+res$Implementation_year <- factor(res$Implementation_year, levels = c("Initial", "BAU", "2015", "2020", "2025", "2030"))
+res$Reserve_size <- factor(res$Reserve_size, levels = c("BAU", "5%", "20%", "30%", "40%", "50%"))
+  
+bmsy<- expression(paste(B/B[MSY]))
+fmsy <- expression(paste(F/F[MSY]))
+```
+
+##New Final Graphs!!!
+
+A. Reserve Size 5%
+Bubbles:
+- Implement 2015. BAU bubble; raw data (2015/5/0/0); IUU (2015/5/40/0); Legalize (2015/5/40/40)
+- Implement 2020. raw data (2020/5/0/0); IUU (2020/5/40/0); Legalize (2020/5/40/40)
+- Implement 2030. raw data (2030/5/0/0); IUU (2030/5/40/0); Legalize (2030/5/40/40)
+
+```{r}
+
+circle_A<- res%>%
+  filter(Reserve_size == "5%" | Reserve_size== "BAU") %>%
+  group_by(Adjusted, Implementation_year)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)%>%
+  mutate(PV_est=PV_est/1000000) %>%
+  filter(Adjusted == "IUU_0" | Adjusted == "IUU_40" | Adjusted == "IUU_40_legal")%>%
+  filter(Implementation_year != "2025")
+circle$Implementation_year<- as.factor(circle$Implementation_year)
+
+```
+
+```{r}
+
+circle_graph_A <- ggplot(circle_A) +
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year, label=Adjusted), shape = 21)+
+  guides(size= "none")+
+  scale_size_continuous(range = c(10, 35)) +
+  xlim(600, 1400)+
+  ylim(40, 175)+
+  theme_classic()+
+  xlab("Biomass (1000 MT)") +
+  ylab("Profits (Millions US$)")+
+  annotate(geom="text", x=700, y=77, label="Unadjusted Catch Data",color="black", size= 3) +
+  annotate(geom="text", x=1000, y=117, label="Accounting for IUU",color="black", size= 3)+
+  annotate(geom="text", x=1200, y=175, label="Perfect Enforcement",color="black", size= 3)+
+  ggtitle("Marine Reserve Network 5% of Project Area")+
+  theme(legend.title = element_blank())
+  
+
+circle_graph_A
+
+#ggsave("circles_A.jpg", width=7, height=5, dpi=300)
+
+```
+
+
+B. Reserve Size 30%
+Bubbles:
+-  Implement 2015. BAU bubble; raw data (2015/30/0/0); IUU (2015/30/40/0); Legalize (2015/30/40/40)
+-  Implement 2020. raw data (2020/30/0/0); IUU (2020/30/40/0); Legalize (2020/30/40/40)
+- Implement 2030. raw data (2030/30/0/0); IUU (2030/30/40/0); Legalize (2030/30/40/40)
+
+```{r}
+
+circle_B<- res%>%
+  filter(Reserve_size == "30%" | Reserve_size== "BAU") %>%
+  group_by(Adjusted, Implementation_year)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)%>%
+  mutate(PV_est=PV_est/1000000) %>%
+  filter(Adjusted == "IUU_0" | Adjusted == "IUU_40" | Adjusted == "IUU_40_legal")%>%
+  filter(Implementation_year != "2025")
+circle$Implementation_year<- as.factor(circle$Implementation_year)
+
+```
+
+```{r}
+
+circle_graph_B <- ggplot(circle_B) +
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+  guides(size= "none")+
+ scale_size_continuous(range = c(10, 35)) +
+ xlim(600, 2200)+
+ ylim(60, 172)+
+  theme_classic()+
+  xlab("Biomass (1000 MT)") +
+  ylab("Profits (Millions US$)")+
+annotate(geom="text", x=677.4844, y=62, label="1",color="black", size= 3) +
+  annotate(geom="text", x=1343.4884, y=105, label="1",color="black", size= 3)+
+  annotate(geom="text", x=1287.4819, y=82, label="1",color="black", size= 3)+
+  annotate(geom="text", x=1165, y=73, label="1",color="black", size= 3)+
+  annotate(geom="text", x=964.6503, y=91.5, label="2",color="black", size= 3)+
+  annotate(geom="text", x=1909.5335, y=143, label="2",color="black", size= 3)+
+  annotate(geom="text", x=1831.8947, y=120, label="2",color="black", size= 3)+
+  annotate(geom="text", x=1646.1131, y=105, label="2",color="black", size= 3)+
+  annotate(geom="text", x=1920, y=160, label="3",color="black", size= 3)+
+  ggtitle("Marine Reserve Network 30% of Project Area") +
+  theme(legend.title = element_blank())
+  
+  
+circle_graph_B
+
+#ggsave("circles_B.jpg", width=7, height=5, dpi=300)
+
+```
+
+
+```{r}
+
+circle_graph_B.1 <- ggplot(circle_B) +
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+  guides(size= "none")+
+ scale_size_continuous(range = c(10, 35)) +
+ xlim(600, 2200)+
+ ylim(60, 172)+
+  theme_classic()+
+  xlab("Biomass (1000 MT)") +
+  ylab("Profits (Millions US$)")+
+annotate(geom="text", x=710, y=62, label="Unadjusted Catch Data",color="black", size= 3) +
+  annotate(geom="text", x=1287.4819, y=82, label="Unadjusted Catch Data",color="black", size= 3)+
+  annotate(geom="text", x=964.6503, y=91.5, label="Accounting for IUU",color="black", size= 3)+
+  annotate(geom="text", x=1831.8947, y=120, label="Accounting for IUU",color="black", size= 3)+
+  annotate(geom="text", x=1920, y=160, label="Perfect Enforcement",color="black", size= 3)+
+  ggtitle("Marine Reserve Network 30% of Project Area")+
+  theme(legend.title = element_blank())
+  
+  
+circle_graph_B.1
+
+#ggsave("circles_B.1.jpg", width=7, height=5, dpi=300)
+
+```
+
+
+C. Reserve Size 50%
+Bubbles:
+- Implement 2015. BAU bubble; raw data (2015/50/0/0); IUU (2015/50/40/0); Legalize (2015/50/40/40)
+- Implement 2020. raw data (2020/50/0/0); IUU (2020/50/40/0); Legalize (2020/50/40/40)
+-  Implement 2030. raw data (2030/50/0/0); IUU (2030/50/40/0); Legalize (2030/50/40/40)
+
+```{r}
+
+circle_C<- res%>%
+  filter(Reserve_size == "50%" | Reserve_size== "BAU") %>%
+  group_by(Adjusted, Implementation_year)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)%>%
+  mutate(PV_est=PV_est/1000000) %>%
+  filter(Adjusted == "IUU_0" | Adjusted == "IUU_40" | Adjusted == "IUU_40_legal")%>%
+  filter(Implementation_year != "2025")
+circle$Implementation_year<- as.factor(circle$Implementation_year)
+
+```
+
+```{r}
+
+circle_graph_C <- ggplot(circle_C) +
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+  guides(size= "none")+
+ scale_size_continuous(range = c(10, 35)) +
+ xlim(600, 2450)+
+ ylim(50, 165)+
+  theme_classic()+
+  xlab("Biomass (1000 MT)") +
+  ylab("Profits (Millions US$)")+
+annotate(geom="text", x=730, y=68, label="Unadjusted Catch Data",color="black", size= 3) +
+  annotate(geom="text", x=1500, y=65, label="Unadjusted Catch Data",color="black", size= 3) +
+  annotate(geom="text", x=964.6503, y=102, label="Accounting for IUU",color="black", size= 3) +
+  annotate(geom="text", x=2116.1685, y=92, label="Accounting for IUU",color="black", size= 3) +
+  annotate(geom="text", x=2300, y=118, label="Perfect Enforcement",color="black", size= 3) +
+  annotate(geom="text", x=2071.9284, y=160, label="Perfect Enforcement",color="black", size= 3) +
+
+  ggtitle("Marine Reserve Network 50% of Project Area")+
+  theme(legend.title = element_blank())
+  
+
+circle_graph_C
+
+#ggsave("circles_C.jpg", width=7, height=5, dpi=300)
+
+```
+
+
+
+
+
+
+
+
+OLD
+
 Summing up cummulative biomass and pv of all genuses OA
+
 ```{r}
 
 circle<- res%>%
-  filter(Total_Area == "5%" | Total_Area== "BAU") %>%
-  group_by(Status, Adjusted)%>%
+  filter(Reserve_size == "5%" | Reserve_size== "BAU") %>%
+  group_by(Adjusted, Implementation_year)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est)) %>%
   mutate(Biomass_est=Biomass_est/1000)%>%
   mutate(PV_est=PV_est/1000000)
-circle$Status<- as.factor(circle$Status)
+circle$Implementation_year<- as.factor(circle$Implementation_year)
 
 #bio_pv_2035 <- res%>%
-#  filter(Total_Area == "5%")%>%
+#  filter(Reserve_size == "5%")%>%
 #  filter(Year <= "2035")%>%
-#  group_by(Status, Adjusted)%>%
+#  group_by(Implementation_year, Adjusted)%>%
 #  summarize(Biomass_est=sum(Biomass_est), 
 #            Catch_est=sum(Catch_est), 
 #            PV_est=sum(PV_est))
-#bio_pv_2035$Status<- as.factor(bio_pv_2035$Status)
-
+#bio_pv_2035$Implementation_year<- as.factor(bio_pv_2035$Implementation_year)
 
 ```
 
@@ -61,21 +263,21 @@ circle$Status<- as.factor(circle$Status)
 ```{r}
 
 circle_graph <- ggplot(circle) +
-  geom_point(aes(x= Biomass_est, y= PV_est,size=Catch_est, color = Status), shape = 21)+
+  geom_point(aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
   guides(size= "none")+
   scale_size_continuous(range = c(15, 30)) +
-  annotate(geom="text", x=1256.866, y=361.405921, label="318K MT",
-              color="black") +
-  annotate(geom="text", x=1253.392, y=364.691491, label="319K MT",
-              color="black")+
-  annotate(geom="text", x=1247.927, y=369.812271, label="321K MT",
-              color="black")+
-  annotate(geom="text", x=1240.207, y=375.365648, label="324K MT",
-              color="black")+
-  annotate(geom="text", x=1188.948, y=377.850277, label="332K MT",
-              color="black")+
-  xlim(1170, 1270)+
-  ylim(360, 380)+
+  #annotate(geom="text", x=1256.866, y=361.405921, label="318K MT",
+           #   color="black") +
+  #annotate(geom="text", x=1253.392, y=364.691491, label="319K MT",
+           #   color="black")+
+  #annotate(geom="text", x=1247.927, y=369.812271, label="321K MT",
+          #    color="black")+
+  #annotate(geom="text", x=1240.207, y=375.365648, label="324K MT",
+          #    color="black")+
+  #annotate(geom="text", x=1188.948, y=377.850277, label="332K MT",
+          #    color="black")+
+  #xlim(1170, 1270)+
+  #ylim(360, 380)+
   theme_classic()+
   xlab("Biomass (1000 MT)") +
   ylab("Profits (Millions US$)")
@@ -90,23 +292,22 @@ circle_graph
 Summing up cummulative biomass and pv of all genuses F= FMSY
 Every column ends up being the same regardless of implementation date
 
-side notw for seleni: looked at data, BAU (status=0) only for the 5% implementation option; would be super useful to compare graphs if it was for all reserve sizes
+side notw for seleni: looked at data, BAU (Implementation_year=0) only for the 5% implementation option; would be super useful to compare graphs if it was for all reserve sizes
 ```{r}
 
 
-fmsy<- read.csv(here::here("Scenarios", "PatchModel_FMSY.csv"))%>%
-  filter(Adjusted=="MT")
+#fmsy<- read.csv(here::here("Scenarios", "PatchModel_FMSY.csv"))%>%
+  #filter(Adjusted=="IUU_0")
 
 
-circle_fmsy<- fmsy%>%
-  filter(Total_Area == "5%") %>%
-  group_by(Status, Adjusted) %>%
-  summarize(Biomass_est=sum(Biomass_est), 
-            Catch_est=sum(Catch_est), 
-            PV_est=sum(PV_est))
+#circle_fmsy<- fmsy%>%
+#  filter(Reserve_size == "5%") %>%
+#  group_by(Implementation_year, Adjusted) %>%
+#  summarize(Biomass_est=sum(Biomass_est), 
+#            Catch_est=sum(Catch_est), 
+#            PV_est=sum(PV_est))
 
-circle_fmsy$Status<- as.factor(circle_fmsy$Status)
-
+#circle_fmsy$Implementation_year<- as.factor(circle_fmsy$Implementation_year)
 
 ```
 
@@ -115,16 +316,16 @@ Circle graphs with 40% protected
 ```{r}
 
 circle_40<- res%>%
-  filter(Total_Area == "40%") %>%
-  group_by(Status, Adjusted)%>%
+  filter(Reserve_size == "40%" | Reserve_size =="BAU") %>%
+  group_by(Implementation_year, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est))
-circle_40$Status<- as.factor(circle_40$Status)
+circle_40$Implementation_year<- as.factor(circle_40$Implementation_year)
 
 
 circle_40_graph <- ggplot(circle_40) +
-  geom_point(aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Status), shape = 21)+
+  geom_point(aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
   scale_size_continuous(range = c(11, 25)) +
   theme_classic()+
   ggtitle("Aggregate Regional Affects 40% Protected")
@@ -137,27 +338,27 @@ circle_40_graph
 ```
 
 
-Circle graphs with 30% protected
+Circle graphs with 20% protected
 
 ```{r}
 
-circle_30<- res%>%
-  filter(Total_Area == "30%") %>%
-  group_by(Status, Adjusted)%>%
+circle_20<- res%>%
+  filter(Reserve_size == "20%" | Reserve_size == "BAU") %>%
+  group_by(Implementation_year, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est))
-circle_30$Status<- as.factor(circle_30$Status)
+circle_20$Implementation_year<- as.factor(circle_20$Implementation_year)
 
 
-circle_30_graph <- ggplot(circle_30) +
-  geom_point(aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Status), shape = 21)+
-  scale_size_continuous(range = c(11, 25)) +
+circle_20_graph <- ggplot(circle_20) +
+  geom_point(aes(x= Biomass_est, y= PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+#  scale_size_continuous(range = c(11, 25)) +
   theme_classic()+
-  ggtitle("Aggregate Regional Affects 30% Protected")
+  ggtitle("Aggregate Regional Affects 20% Protected")
   
 
-circle_30_graph
+circle_20_graph
 
 #ggsave("agg_circles_30.jpg", width=7, height=5, dpi=300)
 
@@ -175,19 +376,19 @@ OA
 library(dplyr)
 
 linepoint <- res %>%
-    filter(Total_Area == "5%" | Total_Area == "BAU") %>%
-  group_by(Year, Status, Adjusted)%>%
+    filter(Reserve_size == "5%" | Reserve_size == "BAU") %>%
+  group_by(Year, Implementation_year, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est)) %>%
   mutate(Biomass_est=Biomass_est/1000)
-linepoint$Status<- as.factor(linepoint$Status)
+linepoint$Implementation_year<- as.factor(linepoint$Implementation_year)
   
 
 #Genus_ts <- read_csv("data/Genus_ts.csv")
 
 historic <- Genus_ts %>%
-  filter(Adjusted == "MT") %>%
+  filter(Adjusted == "IUU_0") %>%
   filter(year>="2005") %>%
   filter(year != "2015") %>%
   group_by(year) %>%
@@ -198,19 +399,19 @@ historic <- Genus_ts %>%
 colnames(historic) <- c("Year", "Catch_est", "Biomass_est")
 
 initial <-linepoint %>%
-  filter(Status== "0") 
+  filter(Implementation_year== "0") 
 initial <- full_join(historic, initial, by=c("Year", "Biomass_est", "Catch_est"))
 
-second <- filter(linepoint, Status == "2015")
+second <- filter(linepoint, Implementation_year == "2015")
 second <- full_join(historic, second, by=c("Year", "Biomass_est", "Catch_est"))
 
-third <- filter(linepoint, Status == "2020")
+third <- filter(linepoint, Implementation_year == "2020")
 third <- full_join(historic, third, by=c("Year", "Biomass_est", "Catch_est"))
 
-fourth <- filter(linepoint, Status == "2025")
+fourth <- filter(linepoint, Implementation_year == "2025")
 fourth <- full_join(historic, fourth, by=c("Year", "Biomass_est", "Catch_est"))
 
-fifth <- filter(linepoint, Status == "2030")
+fifth <- filter(linepoint, Implementation_year == "2030")
 fifth <- full_join(historic, fifth, by=c("Year", "Biomass_est", "Catch_est"))
 
 initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est, show.legend= FALSE))+
@@ -260,44 +461,46 @@ F=Fmsy
 library(dplyr)
 
 fmsy<- read.csv(here::here("Scenarios", "PatchModel_FMSY.csv"))%>%
-  filter(Adjusted=="MT")
+  filter(Adjusted=="IUU_0")
 
 
 linepoint_fmsy<- fmsy%>%
-  filter(Total_Area == "5%") %>%
-  group_by(Year, Status, Adjusted) %>%
+  filter(Reserve_size == "5%" | Reserve_size== "BAU") %>%
+  group_by(Year, Implementation_year, Adjusted) %>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
-            PV_est=sum(PV_est))
+            PV_est=sum(PV_est)) %>%
+    mutate(Biomass_est=Biomass_est/1000)
 
-linepoint_fmsy$Status<- as.factor(circle_fmsy$Status)
+linepoint_fmsy$Implementation_year<- as.factor(circle_fmsy$Implementation_year)
 
-Genus_ts <- read_csv("data/Genus_ts.csv")
+#Genus_ts <- read_csv("data/Genus_ts.csv")
 
 historic <- Genus_ts %>%
-  filter(Adjusted == "MT") %>%
+  filter(Adjusted == "IUU_0") %>%
   filter(year>="2005") %>%
   filter(year != "2015") %>%
   group_by(year) %>%
   summarize(catch=sum(catch),
-            b=sum(b))
+            b=sum(b)) %>%
+  mutate(b = b/1000)
 
 colnames(historic) <- c("Year", "Catch_est", "Biomass_est")
 
 initial <-linepoint_fmsy %>%
-  filter(Status== "0") 
+  filter(Implementation_year== "0") 
 initial <- full_join(historic, initial, by=c("Year", "Biomass_est", "Catch_est"))
 
-second <- filter(linepoint_fmsy, Status == "2015")
+second <- filter(linepoint_fmsy, Implementation_year == "2015")
 second <- full_join(historic, second, by=c("Year", "Biomass_est", "Catch_est"))
 
-third <- filter(linepoint_fmsy, Status == "2020")
+third <- filter(linepoint_fmsy, Implementation_year == "2020")
 third <- full_join(historic, third, by=c("Year", "Biomass_est", "Catch_est"))
 
-fourth <- filter(linepoint_fmsy, Status == "2025")
+fourth <- filter(linepoint_fmsy, Implementation_year == "2025")
 fourth <- full_join(historic, fourth, by=c("Year", "Biomass_est", "Catch_est"))
 
-fifth <- filter(linepoint_fmsy, Status == "2030")
+fifth <- filter(linepoint_fmsy, Implementation_year == "2030")
 fifth <- full_join(historic, fifth, by=c("Year", "Biomass_est", "Catch_est"))
 
 initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
@@ -335,66 +538,164 @@ OA and 40% protected
 library(dplyr)
 
 linepoint <- res %>%
-    filter(Total_Area == "40%") %>%
-  group_by(Year, Status, Adjusted)%>%
+    filter(Reserve_size == "40%" | Reserve_size == "BAU") %>%
+  group_by(Year, Implementation_year, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
-            PV_est=sum(PV_est))
-linepoint$Status<- as.factor(linepoint$Status)
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)
+linepoint$Implementation_year<- as.factor(linepoint$Implementation_year) 
   
 
-Genus_ts <- read_csv("data/Genus_ts.csv")
+#Genus_ts <- read_csv("data/Genus_ts.csv")
 
 historic <- Genus_ts %>%
-  filter(Adjusted == "MT") %>%
+  filter(Adjusted == "IUU_0") %>%
   filter(year>="2005") %>%
   filter(year != "2015") %>%
   group_by(year) %>%
   summarize(catch=sum(catch),
-            b=sum(b))
+            b=sum(b)) %>%
+  mutate(b=b/1000)
 
 colnames(historic) <- c("Year", "Catch_est", "Biomass_est")
 
 initial <-linepoint %>%
-  filter(Status== "0") 
+  filter(Implementation_year== "0") 
 initial <- full_join(historic, initial, by=c("Year", "Biomass_est", "Catch_est"))
 
-second <- filter(linepoint, Status == "2015")
+second <- filter(linepoint, Implementation_year == "2015")
 second <- full_join(historic, second, by=c("Year", "Biomass_est", "Catch_est"))
 
-third <- filter(linepoint, Status == "2020")
+third <- filter(linepoint, Implementation_year == "2020")
 third <- full_join(historic, third, by=c("Year", "Biomass_est", "Catch_est"))
 
-fourth <- filter(linepoint, Status == "2025")
+fourth <- filter(linepoint, Implementation_year == "2025")
 fourth <- full_join(historic, fourth, by=c("Year", "Biomass_est", "Catch_est"))
 
-fifth <- filter(linepoint, Status == "2030")
+fifth <- filter(linepoint, Implementation_year == "2030")
 fifth <- full_join(historic, fifth, by=c("Year", "Biomass_est", "Catch_est"))
 
 initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
   geom_point()+
-  ggtitle("BAU")
+  ggtitle("BAU") +
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
 second_graph <- ggplot(second,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
   geom_point()+
-  ggtitle("Implement 2015")
+  ggtitle("Implement 2015")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
 third_graph <- ggplot(third,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
   geom_point()+
-  ggtitle("Implement 2020")
+  ggtitle("Implement 2020")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
 fourth_graph <- ggplot(fourth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
   geom_point()+
-  ggtitle("Implement 2025")
+  ggtitle("Implement 2025")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
 fifth_graph <- ggplot(fifth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
   geom_point()+
-  ggtitle("Implement 2030")
+  ggtitle("Implement 2030")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
 
 all<-ggarrange(initial_graph, second_graph, third_graph, fourth_graph, fifth_graph, nrow=3, ncol=2, common.legend = TRUE, legend="bottom")
 all
-#ggsave("biomass_time_40protect.jpg", width=10, height=12, dpi=300)
+ggsave("biomass_time_40protect.jpg", width=10, height=12, dpi=300)
 ```
+
+
+Protect 20
+
+```{r}
+
+library(dplyr)
+
+linepoint <- res %>%
+    filter(Reserve_size == "20%" | Reserve_size == "BAU") %>%
+  group_by(Year, Implementation_year, Adjusted)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est))%>%
+  mutate(Biomass_est=Biomass_est/1000)
+linepoint$Implementation_year<- as.factor(linepoint$Implementation_year)
+  
+
+#Genus_ts <- read_csv("data/Genus_ts.csv")
+
+historic <- Genus_ts %>%
+  filter(Adjusted == "IUU_0") %>%
+  filter(year>="2005") %>%
+  filter(year != "2015") %>%
+  group_by(year) %>%
+  summarize(catch=sum(catch),
+            b=sum(b))%>%
+  mutate(b=b/1000)
+
+colnames(historic) <- c("Year", "Catch_est", "Biomass_est")
+
+initial <-linepoint %>%
+  filter(Implementation_year== "0") 
+initial <- full_join(historic, initial, by=c("Year", "Biomass_est", "Catch_est"))
+
+second <- filter(linepoint, Implementation_year == "2015")
+second <- full_join(historic, second, by=c("Year", "Biomass_est", "Catch_est"))
+
+third <- filter(linepoint, Implementation_year == "2020")
+third <- full_join(historic, third, by=c("Year", "Biomass_est", "Catch_est"))
+
+fourth <- filter(linepoint, Implementation_year == "2025")
+fourth <- full_join(historic, fourth, by=c("Year", "Biomass_est", "Catch_est"))
+
+fifth <- filter(linepoint, Implementation_year == "2030")
+fifth <- full_join(historic, fifth, by=c("Year", "Biomass_est", "Catch_est"))
+
+initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+  geom_point()+
+  ggtitle("BAU") +
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
+
+second_graph <- ggplot(second,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+  geom_point()+
+  ggtitle("Implement 2015") +
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
+
+third_graph <- ggplot(third,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+  geom_point()+
+  ggtitle("Implement 2020") +
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
+
+fourth_graph <- ggplot(fourth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+  geom_point()+
+  ggtitle("Implement 2025") +
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
+
+fifth_graph <- ggplot(fifth,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
+  geom_point()+
+  ggtitle("Implement 2030")+
+  ylab("Biomass 1000 (MT)")+
+  theme_classic()
+
+all<-ggarrange(initial_graph, second_graph, third_graph, fourth_graph, fifth_graph, nrow=3, ncol=2, common.legend = TRUE, legend="bottom")
+all
+ggsave("biomass_time_20protect.jpg", width=10, height=12, dpi=300)
+```
+
+
+
+
+
 
 Protect 30
 ```{r}
@@ -402,20 +703,20 @@ Protect 30
 library(dplyr)
 
 linepoint <- res %>%
-    filter(Total_Area == "30%") %>%
-  group_by(Year, Status, Adjusted)%>%
+    filter(Reserve_size == "30%" | Reserve_size == "BAU") %>%
+  group_by(Year, Implementation_year, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est))
-linepoint$Status<- as.factor(linepoint$Status)
+linepoint$Implementation_year<- as.factor(linepoint$Implementation_year)
   
 
-Genus_ts <- read_csv("data/Genus_ts.csv")
+#Genus_ts <- read_csv("data/Genus_ts.csv")
 
 historic <- Genus_ts %>%
-  filter(Adjusted == "MT") %>%
+  filter(Adjusted == "IUU_0") %>%
   filter(year>="2005") %>%
-  filter(year != "2015") %>%
+  filter(year < "2015") %>%
   group_by(year) %>%
   summarize(catch=sum(catch),
             b=sum(b))
@@ -423,19 +724,19 @@ historic <- Genus_ts %>%
 colnames(historic) <- c("Year", "Catch_est", "Biomass_est")
 
 initial <-linepoint %>%
-  filter(Status== "0") 
+  filter(Implementation_year== "0") 
 initial <- full_join(historic, initial, by=c("Year", "Biomass_est", "Catch_est"))
 
-second <- filter(linepoint, Status == "2015")
+second <- filter(linepoint, Implementation_year == "2015")
 second <- full_join(historic, second, by=c("Year", "Biomass_est", "Catch_est"))
 
-third <- filter(linepoint, Status == "2020")
+third <- filter(linepoint, Implementation_year == "2020")
 third <- full_join(historic, third, by=c("Year", "Biomass_est", "Catch_est"))
 
-fourth <- filter(linepoint, Status == "2025")
+fourth <- filter(linepoint, Implementation_year == "2025")
 fourth <- full_join(historic, fourth, by=c("Year", "Biomass_est", "Catch_est"))
 
-fifth <- filter(linepoint, Status == "2030")
+fifth <- filter(linepoint, Implementation_year == "2030")
 fifth <- full_join(historic, fifth, by=c("Year", "Biomass_est", "Catch_est"))
 
 initial_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
@@ -460,7 +761,7 @@ fifth_graph <- ggplot(fifth,aes(x= Year, y = Biomass_est, colour = PV_est, size=
 
 all<-ggarrange(initial_graph, second_graph, third_graph, fourth_graph, fifth_graph, nrow=3, ncol=2, common.legend = TRUE, legend="bottom")
 all
-#ggsave("biomass_time_30protect.jpg", width=10, height=12, dpi=300)
+ggsave("biomass_time_30protect.jpg", width=10, height=12, dpi=300)
 ```
 
 
@@ -473,18 +774,18 @@ Juliette Notebook:
 ```{r}
 
 linepoint <- res %>%
-    filter(Total_Area == "5%") %>%
-  group_by(Year, Status, Adjusted)%>%
+    filter(Reserve_size == "5%") %>%
+  group_by(Year, Implementation_year, Adjusted)%>%
   summarize(Biomass_est=sum(Biomass_est), 
             Catch_est=sum(Catch_est), 
             PV_est=sum(PV_est))
-linepoint$Status<- as.factor(linepoint$Status)
+linepoint$Implementation_year<- as.factor(linepoint$Implementation_year)
   
-initial <-filter(linepoint, Status== "0")
-second <- filter(linepoint, Status == "2015")
-third <- filter(linepoint, Status == "2020")
-fourth <- filter(linepoint, Status == "2025")
-fifth <- filter(linepoint, Status == "2030")
+initial <-filter(linepoint, Implementation_year== "0")
+second <- filter(linepoint, Implementation_year == "2015")
+third <- filter(linepoint, Implementation_year == "2020")
+fourth <- filter(linepoint, Implementation_year == "2025")
+fifth <- filter(linepoint, Implementation_year == "2030")
 
 linepoint_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
   geom_point()+
@@ -496,11 +797,11 @@ linepoint_graph <- ggplot(initial,aes(x= Year, y = Biomass_est, colour = PV_est,
 linepoint_graph    
   
 linepoint_graph_2 <- ggplot(linepoint,aes(x= Year, y = Biomass_est, colour = PV_est, size= Catch_est))+
-  geom_point(data=linepoint[linepoint$Status =="0", ])+
-  geom_point(data=linepoint[linepoint$Status =="2015", ])+
-  geom_point(data=linepoint[linepoint$Status =="2020", ])+
-  geom_point(data=linepoint[linepoint$Status =="2025", ])+
-  geom_point(data=linepoint[linepoint$Status =="2030", ])
+  geom_point(data=linepoint[linepoint$Implementation_year =="0", ])+
+  geom_point(data=linepoint[linepoint$Implementation_year =="2015", ])+
+  geom_point(data=linepoint[linepoint$Implementation_year =="2020", ])+
+  geom_point(data=linepoint[linepoint$Implementation_year =="2025", ])+
+  geom_point(data=linepoint[linepoint$Implementation_year =="2030", ])
 
 linepoint_graph_2
 
