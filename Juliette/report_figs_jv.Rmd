@@ -45,6 +45,24 @@ res$Reserve_size <- factor(res$Reserve_size, levels = c("BAU", "5%", "20%", "30%
 bmsy<- expression(paste(B/B[MSY]))
 fmsy <- expression(paste(F/F[MSY]))
 ```
+Math for crossing lines
+
+```{r}
+crossing<- res%>%
+  filter(Reserve_size == "5%" | Reserve_size == "BAU" |Reserve_size == "30%" | Reserve_size== "50%") %>%
+  group_by(Reserve_size, Implementation_year, Adjusted, Year)%>%
+  summarize(Biomass_est=sum(Biomass_est), 
+            Catch_est=sum(Catch_est), 
+            PV_est=sum(PV_est)) %>%
+  mutate(Biomass_est=Biomass_est/1000)%>%
+  mutate(PV_est=PV_est/1000000) %>%
+  filter(Adjusted == "IUU_0")%>%
+  filter(Implementation_year == "2020" | Implementation_year == "BAU")
+
+
+```
+
+
 
 ##New Final Graphs!!!
 
@@ -53,6 +71,7 @@ Bubbles:
 - Implement 2015. BAU bubble; raw data (2015/5/0/0); IUU (2015/5/40/0); Legalize (2015/5/40/40)
 - Implement 2020. raw data (2020/5/0/0); IUU (2020/5/40/0); Legalize (2020/5/40/40)
 - Implement 2030. raw data (2030/5/0/0); IUU (2030/5/40/0); Legalize (2030/5/40/40)
+
 
 ```{r}
 
@@ -73,7 +92,8 @@ circle$Implementation_year<- as.factor(circle$Implementation_year)
 ```{r}
 
 circle_graph_A <- ggplot(circle_A) +
-  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year, label=Adjusted), shape = 21)+
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Adjusted, shape = Implementation_year) ,fill ="NA")+
+  scale_shape_manual(values = c(21, 22, 24, 23))+
   guides(size= "none")+
   scale_size_continuous(range = c(10, 35)) +
   xlim(600, 1400)+
@@ -90,7 +110,7 @@ circle_graph_A <- ggplot(circle_A) +
 
 circle_graph_A
 
-#ggsave("circles_A.jpg", width=7, height=5, dpi=300)
+#ggsave("circles_1.jpg", width=7, height=5, dpi=300)
 
 ```
 
@@ -120,7 +140,8 @@ circle$Implementation_year<- as.factor(circle$Implementation_year)
 ```{r}
 
 circle_graph_B <- ggplot(circle_B) +
-  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year, shape = Adjusted) ,fill ="NA")+
+  scale_shape_manual(values = c(21, 22, 24, 23))+
   guides(size= "none")+
  scale_size_continuous(range = c(10, 35)) +
  xlim(600, 2200)+
@@ -128,22 +149,22 @@ circle_graph_B <- ggplot(circle_B) +
   theme_classic()+
   xlab("Biomass (1000 MT)") +
   ylab("Profits (Millions US$)")+
-annotate(geom="text", x=677.4844, y=62, label="1",color="black", size= 3) +
-  annotate(geom="text", x=1343.4884, y=105, label="1",color="black", size= 3)+
-  annotate(geom="text", x=1287.4819, y=82, label="1",color="black", size= 3)+
-  annotate(geom="text", x=1165, y=73, label="1",color="black", size= 3)+
-  annotate(geom="text", x=964.6503, y=91.5, label="2",color="black", size= 3)+
-  annotate(geom="text", x=1909.5335, y=143, label="2",color="black", size= 3)+
-  annotate(geom="text", x=1831.8947, y=120, label="2",color="black", size= 3)+
-  annotate(geom="text", x=1646.1131, y=105, label="2",color="black", size= 3)+
-  annotate(geom="text", x=1920, y=160, label="3",color="black", size= 3)+
+#annotate(geom="text", x=677.4844, y=62, label="1",color="black", size= 3) +
+#  annotate(geom="text", x=1343.4884, y=105, label="1",color="black", size= 3)+
+#  annotate(geom="text", x=1287.4819, y=82, label="1",color="black", size= 3)+
+#  annotate(geom="text", x=1165, y=73, label="1",color="black", size= 3)+
+#  annotate(geom="text", x=964.6503, y=91.5, label="2",color="black", size= 3)+
+#  annotate(geom="text", x=1909.5335, y=143, label="2",color="black", size= 3)+
+#  annotate(geom="text", x=1831.8947, y=120, label="2",color="black", size= 3)+
+#  annotate(geom="text", x=1646.1131, y=105, label="2",color="black", size= 3)+
+#  annotate(geom="text", x=1920, y=160, label="3",color="black", size= 3)+
   ggtitle("Marine Reserve Network 30% of Project Area") +
   theme(legend.title = element_blank())
   
   
 circle_graph_B
 
-#ggsave("circles_B.jpg", width=7, height=5, dpi=300)
+#ggsave("circles_B_shapes2.jpg", width=7, height=5, dpi=300)
 
 ```
 
