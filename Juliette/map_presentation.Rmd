@@ -1,0 +1,70 @@
+---
+title: "Map_Presentation"
+author: "Juliette Verstaen"
+date: "4/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(sf) #spatial
+library(sp) #spatial
+library(ggplot2)
+#library(extracolor)
+
+```
+
+Load in all the shapefiles
+```{r}
+
+mexico <- st_read(dsn = ".", layer = "mexico")
+mexico <- mexico%>% 
+  st_transform(4326)
+
+reserves <- st_read(dsn = ".", layer = "Export_Output")
+reserves <- reserves%>% 
+  st_transform(4326)
+
+roi <- st_read(dsn = ".", layer = "ROI")
+roi <- roi%>% 
+  st_transform(4326)
+
+coast <- rnaturalearth::ne_countries(scale = "large",
+                                     country = "United States of America",
+                                     returnclass = "sf")
+
+
+
+```
+
+Map 
+```{r}
+
+roi_map <- ggplot(data = reserves) +
+  geom_sf(data = mexico, color = "gray82", fill= "gray82") +
+  geom_sf(data = coast, color = "gray82", fill = "gray82") +
+  geom_sf( aes(color = '#7D5C39', fill = '#7D5C39'))+
+  geom_sf(data= roi, color = '#244351', fill= NA) +
+  ggtitle("Proposed Marine Reserve Network")+
+  theme_classic()+
+  coord_sf(xlim = c(-115, -111.5), ylim = c(30.5, 28))+
+  theme(axis.text.x=element_text(angle=90, hjust=1)) +
+theme(panel.background = element_rect(fill = "aliceblue",
+                                colour = "aliceblue"))
+roi_map
+#  theme(axis.text.x=element_text(angle=90, hjust=1)) +
+ # coord_sf(xlim = c(-80.25, -80.1), ylim = c(25.5, 25.28))
+
+```
+
+
+
+
+
+
+

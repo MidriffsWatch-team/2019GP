@@ -92,25 +92,26 @@ circle$Implementation_year<- as.factor(circle$Implementation_year)
 ```{r}
 
 circle_graph_A <- ggplot(circle_A) +
-  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Adjusted, shape = Implementation_year) ,fill ="NA")+
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color =Implementation_year), shape = 21,stroke =1.5, fill ="NA")+
   scale_shape_manual(values = c(21, 22, 24, 23))+
   guides(size= "none")+
   scale_size_continuous(range = c(10, 35)) +
-  xlim(600, 1400)+
-  ylim(40, 175)+
-  theme_classic()+
+xlim(500, 2500)+
+ ylim(50, 180)+
+  theme_classic(base_size = 9)+
   xlab("Biomass (1000 MT)") +
-  ylab("Profits (Millions US$)")+
-  annotate(geom="text", x=700, y=77, label="Unadjusted Catch Data",color="black", size= 3) +
-  annotate(geom="text", x=1000, y=117, label="Accounting for IUU",color="black", size= 3)+
-  annotate(geom="text", x=1200, y=175, label="Perfect Enforcement",color="black", size= 3)+
-  ggtitle("Marine Reserve Network 5% of Project Area")+
+  ylab("Profits (MUSD)")+
+  annotate(geom="text", x=709, y=60, label="1",color="black", size= 5) +
+  annotate(geom="text", x=997, y=90, label="2",color="black", size= 5)+
+  annotate(geom="text", x=1190, y=147, label="3",color="black", size= 5)+
+  annotate(geom="text", x=800, y=90, label="3",color="black", size= 5)+
+  scale_colour_manual(values = c("orchid4","royalblue4" , "darkorange3" ,"darkseagreen4"))+
   theme(legend.title = element_blank())
   
 
 circle_graph_A
 
-#ggsave("circles_1.jpg", width=7, height=5, dpi=300)
+ggsave("5circles.jpg", width=7, height=5, dpi=300)
 
 ```
 
@@ -140,7 +141,7 @@ circle$Implementation_year<- as.factor(circle$Implementation_year)
 ```{r}
 
 circle_graph_B <- ggplot(circle_B) +
-  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year, shape = Adjusted) ,fill ="NA")+
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape=21, stroke=1 ,fill ="NA")+
   scale_shape_manual(values = c(21, 22, 24, 23))+
   guides(size= "none")+
  scale_size_continuous(range = c(10, 35)) +
@@ -172,26 +173,27 @@ circle_graph_B
 ```{r}
 
 circle_graph_B.1 <- ggplot(circle_B) +
-  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21, stroke =1.5)+
   guides(size= "none")+
  scale_size_continuous(range = c(10, 35)) +
- xlim(600, 2200)+
- ylim(60, 172)+
-  theme_classic()+
+  xlim(500, 2500)+
+ ylim(50, 180)+
+  theme_classic(base_size = 9)+
   xlab("Biomass (1000 MT)") +
-  ylab("Profits (Millions US$)")+
-annotate(geom="text", x=710, y=62, label="Unadjusted Catch Data",color="black", size= 3) +
-  annotate(geom="text", x=1287.4819, y=82, label="Unadjusted Catch Data",color="black", size= 3)+
-  annotate(geom="text", x=964.6503, y=91.5, label="Accounting for IUU",color="black", size= 3)+
-  annotate(geom="text", x=1831.8947, y=120, label="Accounting for IUU",color="black", size= 3)+
-  annotate(geom="text", x=1920, y=160, label="Perfect Enforcement",color="black", size= 3)+
-  ggtitle("Marine Reserve Network 30% of Project Area")+
+  ylab("Profits (MUSD)")+
+annotate(geom="text", x=675, y=62, label="1",color="black", size= 5) +
+  annotate(geom="text", x=1287.4819, y=95, label="1",color="black", size= 5)+
+  annotate(geom="text", x=1150, y=70, label="1",color="black", size= 5)+
+  annotate(geom="text", x=964.6503, y=91.5, label="2,3",color="black", size= 5)+
+  annotate(geom="text", x=1850, y=130, label="2",color="black", size= 5)+
+  annotate(geom="text", x=1645, y=103, label="2",color="black", size= 5)+
+  annotate(geom="text", x=1917, y=165, label="3",color="black", size= 5)+
+  scale_colour_manual(values = c("orchid4","royalblue4" , "darkorange3" ,"darkseagreen4"))+
   theme(legend.title = element_blank())
-  
+
   
 circle_graph_B.1
-
-#ggsave("circles_B.1.jpg", width=7, height=5, dpi=300)
+ggsave("30circle.jpg", width=7, height=5, dpi=300)
 
 ```
 
@@ -221,28 +223,28 @@ circle$Implementation_year<- as.factor(circle$Implementation_year)
 ```{r}
 
 circle_graph_C <- ggplot(circle_C) +
-  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year), shape = 21)+
+  geom_point(aes(x=Biomass_est, y=PV_est, size=Catch_est, color = Implementation_year),stroke=1.5, shape = 21)+
   guides(size= "none")+
  scale_size_continuous(range = c(10, 35)) +
- xlim(600, 2450)+
- ylim(50, 165)+
-  theme_classic()+
+ xlim(500, 2500)+
+ ylim(50, 190)+
+  theme_classic(base_size = 9)+
   xlab("Biomass (1000 MT)") +
-  ylab("Profits (Millions US$)")+
-annotate(geom="text", x=730, y=68, label="Unadjusted Catch Data",color="black", size= 3) +
-  annotate(geom="text", x=1500, y=65, label="Unadjusted Catch Data",color="black", size= 3) +
-  annotate(geom="text", x=964.6503, y=102, label="Accounting for IUU",color="black", size= 3) +
-  annotate(geom="text", x=2116.1685, y=92, label="Accounting for IUU",color="black", size= 3) +
-  annotate(geom="text", x=2300, y=118, label="Perfect Enforcement",color="black", size= 3) +
-  annotate(geom="text", x=2071.9284, y=160, label="Perfect Enforcement",color="black", size= 3) +
-
-  ggtitle("Marine Reserve Network 50% of Project Area")+
+  ylab("Profits (MUSD)")+
+annotate(geom="text", x=675, y=62, label="1",color="black", size= 5) +
+  annotate(geom="text", x=1420, y=65, label="1",color="black", size= 5) +
+  annotate(geom="text", x=964.6503, y=91, label="2,3",color="black", size= 5) +
+  annotate(geom="text", x=2155, y=93, label="2",color="black", size= 5) +
+  annotate(geom="text", x=1875, y=93, label="2",color="black", size= 5) +
+  annotate(geom="text", x=2320, y=120, label="3",color="black", size= 5) +
+  annotate(geom="text", x=2071.9284, y=143, label="3",color="black", size= 5) +
+  scale_colour_manual(values = c("orchid4","royalblue4" , "darkorange3" ,"darkseagreen4"))+
   theme(legend.title = element_blank())
   
 
 circle_graph_C
 
-#ggsave("circles_C.jpg", width=7, height=5, dpi=300)
+ggsave("50circle.jpg", width=7, height=5, dpi=300)
 
 ```
 

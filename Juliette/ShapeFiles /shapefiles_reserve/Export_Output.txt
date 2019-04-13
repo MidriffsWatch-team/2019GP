@@ -1,0 +1,69 @@
+OBJECTID,Nombre_com,species,SNAME,NAME,Marxan_ID,Shape_Length,Shape_Area
+1,Baya,Mycteroperca jordani,spawning5,Spawning Mycteroperca jordani,27,2120.292215030863600,289046.667048340310000
+2,Baya,Mycteroperca jordani,spawning5,Spawning Mycteroperca jordani,27,1882.729244490324200,281465.444669373040000
+3,Baya,Mycteroperca jordani,spawning5,Spawning Mycteroperca jordani,27,1882.698956000707100,281456.388577721080000
+4,Baya,Mycteroperca jordani,spawning5,Spawning Mycteroperca jordani,27,1882.886852661522200,281512.571072474590000
+5,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1882.564088000259100,281416.065492072610000
+6,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1762.779196084743900,190742.690203651580000
+7,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1882.954433369398200,281532.779551951510000
+8,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1882.734869387941400,281467.126501803460000
+9,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1817.706421612208300,165130.752052037420000
+10,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1689.757999320532900,173263.689172101090000
+11,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1795.502306542412000,133776.343807936790000
+12,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1925.541877151214500,279891.409804872640000
+13,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,2541.828818913938900,213508.782381521330000
+14,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1875.909355072828700,210535.936840698790000
+15,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1989.029818007867100,272219.565261245410000
+16,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1994.266435142775000,242883.439874227890000
+17,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1885.314971657442800,281429.196285720040000
+18,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1951.059802356286100,203497.352633136270000
+19,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,2148.722863458657700,255398.947925038840000
+20,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,2157.160277827058500,209878.569924248590000
+21,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,2623.524016775126700,265104.915416322530000
+22,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1882.703808132253200,281457.839332621890000
+23,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1882.844957806932400,281500.043713657830000
+24,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1995.804008646265900,255291.398259654500000
+25,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1882.954319534330800,281532.745532866330000
+26,Cabrilla sardinera,Mycteroperca rosacea,spawning6,Spawning Mycteroperca rosacea,28,1841.823762651118600,161845.438727970580000
+27,Cabrilla/extranjero,Paralabrax spp,spawning9,Spawning Paralabrax spp,31,1882.566068777854500,281416.657688147160000
+28,Cabrilla/extranjero,Paralabrax spp,spawning9,Spawning Paralabrax spp,31,1883.290325610403200,281633.231390000380000
+29,Cabrilla/extranjero,Paralabrax spp,spawning9,Spawning Paralabrax spp,31,1883.357307439533300,281653.265102281990000
+30,Cabrilla/extranjero,Paralabrax spp,spawning9,Spawning Paralabrax spp,31,1884.679530248490700,282048.876817828160000
+31,Cabrilla/extranjero,Paralabrax spp,spawning9,Spawning Paralabrax spp,31,1882.981474555645500,281540.865840263780000
+32,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1882.560090993048300,281414.870503219890000
+33,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1882.954433369398200,281532.779551951510000
+34,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1882.763005112120000,281475.539092483060000
+35,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1817.706421612208300,165130.752052037420000
+36,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,2015.108493084750800,152341.753791504250000
+37,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1882.656300231534000,281443.634959324960000
+38,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1994.266435142775000,242883.439874227890000
+39,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,2623.524016775126700,265104.915416322530000
+40,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1883.598321286315000,281725.356236901660000
+41,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1882.703808132253200,281457.839332621890000
+42,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1995.804008646265900,255291.398259654500000
+43,Callo de escarlopa,Spondylus limbatus,spawning10,Spawning Spondylus limbatus,32,1882.924819763848700,281523.924198940750000
+44,Caracol chino,Hexaplex nigritus,spawning2,Spawning Hexaplex nigritus,24,1882.505905290240200,281398.670825278040000
+45,Jaiba verde,Callinectes bellicosus,spawning1,Spawning Callinectes bellicosus,23,1882.387620334824800,281363.309249440030000
+46,Jaiba verde,Callinectes bellicosus,spawning1,Spawning Callinectes bellicosus,23,1882.544469735736600,281410.200242786200000
+47,Jaiba verde,Callinectes bellicosus,spawning1,Spawning Callinectes bellicosus,23,1883.045536501115500,281560.023082863420000
+48,Langosta azul,Panulirus inflatus,spawning8,Spawning Panulirus inflatus,30,1870.816775486401600,254835.174672282820000
+49,Langosta azul,Panulirus inflatus,spawning8,Spawning Panulirus inflatus,30,1933.081311082418800,279528.975467282700000
+50,Langosta azul,Panulirus inflatus,spawning8,Spawning Panulirus inflatus,30,1882.704364663763000,281458.005719051700000
+51,Langosta azul,Panulirus inflatus,spawning8,Spawning Panulirus inflatus,30,1882.589107716808300,281423.544899493920000
+52,Langosta azul,Panulirus inflatus,spawning8,Spawning Panulirus inflatus,30,1883.103052632021200,281577.223379197470000
+53,Langosta azul,Panulirus inflatus,spawning8,Spawning Panulirus inflatus,30,1940.408085503159300,265386.356669072880000
+54,Pargo culón,Hoplopagrus guentherii,spawning3,Spawning Hoplopagrus guentherii,25,1882.560090993048300,281414.870503219890000
+55,Pargo culón,Hoplopagrus guentherii,spawning3,Spawning Hoplopagrus guentherii,25,1882.729244490324200,281465.444669373040000
+56,Pargo culón,Hoplopagrus guentherii,spawning3,Spawning Hoplopagrus guentherii,25,1962.143908745333200,210266.213040856350000
+57,Pargo culón,Hoplopagrus guentherii,spawning3,Spawning Hoplopagrus guentherii,25,1882.670846409734600,281447.984081462080000
+58,Pargo culón,Hoplopagrus guentherii,spawning3,Spawning Hoplopagrus guentherii,25,1882.884731509020200,281511.936803858610000
+59,Pepino de mar,Isostichopus fuscus,spawning4,Spawning Isostichopus fuscus,26,2082.797207686395300,256640.050019438120000
+60,Pepino de mar,Isostichopus fuscus,spawning4,Spawning Isostichopus fuscus,26,1883.200613589958700,281606.400388198500000
+61,Pepino de mar,Isostichopus fuscus,spawning4,Spawning Isostichopus fuscus,26,1882.520573521962400,281403.056086711410000
+62,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1882.738548007827800,281468.226402973930000
+63,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1882.564152512418300,281416.084784155600000
+64,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1883.568069336364300,281716.306873763740000
+65,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1883.613477755442500,281729.890082357390000
+66,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1883.572868654154000,281717.742501894240000
+67,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1882.662674921250500,281445.540914940070000
+68,Pulpo,Octopus bimaculatus,spawning7,Spawning Octopus bimaculatus,29,1882.937062266314100,281527.585065790800000
