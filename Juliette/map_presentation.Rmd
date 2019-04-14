@@ -15,6 +15,7 @@ library(tidyverse)
 library(sf) #spatial
 library(sp) #spatial
 library(ggplot2)
+library(colorr)
 #library(extracolor)
 
 ```
@@ -38,27 +39,63 @@ coast <- rnaturalearth::ne_countries(scale = "large",
                                      country = "United States of America",
                                      returnclass = "sf")
 
+guat <- rnaturalearth::ne_countries(scale = "large",
+                                     country = "Guatemala",
+                                     returnclass = "sf")
+
+bel <- rnaturalearth::ne_countries(scale = "large",
+                                     country = "Belize",
+                                     returnclass = "sf")
+
+hond <- rnaturalearth::ne_countries(scale = "large",
+                                     country = "Honduras",
+                                     returnclass = "sf")
+
+sav <-  rnaturalearth::ne_countries(scale = "large",
+                                     country = "El Salvador",
+                                     returnclass = "sf")
 
 
 ```
 
 Map 
 ```{r}
-
+##reserves map
 roi_map <- ggplot(data = reserves) +
   geom_sf(data = mexico, color = "gray82", fill= "gray82") +
   geom_sf(data = coast, color = "gray82", fill = "gray82") +
-  geom_sf( aes(color = '#7D5C39', fill = '#7D5C39'))+
-  geom_sf(data= roi, color = '#244351', fill= NA) +
+    geom_sf(data= roi, color = "#244351", fill= NA, size = 1.5) +
+ geom_sf(colour= "#7D5C39", fill = "#7D5C39")+
   ggtitle("Proposed Marine Reserve Network")+
-  theme_classic()+
-  coord_sf(xlim = c(-115, -111.5), ylim = c(30.5, 28))+
-  theme(axis.text.x=element_text(angle=90, hjust=1)) +
-theme(panel.background = element_rect(fill = "aliceblue",
-                                colour = "aliceblue"))
+  theme(panel.background = element_rect(fill = "aliceblue"))+
+  coord_sf(xlim = c(-115, -111.5), ylim = c(30.5, 28))
+#  theme(axis.text.x=element_text(angle=90, hjust=1)) 
+
 roi_map
-#  theme(axis.text.x=element_text(angle=90, hjust=1)) +
- # coord_sf(xlim = c(-80.25, -80.1), ylim = c(25.5, 25.28))
+#ggsave("roimap.jpg", width=7, height=5, dpi=300)
+
+#general area map
+general_map  <- ggplot(data = mexico) +
+   geom_sf( color = "gray82", fill= "gray82")+
+  geom_sf(data = coast, color = "gray89", fill = "gray89") +
+  geom_sf(data = bel, color = "gray89", fill = "gray89") +
+  geom_sf(data = sav, color = "gray89", fill = "gray89") +
+  geom_sf(data = guat, color = "gray89", fill = "gray89") +
+  geom_sf(data = hond, color = "gray89", fill = "gray89") +
+    geom_sf(data= roi, color = "#244351", fill= NA, size = 1.5) +
+  ggtitle("Proposed Marine Reserve Network")+
+  theme(panel.background = element_rect(fill = "aliceblue"))+
+  coord_sf(xlim = c(-120, -85), ylim = c(40, 10))
+  theme(axis.text.x=element_text(angle=90, hjust=1)) 
+
+general_map
+
+ggsave("general_map.jpg", width=7, height=5, dpi=300)
+# brown 7D5C39
+# light brown C5A571
+# blue 244351
+# light blue 6F939B
+
 
 ```
 
